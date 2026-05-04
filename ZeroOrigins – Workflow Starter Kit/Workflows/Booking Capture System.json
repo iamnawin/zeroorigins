@@ -1,0 +1,288 @@
+{
+  "name": "ZeroOrigins — Booking Capture System",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "book-call",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "bcs-001",
+      "name": "Booking Request Received",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 300],
+      "webhookId": "zeroorigins-book-call"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "b1", "name": "name",           "value": "={{ $json.body.name || $json.body.full_name || '' }}", "type": "string" },
+            { "id": "b2", "name": "email",          "value": "={{ $json.body.email || '' }}", "type": "string" },
+            { "id": "b3", "name": "phone",          "value": "={{ $json.body.phone || '' }}", "type": "string" },
+            { "id": "b4", "name": "business",       "value": "={{ $json.body.business || $json.body.company || '' }}", "type": "string" },
+            { "id": "b5", "name": "message",        "value": "={{ $json.body.message || $json.body.notes || '' }}", "type": "string" },
+            { "id": "b6", "name": "preferredTime",  "value": "={{ $json.body.preferred_time || $json.body.time || '' }}", "type": "string" },
+            { "id": "b7", "name": "source",         "value": "={{ $json.body.source || 'Website' }}", "type": "string" },
+            { "id": "b8", "name": "timestamp",      "value": "={{ new Date().toISOString() }}", "type": "string" },
+            { "id": "b9", "name": "meetingDate",    "value": "={{ $json.body.date || new Date(Date.now() + 86400000).toISOString().split('T')[0] }}", "type": "string" },
+            { "id": "b10","name": "meetingTime",    "value": "={{ $json.body.time_slot || '10:00' }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bcs-002",
+      "name": "Normalize Booking Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [420, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"status\": \"confirmed\", \"message\": \"Your booking request has been received. Check your email for confirmation.\" }",
+        "options": {}
+      },
+      "id": "bcs-003",
+      "name": "Ack Immediately",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [640, 140]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.googleapis.com/calendar/v3/calendars/primary/events",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"summary\": \"Discovery Call — {{ $json.name }} ({{ $json.business }})\",\n  \"description\": \"Inbound booking from ZeroOrigins website.\\n\\nName: {{ $json.name }}\\nEmail: {{ $json.email }}\\nBusiness: {{ $json.business }}\\nMessage: {{ $json.message }}\\nSource: {{ $json.source }}\",\n  \"start\": {\n    \"dateTime\": \"{{ $json.meetingDate }}T{{ $json.meetingTime }}:00+05:30\",\n    \"timeZone\": \"Asia/Kolkata\"\n  },\n  \"end\": {\n    \"dateTime\": \"{{ $json.meetingDate }}T{{ new Date(new Date($json.meetingDate + 'T' + $json.meetingTime + ':00+05:30').getTime() + 1800000).toISOString().slice(11,16) }}:00+05:30\",\n    \"timeZone\": \"Asia/Kolkata\"\n  },\n  \"attendees\": [\n    {\"email\": \"{{ $json.email }}\", \"displayName\": \"{{ $json.name }}\"},\n    {\"email\": \"hello@zeroorigins.in\", \"displayName\": \"Naveen at ZeroOrigins\"}\n  ],\n  \"conferenceData\": {\n    \"createRequest\": {\n      \"requestId\": \"{{ $json.timestamp.replace(/[^a-zA-Z0-9]/g, '') }}\",\n      \"conferenceSolutionKey\": {\"type\": \"hangoutsMeet\"}\n    }\n  },\n  \"reminders\": {\n    \"useDefault\": false,\n    \"overrides\": [\n      {\"method\": \"email\", \"minutes\": 1440},\n      {\"method\": \"popup\", \"minutes\": 30}\n    ]\n  }\n}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "conferenceDataVersion", "value": "1" },
+            { "name": "sendUpdates", "value": "all" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bcs-004",
+      "name": "Create Google Calendar Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [640, 320],
+      "credentials": {
+        "oAuth2Api": {
+          "id": "YOUR_GOOGLE_OAUTH_CREDENTIAL_ID",
+          "name": "Google Calendar OAuth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "e1", "name": "calEventId",     "value": "={{ $json.id }}", "type": "string" },
+            { "id": "e2", "name": "calEventUrl",    "value": "={{ $json.htmlLink }}", "type": "string" },
+            { "id": "e3", "name": "meetLink",       "value": "={{ $json.conferenceData?.entryPoints?.[0]?.uri || 'https://meet.google.com (link in calendar invite)' }}", "type": "string" },
+            { "id": "e4", "name": "name",           "value": "={{ $('Normalize Booking Fields').item.json.name }}", "type": "string" },
+            { "id": "e5", "name": "email",          "value": "={{ $('Normalize Booking Fields').item.json.email }}", "type": "string" },
+            { "id": "e6", "name": "business",       "value": "={{ $('Normalize Booking Fields').item.json.business }}", "type": "string" },
+            { "id": "e7", "name": "message",        "value": "={{ $('Normalize Booking Fields').item.json.message }}", "type": "string" },
+            { "id": "e8", "name": "meetingDate",    "value": "={{ $('Normalize Booking Fields').item.json.meetingDate }}", "type": "string" },
+            { "id": "e9", "name": "meetingTime",    "value": "={{ $('Normalize Booking Fields').item.json.meetingTime }}", "type": "string" },
+            { "id": "e10","name": "source",         "value": "={{ $('Normalize Booking Fields').item.json.source }}", "type": "string" },
+            { "id": "e11","name": "timestamp",      "value": "={{ $('Normalize Booking Fields').item.json.timestamp }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bcs-005",
+      "name": "Extract Calendar Details",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [860, 320]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "Your call is booked — here's what to expect",
+        "message": "=<p>Hi {{ $json.name }},</p>\n\n<p>Your discovery call with ZeroOrigins is confirmed. Here are the details:</p>\n\n<table style=\"font-family:sans-serif;font-size:14px;border-collapse:collapse;margin:16px 0\">\n  <tr><td style=\"padding:8px 16px;font-weight:600;background:#f5f5f5\">Date</td><td style=\"padding:8px 16px\">{{ $json.meetingDate }}</td></tr>\n  <tr><td style=\"padding:8px 16px;font-weight:600;background:#f5f5f5\">Time</td><td style=\"padding:8px 16px\">{{ $json.meetingTime }} IST (30 minutes)</td></tr>\n  <tr><td style=\"padding:8px 16px;font-weight:600;background:#f5f5f5\">Join</td><td style=\"padding:8px 16px\"><a href=\"{{ $json.meetLink }}\">{{ $json.meetLink }}</a></td></tr>\n</table>\n\n<p><strong>What to prepare (nothing required, but helpful):</strong></p>\n<ul style=\"font-family:sans-serif;font-size:14px\">\n  <li>What you're currently doing for lead capture / follow-up</li>\n  <li>The biggest workflow bottleneck in your business right now</li>\n  <li>Any tools you're already using (CRM, email, Slack, etc.)</li>\n</ul>\n\n<p>A Google Calendar invite has been sent to this email. The meeting link is inside it.</p>\n\n<p>If you need to reschedule: <a href=\"https://calendly.com/zeroorigins\">https://calendly.com/zeroorigins</a></p>\n\n<p>See you on the call,<br>Naveen<br>ZeroOrigins AI<br>hello@zeroorigins.in</p>",
+        "options": { "appendAttribution": false, "senderName": "Naveen at ZeroOrigins" }
+      },
+      "id": "bcs-006",
+      "name": "Confirmation Email to Client",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1080, 220],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_GMAIL_CREDENTIAL_ID",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": { "__rl": true, "value": "YOUR_SLACK_CHANNEL_ID", "mode": "id" },
+        "text": "=:calendar: *New booking confirmed*\n\n*Client:* {{ $json.name }}\n*Business:* {{ $json.business }}\n*Email:* {{ $json.email }}\n*Date:* {{ $json.meetingDate }} at {{ $json.meetingTime }} IST\n*Source:* {{ $json.source }}\n\n*What they said:*\n> {{ $json.message || '(no message)' }}\n\n:video_camera: <{{ $json.meetLink }}|Join meeting>\n:calendar: <{{ $json.calEventUrl }}|Calendar event>",
+        "otherOptions": { "mrkdwn": true }
+      },
+      "id": "bcs-007",
+      "name": "Slack Booking Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [1080, 420],
+      "credentials": {
+        "slackApi": {
+          "id": "YOUR_SLACK_CREDENTIAL_ID",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "page",
+        "operation": "create",
+        "pageId": {
+          "__rl": true,
+          "value": "YOUR_NOTION_CLIENTS_PAGE_ID",
+          "mode": "id"
+        },
+        "title": "={{ $json.name }} — {{ $json.business }} | Discovery Call {{ $json.meetingDate }}",
+        "blockUi": {
+          "blockValues": [
+            {
+              "type": "heading_2",
+              "textContent": "Contact Details"
+            },
+            {
+              "type": "paragraph",
+              "textContent": "={{ 'Name: ' + $json.name + '\\nEmail: ' + $json.email + '\\nBusiness: ' + $json.business }}"
+            },
+            {
+              "type": "heading_2",
+              "textContent": "Call Details"
+            },
+            {
+              "type": "paragraph",
+              "textContent": "={{ 'Date: ' + $json.meetingDate + ' at ' + $json.meetingTime + ' IST\\nMeet link: ' + $json.meetLink + '\\nCalendar: ' + $json.calEventUrl }}"
+            },
+            {
+              "type": "heading_2",
+              "textContent": "Their Message"
+            },
+            {
+              "type": "paragraph",
+              "textContent": "={{ $json.message || '(no message provided)' }}"
+            },
+            {
+              "type": "heading_2",
+              "textContent": "Notes"
+            },
+            {
+              "type": "paragraph",
+              "textContent": "(Add discovery notes here during/after the call)"
+            }
+          ]
+        }
+      },
+      "id": "bcs-008",
+      "name": "Notion Client Intake Page",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [1080, 600],
+      "credentials": {
+        "notionApi": {
+          "id": "YOUR_NOTION_CREDENTIAL_ID",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "baseId": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "ZeroOrigins CRM"
+        },
+        "tableId": {
+          "__rl": true,
+          "value": "tblBookings",
+          "mode": "list",
+          "cachedResultName": "Bookings"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name":           "={{ $json.name }}",
+            "Email":          "={{ $json.email }}",
+            "Business":       "={{ $json.business }}",
+            "Message":        "={{ $json.message }}",
+            "Meeting Date":   "={{ $json.meetingDate }}",
+            "Meeting Time":   "={{ $json.meetingTime }}",
+            "Meet Link":      "={{ $json.meetLink }}",
+            "Calendar Event": "={{ $json.calEventUrl }}",
+            "Source":         "={{ $json.source }}",
+            "Booked At":      "={{ $json.timestamp }}",
+            "Status":         "Scheduled"
+          },
+          "schema": [],
+          "matchingColumns": []
+        }
+      },
+      "id": "bcs-009",
+      "name": "Airtable Log Booking",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [1300, 420],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "YOUR_AIRTABLE_CREDENTIAL_ID",
+          "name": "Airtable account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Booking Request Received": {
+      "main": [[{ "node": "Normalize Booking Fields", "type": "main", "index": 0 }]]
+    },
+    "Normalize Booking Fields": {
+      "main": [
+        [
+          { "node": "Ack Immediately",             "type": "main", "index": 0 },
+          { "node": "Create Google Calendar Event", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Create Google Calendar Event": {
+      "main": [[{ "node": "Extract Calendar Details", "type": "main", "index": 0 }]]
+    },
+    "Extract Calendar Details": {
+      "main": [
+        [
+          { "node": "Confirmation Email to Client", "type": "main", "index": 0 },
+          { "node": "Slack Booking Alert",          "type": "main", "index": 0 },
+          { "node": "Notion Client Intake Page",    "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Slack Booking Alert": {
+      "main": [[{ "node": "Airtable Log Booking", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1", "saveManualExecutions": true },
+  "versionId": "zo-bcs-v1-2026",
+  "meta": { "templateCredsSetupCompleted": false },
+  "id": "zeroorigins-booking-capture-v1",
+  "tags": [{ "name": "ZeroOrigins" }, { "name": "Booking" }, { "name": "Calendar" }]
+}

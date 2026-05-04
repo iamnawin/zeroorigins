@@ -1,0 +1,212 @@
+{
+  "name": "ZeroOrigins — Follow-Up Flow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "b1c2d3e4-0001-4000-8000-000000000001",
+      "name": "Daily at 9AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "leftValue": "Followup Sent",
+              "rightValue": "FALSE",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b1c2d3e4-0002-4000-8000-000000000002",
+      "name": "Read Pending Leads",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [420, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "age-check",
+              "leftValue": "={{ Math.floor((new Date() - new Date($json.Timestamp)) / (1000 * 60 * 60)) }}",
+              "rightValue": 24,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b1c2d3e4-0003-4000-8000-000000000003",
+      "name": "Is 24h+ Old?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [640, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "Still thinking it over? I can help.",
+        "message": "=<p>Hi {{ $json.Name }},</p>\n\n<p>I noticed you reached out recently and wanted to follow up.</p>\n\n<p>If you're still figuring out your next step, I'd be happy to jump on a quick 30-minute call. We can look at your current setup and map out the fastest path to getting your system working.</p>\n\n<p>No pressure — just a conversation.</p>\n\n<p><a href=\"https://calendly.com/zeroorigins\" style=\"background:#000;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block\">Book a free 30-minute call</a></p>\n\n<p>Or reply to this email and let me know where you're at — I read every reply.</p>\n\n<p>Talk soon,<br>Naveen<br>ZeroOrigins AI<br>hello@zeroorigins.in</p>",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "Naveen at ZeroOrigins"
+        }
+      },
+      "id": "b1c2d3e4-0004-4000-8000-000000000004",
+      "name": "Send Follow-Up Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [860, 200],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_GMAIL_CREDENTIAL_ID",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Followup Sent": "TRUE",
+            "Followup Date": "={{ new Date().toISOString().split('T')[0] }}"
+          },
+          "matchingColumns": ["Email"],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "b1c2d3e4-0005-4000-8000-000000000005",
+      "name": "Mark as Followed Up",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [1080, 200],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Daily at 9AM": {
+      "main": [
+        [
+          {
+            "node": "Read Pending Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Pending Leads": {
+      "main": [
+        [
+          {
+            "node": "Is 24h+ Old?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is 24h+ Old?": {
+      "main": [
+        [
+          {
+            "node": "Send Follow-Up Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Send Follow-Up Email": {
+      "main": [
+        [
+          {
+            "node": "Mark as Followed Up",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "versionId": "b1c2d3e4-ffff-4000-8000-zeroorigins02",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": "zeroorigins-workflow-starter-kit"
+  },
+  "id": "zeroorigins-followup-flow-v1",
+  "tags": [
+    { "name": "ZeroOrigins" },
+    { "name": "Follow-Up" }
+  ]
+}

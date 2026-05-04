@@ -1,0 +1,83 @@
+==============================================================
+  WORKFLOW NOTES — READ BEFORE IMPORTING
+==============================================================
+
+These notes tell you exactly what to change in each workflow
+after you import it into n8n. Nothing is hardcoded — every
+personal value is clearly marked with [YOUR_VALUE_HERE].
+
+--------------------------------------------------------------
+LEAD CAPTURE WORKFLOW (lead_capture.json)
+--------------------------------------------------------------
+
+After import, open the workflow and update the following nodes:
+
+  NODE: Google Sheets — "Log Lead to Sheet"
+    - Connect your Google account credential
+    - Spreadsheet ID: paste your Google Sheet ID
+      (found in the URL: docs.google.com/spreadsheets/d/[THIS_PART]/edit)
+    - Sheet name: change "Leads" to whatever you named your sheet tab
+
+  NODE: Gmail — "Notify Owner"
+    - Connect your Gmail credential
+    - To: change to YOUR email address (where you want lead alerts)
+    - From Name: change "ZeroOrigins" to your business name
+
+  NODE: Gmail — "Send Confirmation to Lead"
+    - From Name: change "ZeroOrigins" to your business name
+    - Subject: customise if needed
+    - Body: update the booking link and your name/brand
+
+  NODE: Respond to Webhook
+    - No changes needed unless you want a custom success message
+
+WEBHOOK URL:
+  After activating, copy the webhook URL from the Webhook node.
+  This URL goes into your form tool as the "submission URL" or
+  "webhook destination". Every form submission triggers this workflow.
+
+--------------------------------------------------------------
+FOLLOW-UP WORKFLOW (followup_flow.json)
+--------------------------------------------------------------
+
+  NODE: Schedule Trigger
+    - Default: runs daily at 9:00 AM
+    - Change the time to suit your timezone
+
+  NODE: Google Sheets — "Read Pending Leads"
+    - Same credential and Sheet ID as above
+    - The workflow filters for rows where "Followup Sent" = FALSE
+      and the lead is at least 24 hours old
+
+  NODE: Gmail — "Send Follow-Up Email"
+    - Connect the same Gmail credential
+    - From Name: update to your business name
+    - Body: personalise the follow-up message and your CTA/booking link
+
+  NODE: Google Sheets — "Mark as Followed Up"
+    - Same credential and Sheet ID
+    - This node writes TRUE to the "Followup Sent" column
+      and today's date to "Followup Date" — do not change the logic
+
+--------------------------------------------------------------
+GOOGLE SHEET COLUMN ORDER (REQUIRED — DO NOT CHANGE)
+--------------------------------------------------------------
+
+  Column A: Timestamp
+  Column B: Name
+  Column C: Email
+  Column D: Business
+  Column E: Message
+  Column F: Source
+  Column G: Status          (default value: "New")
+  Column H: Followup Sent   (default value: FALSE)
+  Column I: Followup Date   (default value: blank)
+
+  The workflows use column letters to read/write data.
+  If you add columns, add them AFTER column I.
+
+--------------------------------------------------------------
+NEED HELP?
+  Email: hello@zeroorigins.in
+  Book a call: https://calendly.com/zeroorigins
+==============================================================

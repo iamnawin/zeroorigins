@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)file:///D:/Downloads/IgnAIte_CourseStructure_1.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IgnAIte — Course Structure</title>
+<link href="./IgnAIte — Course Structure_files/css2" rel="stylesheet">
+<style>
+:root {
+  --bg:     #080808;
+  --bg2:    #0F0F0F;
+  --card:   #111111;
+  --card2:  #161616;
+  --border: #222222;
+  --b2:     #2A2A2A;
+  --v:      #8B5CF6;
+  --v2:     #A78BFA;
+  --v3:     #DDD6FE;
+  --white:  #FFFFFF;
+  --off:    #E8E4DF;
+  --muted:  #666666;
+  --muted2: #444444;
+  --green:  #4ADE80;
+  --teal:   #22D3EE;
+  --pink:   #F43F5E;
+  --yellow: #EAB308;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--off);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* noise */
+body::after {
+  content:''; position:fixed; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:0; opacity:0.5;
+}
+
+.wrap { max-width:960px; margin:0 auto; padding:0 28px; position:relative; z-index:1; }
+
+/* ── TOP BAR ── */
+.topbar {
+  border-bottom:1px solid var(--border);
+  background: var(--bg2);
+  padding: 12px 0;
+}
+.topbar-inner {
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:11px; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase;
+}
+.topbar-logo {
+  font-family:'Bebas Neue', sans-serif;
+  font-size:22px; letter-spacing:0.04em;
+}
+.topbar-logo .v { color:var(--v); }
+
+/* ── PAGE HERO ── */
+.page-hero {
+  padding: 72px 0 56px;
+  text-align:center;
+  position:relative; overflow:hidden;
+}
+.page-hero::before {
+  content:'';
+  position:absolute;
+  width:600px; height:300px;
+  background: radial-gradient(ellipse, rgba(139,92,246,0.1) 0%, transparent 65%);
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+
+.ph-label {
+  font-size:11px; font-weight:700; letter-spacing:0.14em;
+  text-transform:uppercase; color:var(--v);
+  margin-bottom:14px;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+}
+.ph-label::before, .ph-label::after {
+  content:''; display:block;
+  width:28px; height:1px;
+  background:var(--v);
+  opacity:0.5;
+}
+
+.ph-title {
+  font-family:'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 10vw, 80px);
+  letter-spacing:0.02em; line-height:1;
+  color:var(--white); margin-bottom:16px;
+}
+.ph-title .v { color:var(--v); }
+
+.ph-desc {
+  font-size:15px; color:var(--muted); max-width:480px; margin:0 auto;
+  font-weight:300;
+}
+.ph-desc strong { color:var(--off); font-weight:500; }
+
+/* ── TIER SECTION ── */
+.tier-section {
+  padding: 60px 0;
+  border-top: 1px solid var(--border);
+}
+
+.tier-header {
+  display:flex; align-items:flex-start;
+  justify-content:space-between; gap:20px;
+  margin-bottom:40px;
+  flex-wrap:wrap;
+}
+
+.tier-left { flex:1; min-width:240px; }
+
+.tier-num {
+  font-size:11px; font-weight:700; letter-spacing:0.14em;
+  text-transform:uppercase; color:var(--muted2); margin-bottom:8px;
+}
+
+.tier-name {
+  font-family:'Bebas Neue', sans-serif;
+  font-size:clamp(36px,6vw,52px); letter-spacing:0.02em; line-height:1;
+  color:var(--white); margin-bottom:8px;
+}
+.tier-name .v  { color:var(--v); }
+.tier-name .g  { color:var(--green); }
+.tier-name .pk { color:var(--pink); }
+
+.tier-tagline {
+  font-size:14px; color:var(--muted); font-weight:300; max-width:340px;
+}
+.tier-tagline strong { color:var(--off); font-weight:500; }
+
+.tier-right {
+  display:flex; flex-direction:column; align-items:flex-end; gap:8px;
+}
+
+.tier-price-block { text-align:right; }
+.tp-strike { font-size:13px; color:var(--muted2); text-decoration:line-through; }
+.tp-price {
+  font-family:'DM Sans',sans-serif; font-weight:800;
+  font-size:38px; letter-spacing:-0.02em; line-height:1.1;
+}
+.t1 .tp-price { color:var(--v2); }
+.t2 .tp-price { color:var(--v); }
+.t3 .tp-price { color:var(--white); }
+
+.tp-off {
+  display:inline-block; font-size:11px; font-weight:700;
+  padding:3px 10px; border-radius:100px;
+  background:rgba(139,92,246,0.15); color:var(--v);
+  border:1px solid rgba(139,92,246,0.2);
+}
+.t2 .tp-off { background:var(--v); color:var(--white); border-color:transparent; }
+
+.tier-badge {
+  font-size:10px; font-weight:700; letter-spacing:0.1em;
+  text-transform:uppercase; padding:5px 14px; border-radius:100px;
+  background:var(--card2); border:1px solid var(--border);
+  color:var(--muted);
+}
+.t2 .tier-badge { background:rgba(139,92,246,0.1); border-color:var(--v); color:var(--v); }
+
+/* ── ACCENT LINE ── */
+.accent-line {
+  height:1px; margin-bottom:36px;
+  background: linear-gradient(90deg, var(--v), transparent 60%);
+  opacity:0.4;
+}
+.t2 .accent-line { opacity:1; }
+
+/* ── MODULES GRID ── */
+.modules {
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap:14px;
+}
+
+.mod {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:22px;
+  position:relative; overflow:hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.mod:hover { transform:translateY(-2px); }
+
+/* color top strip per tier */
+.t1 .mod { border-top:2px solid var(--v2); }
+.t2 .mod { border-top:2px solid var(--v); }
+.t3 .mod { border-top:2px solid var(--white); }
+
+.t2 .mod { background:#110D1A; border-color:#1E1A2E; }
+.t2 .mod:hover { border-color:rgba(139,92,246,0.4); }
+
+.mod-num {
+  font-size:10px; font-weight:700; letter-spacing:0.12em;
+  text-transform:uppercase; color:var(--muted2);
+  margin-bottom:8px;
+}
+
+.mod-icon { font-size:22px; margin-bottom:10px; display:block; }
+
+.mod-name {
+  font-weight:700; font-size:15px; color:var(--white);
+  margin-bottom:8px; line-height:1.2;
+}
+
+.mod-points { list-style:none; }
+.mod-points li {
+  font-size:12.5px; color:var(--muted);
+  padding:4px 0;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:flex-start; gap:8px;
+  line-height:1.4;
+}
+.mod-points li:last-child { border-bottom:none; }
+.mod-points li::before {
+  content:'→'; color:var(--v2); font-weight:700;
+  flex-shrink:0; font-size:11px; margin-top:2px;
+}
+.t3 .mod-points li::before { color:var(--v); }
+
+.mod-deliverable {
+  margin-top:14px;
+  background:rgba(139,92,246,0.06);
+  border:1px solid rgba(139,92,246,0.15);
+  border-radius:7px;
+  padding:9px 12px;
+  font-size:11.5px; color:var(--v3);
+  display:flex; align-items:flex-start; gap:7px;
+}
+.mod-deliverable .d-label {
+  font-weight:700; color:var(--v); flex-shrink:0;
+}
+
+/* ── FULL WIDTH MODULE (Builder Track) ── */
+.mod-full {
+  background:var(--card);
+  border:1px solid rgba(139,92,246,0.2);
+  border-top:2px solid var(--v);
+  border-radius:12px;
+  padding:24px;
+  margin-top:14px;
+  display:flex; gap:24px; align-items:flex-start;
+  flex-wrap:wrap;
+}
+.mod-full-left { flex:1; min-width:200px; }
+.mod-full-right { flex:2; min-width:260px; }
+.mod-full-points {
+  display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;
+}
+.mod-full-tag {
+  background:rgba(139,92,246,0.1);
+  border:1px solid rgba(139,92,246,0.2);
+  border-radius:100px; padding:4px 12px;
+  font-size:11px; color:var(--v2);
+  font-weight:500;
+}
+
+/* ── TIER BOTTOM BAR ── */
+.tier-bottom {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-top:28px; padding-top:20px;
+  border-top:1px solid var(--border);
+  gap:16px; flex-wrap:wrap;
+}
+.tb-emi {
+  font-size:12px; font-weight:700; color:var(--yellow);
+  background:var(--card2); border:1px solid var(--border);
+  padding:7px 16px; border-radius:100px;
+}
+.tb-cta {
+  display:inline-block; text-decoration:none;
+  font-weight:700; font-size:13px; letter-spacing:0.01em;
+  padding:11px 28px; border-radius:8px;
+  transition: opacity 0.2s, transform 0.2s;
+  color:var(--white);
+}
+.tb-cta:hover { opacity:0.88; transform:translateY(-1px); }
+.t1 .tb-cta { background:var(--card2); border:1px solid var(--b2); color:var(--off); }
+.t2 .tb-cta { background:var(--v); box-shadow:0 8px 24px rgba(139,92,246,0.3); }
+.t3 .tb-cta { background:#1A1A1A; border:1px solid rgba(139,92,246,0.3); color:var(--v2); }
+
+.tb-note { font-size:11px; color:var(--muted2); }
+
+/* ── COMPARISON TABLE ── */
+.compare-section { padding:60px 0; border-top:1px solid var(--border); }
+
+.compare-table {
+  width:100%; border-collapse:collapse;
+  border-radius:12px; overflow:hidden;
+}
+.compare-table th {
+  background:var(--card2);
+  padding:14px 16px; font-size:12px;
+  font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+  text-align:left; color:var(--muted);
+  border-bottom:1px solid var(--border);
+}
+.compare-table th.hl { color:var(--v); }
+.compare-table td {
+  padding:13px 16px; font-size:13px;
+  border-bottom:1px solid var(--border);
+  color:var(--muted);
+  vertical-align:top;
+}
+.compare-table td:first-child { color:var(--off); font-weight:500; }
+.compare-table td.hl { color:var(--off); }
+.compare-table tr:last-child td { border-bottom:none; }
+.compare-table tr:nth-child(even) td { background:rgba(255,255,255,0.015); }
+.compare-table td .yes { color:var(--green); font-weight:700; }
+.compare-table td .no  { color:var(--muted2); }
+.compare-table td .par { color:var(--yellow); }
+
+/* ── BOTTOM CTA ── */
+.bottom-cta {
+  margin:60px 0;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-top:2px solid var(--v);
+  border-radius:16px;
+  padding:52px 40px;
+  text-align:center; position:relative; overflow:hidden;
+}
+.bottom-cta::before {
+  content:''; position:absolute;
+  width:400px; height:300px;
+  background:radial-gradient(ellipse, rgba(139,92,246,0.08) 0%, transparent 65%);
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.bottom-cta h2 {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(36px,6vw,54px); letter-spacing:0.02em;
+  color:var(--white); margin-bottom:10px; position:relative;
+}
+.bottom-cta h2 .v { color:var(--v); }
+.bottom-cta p { font-size:14px; color:var(--muted); margin-bottom:28px; position:relative; }
+.bc-cta {
+  display:inline-block; text-decoration:none;
+  background:var(--v); color:var(--white);
+  font-weight:700; font-size:15px; letter-spacing:0.01em;
+  padding:15px 44px; border-radius:8px;
+  box-shadow:0 8px 28px rgba(139,92,246,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position:relative;
+}
+.bc-cta:hover { transform:translateY(-2px); box-shadow:0 16px 40px rgba(139,92,246,0.4); }
+.bc-disc { font-size:11px; color:var(--muted2); margin-top:14px; position:relative; }
+
+/* footer */
+footer {
+  border-top:1px solid var(--border); padding:22px 0;
+  background:var(--bg2);
+}
+footer p { font-size:12px; color:var(--muted2); text-align:center; }
+footer strong { color:var(--muted); }
+
+/* responsive */
+@media(max-width:640px){
+  .tier-header { flex-direction:column; }
+  .tier-right  { align-items:flex-start; }
+  .modules     { grid-template-columns:1fr; }
+  .mod-full    { flex-direction:column; }
+  .compare-table { font-size:11px; }
+  .compare-table th, .compare-table td { padding:10px 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="wrap">
+    <div class="topbar-inner">
+      <div class="topbar-logo">Ign<span class="v">AI</span>te</div>
+      <span>Course Structure · 2026</span>
+      <span>ignaite.in</span>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="wrap">
+    <div class="ph-label">Full Curriculum</div>
+    <div class="ph-title">Course <span class="v">Structure</span></div>
+    <p class="ph-desc">
+      <strong>Three tiers. Every module counts.</strong><br>
+      Pick your path — self-paced, live cohort, or full elite.
+    </p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TIER 1
+══════════════════════════════════════ -->
+<section class="tier-section t1">
+  <div class="wrap">
+
+    <div class="tier-header">
+      <div class="tier-left">
+        <div class="tier-num">Tier 01</div>
+        <div class="tier-name">AI <span class="v">Starter</span> Pack</div>
+        <div class="tier-tagline">
+          <strong>Learn the tools. Find your direction.</strong><br>
+          Self-paced — start today, go at your own speed.
+        </div>
+      </div>
+      <div class="tier-right">
+        <div class="tier-badge">Self-Paced · No Live Sessions</div>
+        <div class="tier-price-block">
+          <div class="tp-strike">₹15,999</div>
+          <div class="tp-price">₹4,999</div>
+          <span class="tp-off">69% OFF</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accent-line"></div>
+
+    <div class="modules">
+
+      <div class="mod">
+        <span class="mod-icon">⚡</span>
+        <div class="mod-num">Module 01</div>
+        <div class="mod-name">AI Tools for Productivity</div>
+        <ul class="mod-points">
+          <li>ChatGPT, Claude, Gemini — daily use</li>
+          <li>Image AI: Midjourney, DALL-E, Firefly</li>
+          <li>Video AI: Runway, Kling, CapCut AI</li>
+          <li>Audio AI: ElevenLabs, Whisper, Suno, HeyGen</li>
+            <li>Voice cloning basics — clone your own voice in minutes</li>
+          <li>Build your personal AI workflow</li>
+        </ul>
+        <div class="mod-deliverable">
+          <span class="d-label">🎯</span>
+          Personal AI Toolkit — before/after workflow doc
+        </div>
+      </div>
+
+      <div class="mod">
+        <span class="mod-icon">🧠</span>
+        <div class="mod-num">Module 02</div>
+        <div class="mod-name">Prompt Engineering</div>
+        <ul class="mod-points">
+          <li>CRISP Framework — the only one you need</li>
+          <li>Zero-shot, one-shot, few-shot prompting</li>
+          <li>Chain-of-thought reasoning</li>
+          <li>System prompts &amp; custom instructions</li>
+          <li>20+ business prompt templates</li>
+        </ul>
+        <div class="mod-deliverable">
+          <span class="d-label">🎯</span>
+          Personal Prompt Library — 20+ reusable prompts
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tier-bottom">
+      <div class="tb-emi">EMI: ₹1,667 × 3 months</div>
+      <div class="tb-note">Lifetime access · Certificate included</div>
+      <a href="file:///D:/Downloads/IgnAIte_CourseStructure_1.html#" class="tb-cta">Get Started →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     TIER 2
+══════════════════════════════════════ -->
+<section class="tier-section t2">
+  <div class="wrap">
+
+    <div class="tier-header">
+      <div class="tier-left">
+        <div class="tier-num">Tier 02 · ⭐ Most Popular</div>
+        <div class="tier-name">AI <span class="v">Pro</span> Cohort</div>
+        <div class="tier-tagline">
+          <strong>Go deep. Build real. Get career-ready.</strong><br>
+          12 live interactions + all 7 pillars covered.
+        </div>
+      </div>
+      <div class="tier-right">
+        <div class="tier-badge">12 Live Interactions · Tue 8PM + Sat 6PM IST</div>
+        <div class="tier-price-block">
+          <div class="tp-strike">₹34,999</div>
+          <div class="tp-price">₹14,999</div>
+          <span class="tp-off">57% OFF · First 100 Seats</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accent-line"></div>
+
+    <div class="modules">
+
+      <div class="mod">
+        <span class="mod-icon">⚡</span>
+        <div class="mod-num">Module 01 + 02</div>
+        <div class="mod-name">AI Tools + Prompts</div>
+        <ul class="mod-points">
+          <li>Everything in Tier 1 — live, not recorded</li>
+          <li>Real-time Q&amp;A and peer learning</li>
+          <li>Instructor-led prompt deep dives</li>
+        </ul>
+      </div>
+
+      <div class="mod">
+        <span class="mod-icon">🤖</span>
+        <div class="mod-num">Module 03</div>
+        <div class="mod-name">AI Agents &amp; Automations</div>
+        <ul class="mod-points">
+          <li>Build Custom GPTs &amp; Claude Projects</li>
+          <li>n8n: nodes, triggers, live workflows</li>
+          <li>Connect AI to Gmail, Sheets, WhatsApp</li>
+          <li>5 real automations built together live</li>
+        </ul>
+        <div class="mod-deliverable">
+          <span class="d-label">🎯</span>
+          2 live automations running on demo day
+        </div>
+      </div>
+
+      <div class="mod">
+        <span class="mod-icon">🛠️</span>
+        <div class="mod-num">Module 04</div>
+        <div class="mod-name">No-Code AI App Building</div>
+        <ul class="mod-points">
+          <li>Bubble.io: database, logic, UI</li>
+          <li>Connecting OpenAI API to no-code tools</li>
+          <li>User auth + Stripe payments</li>
+          <li>5 validated app ideas — build one live</li>
+        </ul>
+        <div class="mod-deliverable">
+          <span class="d-label">🎯</span>
+          Live shareable AI app — 5+ real users
+        </div>
+      </div>
+
+      <div class="mod">
+        <span class="mod-icon">🎬</span>
+        <div class="mod-num">Module 05</div>
+        <div class="mod-name">AI for Content Creators</div>
+        <ul class="mod-points">
+          <li>YouTube end-to-end: script → video → thumbnail</li>
+          <li>Reels/Shorts — batch 10 videos in one session</li>
+          <li>30 days of content in 2 hours</li>
+          <li>AI dubbing: 1 video → 5 Indian languages</li>
+            <li>Voice cloning — build your own AI voice with ElevenLabs, HeyGen</li>
+            <li>Clone voice for content, ads, courses — no studio needed</li>
+        </ul>
+        <div class="mod-deliverable">
+          <span class="d-label">🎯</span>
+          Full content system — 1 long-form + 5 short pieces live
+        </div>
+      </div>
+
+      <div class="mod">
+        <span class="mod-icon">💼</span>
+        <div class="mod-num">Module 06</div>
+        <div class="mod-name">AI Freelancing &amp; Business</div>
+        <ul class="mod-points">
+          <li>10 highest-paying AI niches in India</li>
+          <li>3 service packages with real pricing</li>
+          <li>Finding clients: LinkedIn, Upwork, cold DM</li>
+          <li>Indian freelancer tax: GST, invoicing, ITR</li>
+        </ul>
+        <div class="mod-deliverable">
+          <span class="d-label">🎯</span>
+          Portfolio live + 3 proposals sent + first client call
+        </div>
+      </div>
+
+      <div class="mod" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:rgba(139,92,246,0.05);border-color:rgba(139,92,246,0.2);">
+        <span style="font-size:32px;margin-bottom:12px">🏙️</span>
+        <div class="mod-name">Community &amp; Events</div>
+        <p style="font-size:13px;color:var(--muted);margin-top:8px">City meetups · Physical gatherings · Annual IgnAIte conference · Job &amp; client referral board</p>
+      </div>
+
+    </div>
+
+    <div class="tier-bottom">
+      <div class="tb-emi">EMI: ₹3,750 × 4 — No Cost</div>
+      <div class="tb-note">All recordings 6 months · LinkedIn certificate</div>
+      <a href="file:///D:/Downloads/IgnAIte_CourseStructure_1.html#" class="tb-cta">Enroll Now — ₹14,999 →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     TIER 3
+══════════════════════════════════════ -->
+<section class="tier-section t3">
+  <div class="wrap">
+
+    <div class="tier-header">
+      <div class="tier-left">
+        <div class="tier-num">Tier 03 · 👑 Elite</div>
+        <div class="tier-name">Ign<span class="v">AI</span>te Elite</div>
+        <div class="tier-tagline">
+          <strong>Zero to job. Guaranteed.</strong><br>
+          30 live sessions + technical AI + dedicated mentor.
+        </div>
+      </div>
+      <div class="tier-right">
+        <div class="tier-badge">30 Live Sessions · Job Support</div>
+        <div class="tier-price-block">
+          <div class="tp-strike">₹79,999</div>
+          <div class="tp-price">₹49,999</div>
+          <span class="tp-off">37% OFF · First 30 Seats</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accent-line"></div>
+
+    <div class="modules">
+
+      <div class="mod" style="border-color:rgba(139,92,246,0.15)">
+        <span class="mod-icon">🚀</span>
+        <div class="mod-num">Modules 01 – 06</div>
+        <div class="mod-name">Everything in Pro, Plus More</div>
+        <ul class="mod-points">
+          <li>All 6 Pro modules — live, deeper sessions</li>
+          <li>Dedicated mentor from day one</li>
+          <li>Weekly 1:1 check-ins throughout</li>
+          <li>Personal resume + LinkedIn review</li>
+        </ul>
+      </div>
+
+      <div class="mod" style="border-color:rgba(139,92,246,0.3); background:#0E0B16;">
+        <span class="mod-icon">💻</span>
+        <div class="mod-num">Module 07 · Builder Track</div>
+        <div class="mod-name">Technical AI — Python &amp; Deploy</div>
+        <ul class="mod-points">
+          <li>Python fast track for AI: APIs, JSON</li>
+          <li>OpenAI, Anthropic, Gemini APIs direct</li>
+          <li>Embeddings + RAG — chat with your docs</li>
+          <li>LangChain: chains, memory, agents</li>
+          <li>FastAPI + Streamlit — ship a real product</li>
+          <li>Docker + GitHub Actions + Cloud Deploy</li>
+        </ul>
+        <div class="mod-deliverable">
+          <span class="d-label">🎯</span>
+          Live deployed AI app with public URL + GitHub repo
+        </div>
+      </div>
+
+      <div class="mod" style="border-color:rgba(139,92,246,0.15)">
+        <span class="mod-icon">🏆</span>
+        <div class="mod-num">Capstone Sprint</div>
+        <div class="mod-name">Build &amp; Ship Your AI Product</div>
+        <ul class="mod-points">
+          <li>Ideate → build → launch in one sprint</li>
+          <li>Mentor-guided product decisions</li>
+          <li>Live Demo Day presentation</li>
+          <li>Architecture diagram + runbook</li>
+        </ul>
+        <div class="mod-deliverable">
+          <span class="d-label">🎯</span>
+          Real AI product — live users, public link, portfolio ready
+        </div>
+      </div>
+
+      <div class="mod" style="border-color:rgba(139,92,246,0.15)">
+        <span class="mod-icon">💼</span>
+        <div class="mod-num">Career Placement</div>
+        <div class="mod-name">Job Supportd or Refund*</div>
+        <ul class="mod-points">
+          <li>Mock interviews + HR prep sessions</li>
+          <li>Minimum 3 company referrals</li>
+          <li>Internship placement assistance</li>
+          <li>6-month post-course job support</li>
+          <li>LinkedIn managed during job hunt</li>
+        </ul>
+        <div class="mod-deliverable">
+          <span class="d-label">🎯</span>
+          First job or client in tech. Guaranteed.*
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tier-bottom">
+      <div class="tb-emi">EMI: ₹8,334 × 6 — No Cost</div>
+      <div class="tb-note">Lifetime community · VIP conference · All future recordings</div>
+      <a href="file:///D:/Downloads/IgnAIte_CourseStructure_1.html#" class="tb-cta">Join Elite Track →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     MODULE 08 — AI ENGINEERING
+══════════════════════════════════════ -->
+<section class="tier-section t3" style="background:linear-gradient(180deg,#0A0812 0%,#080808 100%)">
+  <div class="wrap">
+
+    <div class="tier-header">
+      <div class="tier-left">
+        <div class="tier-num">Module 08 · Elite Only · 🔥 Advanced</div>
+        <div class="tier-name" style="font-size:clamp(32px,5vw,46px)">AI <span class="v">Engineering</span><br>&amp; Agent Systems</div>
+        <div class="tier-tagline">
+          <strong>The module nobody else teaches.</strong><br>
+          Real frameworks. Real agent patterns. Production-grade projects.
+        </div>
+      </div>
+      <div class="tier-right">
+        <div class="tier-badge" style="border-color:rgba(139,92,246,0.4);color:var(--v2)">16 Sessions · Builder Track</div>
+        <div style="font-size:12px;color:var(--muted);text-align:right;max-width:200px;margin-top:8px">
+          This is what separates an AI user from an AI engineer.
+        </div>
+      </div>
+    </div>
+
+    <div class="accent-line" style="opacity:1;background:linear-gradient(90deg,var(--v),var(--teal),transparent 70%)"></div>
+
+    <!-- FRAMEWORKS OVERVIEW -->
+    <div style="margin-bottom:32px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--v);margin-bottom:18px">
+        Frameworks You'll Master
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
+
+        <!-- MCP -->
+        <div style="background:#0E0B18;border:1px solid rgba(139,92,246,0.25);border-radius:10px;padding:16px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--v);margin-bottom:6px">Anthropic</div>
+          <div style="font-weight:800;font-size:15px;color:var(--white);margin-bottom:6px">MCP</div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.5">Model Context Protocol — connect AI to any tool, DB, or API using standardised server/client architecture</div>
+        </div>
+
+        <!-- A2A -->
+        <div style="background:#0E0B18;border:1px solid rgba(139,92,246,0.25);border-radius:10px;padding:16px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--v);margin-bottom:6px">Google</div>
+          <div style="font-weight:800;font-size:15px;color:var(--white);margin-bottom:6px">A2A Protocol</div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.5">Agent-to-Agent communication — how multiple AI agents discover, delegate, and collaborate across systems</div>
+        </div>
+
+        <!-- OpenAI Agents SDK -->
+        <div style="background:#0E0B18;border:1px solid rgba(34,211,238,0.2);border-radius:10px;padding:16px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--teal);margin-bottom:6px">OpenAI</div>
+          <div style="font-weight:800;font-size:15px;color:var(--white);margin-bottom:6px">Agents SDK</div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.5">Build production agents with handoffs, tool calls, guardrails, tracing — the official OpenAI way</div>
+        </div>
+
+        <!-- Claude Tool Use -->
+        <div style="background:#0E0B18;border:1px solid rgba(139,92,246,0.25);border-radius:10px;padding:16px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--v);margin-bottom:6px">Anthropic</div>
+          <div style="font-weight:800;font-size:15px;color:var(--white);margin-bottom:6px">Claude Tool Use</div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.5">Function calling, computer use, document agents — building reliable pipelines with Claude as the brain</div>
+        </div>
+
+        <!-- Codex / Operator -->
+        <div style="background:#0E0B18;border:1px solid rgba(34,211,238,0.2);border-radius:10px;padding:16px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--teal);margin-bottom:6px">OpenAI</div>
+          <div style="font-weight:800;font-size:15px;color:var(--white);margin-bottom:6px">Codex &amp; Operator</div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.5">Agentic code execution, browser-use, task automation — AI that acts, not just answers</div>
+        </div>
+
+        <!-- LangChain -->
+        <div style="background:#0E0B18;border:1px solid rgba(74,222,128,0.2);border-radius:10px;padding:16px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:6px">OSS</div>
+          <div style="font-weight:800;font-size:15px;color:var(--white);margin-bottom:6px">LangChain</div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.5">Chains, memory, tools, LCEL — the industry standard for composable LLM apps and RAG pipelines</div>
+        </div>
+
+        <!-- LangGraph -->
+        <div style="background:#0E0B18;border:1px solid rgba(74,222,128,0.2);border-radius:10px;padding:16px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:6px">OSS</div>
+          <div style="font-weight:800;font-size:15px;color:var(--white);margin-bottom:6px">LangGraph</div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.5">Stateful multi-agent graphs — conditional branching, cycles, human-in-the-loop, supervisor patterns</div>
+        </div>
+
+        <!-- AutoGen -->
+        <div style="background:#0E0B18;border:1px solid rgba(234,179,8,0.2);border-radius:10px;padding:16px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--yellow);margin-bottom:6px">Microsoft</div>
+          <div style="font-weight:800;font-size:15px;color:var(--white);margin-bottom:6px">AutoGen</div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.5">Multi-agent conversation framework — agents that talk to each other, debate, code, and self-correct</div>
+        </div>
+
+        <!-- CrewAI -->
+        <div style="background:#0E0B18;border:1px solid rgba(244,63,94,0.2);border-radius:10px;padding:16px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--pink);margin-bottom:6px">OSS</div>
+          <div style="font-weight:800;font-size:15px;color:var(--white);margin-bottom:6px">CrewAI</div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.5">Role-based agent crews — define agents as specialists (researcher, writer, coder) with tasks and goals</div>
+        </div>
+
+        <!-- LlamaIndex -->
+        <div style="background:#0E0B18;border:1px solid rgba(234,179,8,0.2);border-radius:10px;padding:16px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--yellow);margin-bottom:6px">OSS</div>
+          <div style="font-weight:800;font-size:15px;color:var(--white);margin-bottom:6px">LlamaIndex</div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.5">Data framework for LLMs — indexing, retrieval, query engines, knowledge graphs over your own data</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- AGENT PATTERNS -->
+    <div style="margin-bottom:32px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--v);margin-bottom:18px">
+        Agent Patterns You'll Build
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
+
+        <div style="background:var(--card);border:1px solid var(--border);border-left:3px solid var(--v);border-radius:10px;padding:18px">
+          <div style="font-weight:700;font-size:14px;color:var(--white);margin-bottom:8px">🔁 ReAct Agent</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.5">Reason → Act → Observe loop. Agent thinks step-by-step, calls tools, observes output, adjusts. Foundation of all agentic systems.</div>
+        </div>
+
+        <div style="background:var(--card);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:10px;padding:18px">
+          <div style="font-weight:700;font-size:14px;color:var(--white);margin-bottom:8px">👥 Multi-Agent Supervisor</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.5">One supervisor agent delegates to specialist sub-agents (researcher, coder, writer). Each does one thing perfectly.</div>
+        </div>
+
+        <div style="background:var(--card);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:10px;padding:18px">
+          <div style="font-weight:700;font-size:14px;color:var(--white);margin-bottom:8px">📚 RAG Pipeline</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.5">Retrieval Augmented Generation — embed your docs into a vector DB, retrieve relevant chunks, feed to LLM for grounded answers.</div>
+        </div>
+
+        <div style="background:var(--card);border:1px solid var(--border);border-left:3px solid var(--yellow);border-radius:10px;padding:18px">
+          <div style="font-weight:700;font-size:14px;color:var(--white);margin-bottom:8px">🛠️ Tool-Calling Agent</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.5">Agent with access to tools (search, code exec, DB, API). Decides which tool to call, when, with what params — autonomously.</div>
+        </div>
+
+        <div style="background:var(--card);border:1px solid var(--border);border-left:3px solid var(--pink);border-radius:10px;padding:18px">
+          <div style="font-weight:700;font-size:14px;color:var(--white);margin-bottom:8px">🌐 MCP Server + Client</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.5">Build your own MCP server exposing tools/resources. Connect any LLM client (Claude, Cursor, custom) to your backend via standard protocol.</div>
+        </div>
+
+        <div style="background:var(--card);border:1px solid var(--border);border-left:3px solid var(--v2);border-radius:10px;padding:18px">
+          <div style="font-weight:700;font-size:14px;color:var(--white);margin-bottom:8px">🔗 A2A Agent Network</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.5">Multiple agents publishing Agent Cards, discovering each other, delegating tasks peer-to-peer without a central orchestrator.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PROJECT STRUCTURE -->
+    <div style="margin-bottom:32px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--v);margin-bottom:18px">
+        Production Project Structure
+      </div>
+      <div style="background:#0A0812;border:1px solid rgba(139,92,246,0.2);border-radius:12px;padding:24px;font-family:&#39;DM Sans&#39;,monospace">
+        <div style="font-size:11px;color:var(--v);font-weight:700;margin-bottom:14px;letter-spacing:0.06em">YOUR-AI-AGENT/</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px">
+          <div>
+            <div style="font-size:12px;color:var(--teal);font-weight:600;margin-bottom:6px">📁 Core</div>
+            <div style="font-size:11.5px;color:var(--muted);line-height:2">
+              agents/ &nbsp;<span style="color:var(--muted2)">— agent definitions</span><br>
+              tools/ &nbsp;<span style="color:var(--muted2)">— tool functions</span><br>
+              prompts/ &nbsp;<span style="color:var(--muted2)">— system prompts</span><br>
+              memory/ &nbsp;<span style="color:var(--muted2)">— vector stores</span><br>
+              chains/ &nbsp;<span style="color:var(--muted2)">— LangChain flows</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:12px;color:var(--green);font-weight:600;margin-bottom:6px">📁 Infrastructure</div>
+            <div style="font-size:11.5px;color:var(--muted);line-height:2">
+              api/ &nbsp;<span style="color:var(--muted2)">— FastAPI routes</span><br>
+              mcp/ &nbsp;<span style="color:var(--muted2)">— MCP server</span><br>
+              tests/ &nbsp;<span style="color:var(--muted2)">— evals &amp; tests</span><br>
+              docker/ &nbsp;<span style="color:var(--muted2)">— containers</span><br>
+              .github/ &nbsp;<span style="color:var(--muted2)">— CI/CD actions</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:12px;color:var(--yellow);font-weight:600;margin-bottom:6px">📁 Data</div>
+            <div style="font-size:11.5px;color:var(--muted);line-height:2">
+              data/raw/ &nbsp;<span style="color:var(--muted2)">— source docs</span><br>
+              data/indexed/ &nbsp;<span style="color:var(--muted2)">— embeddings</span><br>
+              schemas/ &nbsp;<span style="color:var(--muted2)">— Pydantic models</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:12px;color:var(--pink);font-weight:600;margin-bottom:6px">📄 Config</div>
+            <div style="font-size:11.5px;color:var(--muted);line-height:2">
+              .env &nbsp;<span style="color:var(--muted2)">— API keys</span><br>
+              config.yaml &nbsp;<span style="color:var(--muted2)">— model config</span><br>
+              requirements.txt<br>
+              README.md
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILLS & TOOLS TAUGHT -->
+    <div style="margin-bottom:32px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--v);margin-bottom:18px">
+        Full Tech Stack Taught
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <!-- each skill pill -->
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--v2)">Python 3.11+</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--teal)">OpenAI SDK</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--v2)">Anthropic SDK</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--green)">LangChain</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--green)">LangGraph</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--yellow)">LlamaIndex</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--yellow)">AutoGen</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--pink)">CrewAI</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--v2)">MCP Protocol</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--teal)">A2A Protocol</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--teal)">OpenAI Agents SDK</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--teal)">Codex / Operator</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--green)">ChromaDB</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--green)">Pinecone</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--off)">FastAPI</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--off)">Pydantic</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--off)">Docker</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--off)">GitHub Actions</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--off)">Streamlit</span>
+        <span style="background:#111;border:1px solid #222;border-radius:100px;padding:6px 14px;font-size:11.5px;color:var(--muted)">Railway / Render / GCP</span>
+      </div>
+    </div>
+
+    <!-- DELIVERABLE -->
+    <div style="background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-left:3px solid var(--v);border-radius:10px;padding:20px 24px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--v);margin-bottom:10px">🎯 Final Deliverable</div>
+      <div style="font-weight:700;font-size:15px;color:var(--white);margin-bottom:6px">
+        A production-ready multi-agent AI system — deployed, documented, and demoed live.
+      </div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6">
+        Your own agent using MCP + LangGraph (or CrewAI) — with a FastAPI backend, vector memory, tool integrations, Docker container, CI/CD pipeline, and a public URL. Architecture diagram + runbook included. Demo Day presentation to mentors and peers.
+      </div>
+    </div>
+
+    <div class="tier-bottom">
+      <div class="tb-emi">Included in IgnAIte Elite · ₹49,999</div>
+      <div class="tb-note">16 sessions · Builder Track · Elite only</div>
+      <a href="file:///D:/Downloads/IgnAIte_CourseStructure_1.html#" class="tb-cta" style="background:var(--v);color:white;border:none;box-shadow:0 8px 24px rgba(139,92,246,0.3)">Join Elite Track →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     QUICK COMPARE
+══════════════════════════════════════ -->
+<section class="compare-section">
+  <div class="wrap">
+    <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--v);margin-bottom:10px">At a Glance</div>
+    <div style="font-family:&#39;DM Sans&#39;;font-weight:800;font-size:clamp(26px,5vw,36px);color:var(--white);letter-spacing:-0.02em;margin-bottom:8px">Which Tier Is <span style="color:var(--v)">Right for You?</span></div>
+    <div style="font-size:14px;color:var(--muted);margin-bottom:32px">Pick based on where you are and where you want to go.</div>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>AI Starter</th>
+          <th class="hl">AI Pro Cohort</th>
+          <th>IgnAIte Elite</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Price</td>
+          <td>₹4,999</td>
+          <td class="hl">₹14,999</td>
+          <td>₹49,999</td>
+        </tr>
+        <tr>
+          <td>Format</td>
+          <td>Self-paced</td>
+          <td class="hl">Live cohort</td>
+          <td>Live + mentor</td>
+        </tr>
+        <tr>
+          <td>Modules</td>
+          <td>01 – 02</td>
+          <td class="hl">01 – 06</td>
+          <td>01 – 07 + Capstone</td>
+        </tr>
+        <tr>
+          <td>Live Sessions</td>
+          <td><span class="no">✗ None</span></td>
+          <td class="hl"><span class="yes">✓ 12 sessions</span></td>
+          <td><span class="yes">✓ 30 sessions</span></td>
+        </tr>
+        <tr>
+          <td>1:1 Mentorship</td>
+          <td><span class="no">✗</span></td>
+          <td class="hl"><span class="no">✗</span></td>
+          <td><span class="yes">✓ Weekly check-ins</span></td>
+        </tr>
+        <tr>
+          <td>Technical AI (Python)</td>
+          <td><span class="no">✗</span></td>
+          <td class="hl"><span class="no">✗</span></td>
+          <td><span class="yes">✓ Full module</span></td>
+        </tr>
+        <tr>
+          <td>Job Support</td>
+          <td><span class="no">✗</span></td>
+          <td class="hl"><span class="no">✗</span></td>
+          <td><span class="yes">✓ Guaranteed*</span></td>
+        </tr>
+        <tr>
+          <td>City Meetups</td>
+          <td><span class="no">✗</span></td>
+          <td class="hl"><span class="yes">✓</span></td>
+          <td><span class="yes">✓ + VIP conference</span></td>
+        </tr>
+        <tr>
+          <td>Best For</td>
+          <td>Beginners, curious starters</td>
+          <td class="hl">Professionals, freelancers</td>
+          <td>Career switchers, devs</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<div class="wrap">
+  <div class="bottom-cta">
+    <h2>Ready to <span class="v">IgnAIte</span> Your Career?</h2>
+    <p>First 50 seats get 10% extra off. EMI on all tiers. No hidden fees.</p>
+    <a href="https://ignaite.in/" class="bc-cta">ignaite.in — Enroll Now →</a>
+    <div class="bc-disc">*Job support: min. 80% assignment completion required. T&amp;C apply.</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <p><strong>IgnAIte</strong> &nbsp;·&nbsp; India's AI Career Program &nbsp;·&nbsp; ignaite.in &nbsp;·&nbsp; <a href="file:///D:/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b6ded3dadad9f6dfd1d8d7dfc2d398dfd8">[email&nbsp;protected]</a></p>
+    </div></footer></body></html>

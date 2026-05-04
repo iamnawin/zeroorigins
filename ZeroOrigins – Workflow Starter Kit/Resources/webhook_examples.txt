@@ -1,0 +1,125 @@
+==============================================================
+  WEBHOOK PAYLOAD EXAMPLES — ZeroOrigins Workflow Starter Kit
+==============================================================
+
+These are example JSON payloads to POST to each webhook endpoint.
+Use these to test your workflows before connecting real forms.
+
+You can test with cURL, Postman, or Insomnia.
+
+--------------------------------------------------------------
+1. LEAD CAPTURE / AI LEAD QUALIFIER
+   POST to: https://your-n8n.app.n8n.cloud/webhook/qualify-lead
+--------------------------------------------------------------
+
+{
+  "name": "Sarah Chen",
+  "email": "sarah@growthstartup.co",
+  "business": "GrowthStartup",
+  "company": "GrowthStartup",
+  "message": "We're a 25-person SaaS company losing leads because our sales team manually follows up. We need a system that qualifies and follows up automatically. Budget is around $500-1000. Can you help?",
+  "source": "LinkedIn",
+  "utm_source": "linkedin",
+  "phone": "+1-555-0123"
+}
+
+--- COLD LEAD EXAMPLE ---
+{
+  "name": "Student Dev",
+  "email": "student@gmail.com",
+  "business": "Personal Project",
+  "message": "Hi I'm a student learning n8n for a college project. Can you help me understand workflows?",
+  "source": "Google"
+}
+
+--------------------------------------------------------------
+2. BOOKING CAPTURE SYSTEM
+   POST to: https://your-n8n.app.n8n.cloud/webhook/book-call
+--------------------------------------------------------------
+
+{
+  "name": "Marcus Williams",
+  "email": "marcus@agencyblue.io",
+  "phone": "+44-7700-900123",
+  "business": "Agency Blue",
+  "message": "We run a marketing agency and want to automate our client reporting and lead follow-up. Already using HubSpot but it's not connected to anything.",
+  "date": "2026-05-10",
+  "time_slot": "15:00",
+  "preferred_time": "3pm IST",
+  "source": "Website"
+}
+
+--------------------------------------------------------------
+3. INTERNAL ALERT SYSTEM
+   POST to: https://your-n8n.app.n8n.cloud/webhook/internal-alert
+--------------------------------------------------------------
+
+--- CRITICAL ALERT ---
+{
+  "type": "system_down",
+  "urgency": "critical",
+  "title": "n8n workflow server unreachable",
+  "body": "The primary n8n instance at app.n8n.cloud is returning 503 errors. Lead capture workflows are not firing. Last successful execution: 14 minutes ago.",
+  "source": "Uptime Monitor",
+  "link": "https://app.n8n.cloud/executions"
+}
+
+--- HIGH PRIORITY ALERT ---
+{
+  "type": "new_client",
+  "urgency": "high",
+  "title": "New client payment — Workflow Starter Kit",
+  "body": "Sarah Chen (sarah@growthstartup.co) purchased the Workflow Starter Kit. Amount: USD 297. Client code will be auto-generated.",
+  "source": "Stripe",
+  "link": "https://dashboard.stripe.com/payments"
+}
+
+--- NORMAL ALERT ---
+{
+  "type": "content",
+  "urgency": "normal",
+  "title": "New blog post published — ZeroOrigins",
+  "body": "Post: '5 n8n workflows every founder needs' is now live. Remember to share on LinkedIn and Twitter.",
+  "source": "CMS",
+  "link": "https://zeroorigins.in/blog"
+}
+
+--------------------------------------------------------------
+HOW TO TEST WITH CURL
+--------------------------------------------------------------
+
+Replace YOUR_WEBHOOK_URL with your actual n8n webhook URL.
+
+  curl -X POST https://YOUR_WEBHOOK_URL/webhook/qualify-lead \
+    -H "Content-Type: application/json" \
+    -d '{"name":"Test User","email":"test@example.com","business":"Test Co","message":"I need help automating my lead follow-up","source":"Direct"}'
+
+--------------------------------------------------------------
+HOW TO TEST IN POSTMAN / INSOMNIA
+--------------------------------------------------------------
+
+1. Create a new POST request
+2. Set URL to your webhook endpoint
+3. Set Body type to: JSON (application/json)
+4. Paste the example payload above
+5. Click Send
+
+You should see a 200 response with a JSON body confirming receipt.
+Check your n8n Executions tab to see the full workflow run.
+
+--------------------------------------------------------------
+FIELD MAPPING REFERENCE
+--------------------------------------------------------------
+
+The workflows accept flexible field names. These are equivalent:
+
+  name / full_name           → lead's full name
+  email                      → lead's email (required)
+  business / company         → company name
+  message / notes            → lead's message
+  source / utm_source        → where they came from
+  time_slot / time           → preferred meeting time (HH:MM)
+  date                       → preferred meeting date (YYYY-MM-DD)
+  urgency                    → critical / high / normal (alerts only)
+
+==============================================================

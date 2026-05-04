@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)file:///D:/Downloads/IgnAIte_Brochure_v3_1.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IgnAIte — Ignite Your Career with AI</title>
+<link href="./Ignaite brochure v3_files/css2" rel="stylesheet">
+<link href="./Ignaite brochure v3_files/css2(1)" rel="stylesheet">
+<style>
+
+:root {
+  --bg:       #0C0C0C;
+  --bg2:      #111111;
+  --bg3:      #161616;
+  --card:     #191919;
+  --card2:    #1E1E1E;
+  --border:   #2A2A2A;
+  --border2:  #333333;
+  --violet:   #8B5CF6;
+  --orange2:  #A78BFA;
+  --white:    #FFFFFF;
+  --off:      #F0EDE8;
+  --muted:    #888888;
+  --muted2:   #555555;
+  --green:    #4ADE80;
+  --teal:     #22D3EE;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--off);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+/* ── subtle noise ── */
+body::after {
+  content:'';
+  position:fixed; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:0; opacity:0.5;
+}
+
+.wrap { max-width:900px; margin:0 auto; padding:0 28px; position:relative; z-index:1; }
+
+/* ════════════════════════════════
+   TOP STRIP
+════════════════════════════════ */
+.topstrip {
+  border-bottom: 1px solid var(--border);
+  padding: 11px 0;
+  background: var(--bg2);
+}
+.topstrip-inner {
+  display:flex; align-items:center; justify-content:space-between;
+  font-size: 11px; color: var(--muted); letter-spacing:0.06em; text-transform:uppercase;
+}
+.topstrip-inner .dot { color: var(--violet); }
+
+/* ════════════════════════════════
+   HERO
+════════════════════════════════ */
+.hero {
+  padding: 90px 0 70px;
+  text-align: center;
+  position:relative;
+  overflow:hidden;
+}
+
+/* big glow behind title */
+.hero-glow {
+  position:absolute;
+  width:700px; height:400px;
+  background: radial-gradient(ellipse, rgba(139,92,246,0.07) 0%, transparent 70%);
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+
+/* ── EYEBROW BADGE ── */
+.eyebrow {
+  display:inline-flex; align-items:center; gap:8px;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
+  padding: 7px 18px; border-radius:100px;
+  margin-bottom:40px;
+  animation: up 0.7s ease both;
+}
+.eyebrow .fire { color: var(--violet); font-weight:700; }
+
+/* ── GIANT LOGO ── */
+.hero-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(88px, 20vw, 140px);
+  letter-spacing: 0.01em;
+  line-height: 1;
+  margin-bottom: 0;
+  animation: up 0.7s 0.08s ease both; opacity:0;
+}
+.hero-logo .w { color: var(--white); }
+.hero-logo .o { color: var(--violet); }
+
+/* ── DECO LINES ── */
+.deco-lines {
+  display:flex; align-items:center; justify-content:center;
+  gap: 14px;
+  margin: 18px 0 28px;
+  animation: up 0.7s 0.12s ease both; opacity:0;
+}
+.deco-line {
+  height: 1px; flex:1; max-width:120px;
+  background: linear-gradient(90deg, transparent, var(--border2), transparent);
+}
+.deco-line.lit { background: linear-gradient(90deg, transparent, var(--violet), transparent); max-width:60px; }
+.deco-diamond {
+  width:7px; height:7px;
+  background: var(--violet);
+  transform: rotate(45deg);
+  box-shadow: 0 0 12px rgba(139,92,246,0.5);
+}
+.deco-dot {
+  width:4px; height:4px;
+  background: var(--border2);
+  border-radius:50%;
+}
+
+/* ── HERO HEADLINES ── */
+.hero-h1 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 800;
+  font-size: clamp(22px, 4.5vw, 34px);
+  color: var(--white);
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+  animation: up 0.7s 0.18s ease both; opacity:0;
+}
+.hero-h1 em { color: var(--violet); font-style:normal; }
+
+.hero-h2 {
+  font-size: clamp(14px, 2.5vw, 18px);
+  color: var(--muted);
+  font-weight: 300;
+  max-width: 520px;
+  margin: 0 auto 14px;
+  animation: up 0.7s 0.22s ease both; opacity:0;
+}
+.hero-h2 strong { color: var(--off); font-weight:500; }
+
+.hero-hook {
+  font-size: 13px;
+  color: var(--muted2);
+  max-width: 460px;
+  margin: 0 auto 48px;
+  animation: up 0.7s 0.26s ease both; opacity:0;
+}
+
+/* ── STATS ROW ── */
+.stats {
+  display:flex; justify-content:center;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow:hidden;
+  background: var(--card);
+  margin-bottom: 36px;
+  animation: up 0.7s 0.3s ease both; opacity:0;
+}
+.stat {
+  flex:1; padding:20px 12px; text-align:center;
+  border-right: 1px solid var(--border);
+  position:relative;
+}
+.stat:last-child { border-right:none; }
+.stat-n {
+  font-family: 'DM Sans', sans-serif;
+  font-weight:800; font-size:26px;
+  color: var(--white);
+  display:block; margin-bottom:3px;
+}
+.stat-n.fire { color: var(--violet); }
+.stat-l { font-size:10px; color:var(--muted2); text-transform:uppercase; letter-spacing:0.07em; }
+
+/* ── QUOTE ── */
+.hero-quote {
+  background: var(--card2);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--violet);
+  border-radius: 10px;
+  padding: 22px 28px;
+  text-align:left;
+  margin-bottom: 16px;
+  animation: up 0.7s 0.34s ease both; opacity:0;
+  position:relative;
+}
+.hero-quote .q-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.hero-quote .q-sub {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ── FEATURE TAGS ── */
+.feature-tags {
+  display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
+  animation: up 0.7s 0.38s ease both; opacity:0;
+  margin-bottom: 0;
+}
+.ftag {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 7px 16px;
+  font-size: 12px;
+  color: var(--muted);
+  display:flex; align-items:center; gap:6px;
+}
+.ftag .icon { font-size:13px; }
+
+/* ════════════════════════════════
+   SHARED SECTION STYLES
+════════════════════════════════ */
+section { padding: 70px 0; border-top: 1px solid var(--border); }
+
+.s-label {
+  font-size:11px; font-weight:700; letter-spacing:0.12em;
+  text-transform:uppercase; color:var(--violet);
+  margin-bottom:10px;
+}
+.s-title {
+  font-family:'DM Sans', sans-serif;
+  font-weight:800; font-size:clamp(26px,5vw,38px);
+  color:var(--white); letter-spacing:-0.02em; line-height:1.1;
+  margin-bottom:8px;
+}
+.s-title em { color:var(--violet); font-style:normal; }
+.s-desc { font-size:14px; color:var(--muted); margin-bottom:10px; }
+.s-hr {
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:36px; margin-top:12px;
+}
+.s-hr-line { height:1px; width:40px; background: linear-gradient(90deg, var(--violet), transparent); }
+.s-hr-dot  { width:5px; height:5px; background:var(--violet); border-radius:50%; flex-shrink:0; }
+
+/* ════════════════════════════════
+   PILLARS
+════════════════════════════════ */
+.pillars { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+
+.pcrd {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:20px;
+  position:relative;
+  overflow:hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.pcrd:hover { transform:translateY(-2px); }
+
+.pcrd::after {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:2px;
+  border-radius:10px 10px 0 0;
+}
+.p-o::after { background:var(--violet); }
+.p-w::after { background:#FFFFFF22; }
+.p-t::after { background:var(--teal); }
+.p-g::after { background:var(--green); }
+.p-r::after { background:#F43F5E; }
+.p-y::after { background:#EAB308; }
+
+.p-o:hover { border-color:rgba(139,92,246,0.3); }
+.p-t:hover { border-color:rgba(34,211,238,0.3); }
+.p-g:hover { border-color:rgba(74,222,128,0.3); }
+
+.p-top { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.p-icon { font-size:20px; }
+.p-num { font-size:10px; color:var(--muted2); font-weight:700; letter-spacing:0.1em; text-transform:uppercase; }
+.p-name { font-weight:700; font-size:14px; color:var(--white); margin-bottom:6px; }
+.p-tools { font-size:12px; color:var(--muted); line-height:1.5; margin-bottom:10px; }
+
+.p-badge {
+  display:inline-block; font-size:10px; font-weight:700;
+  padding:3px 10px; border-radius:100px; letter-spacing:0.04em;
+}
+.p-o .p-badge { background:rgba(139,92,246,0.12); color:var(--violet); }
+.p-w .p-badge { background:rgba(255,255,255,0.06); color:var(--muted); }
+.p-t .p-badge { background:rgba(34,211,238,0.1); color:var(--teal); }
+.p-g .p-badge { background:rgba(74,222,128,0.1); color:var(--green); }
+.p-r .p-badge { background:rgba(244,63,94,0.1); color:#F43F5E; }
+.p-y .p-badge { background:rgba(234,179,8,0.1); color:#EAB308; }
+
+.p-full {
+  background:var(--card);
+  border:1px solid rgba(139,92,246,0.2);
+  border-radius:10px; padding:20px 24px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  position:relative; overflow:hidden;
+}
+.p-full::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--violet); }
+.p-full-info { display:flex; align-items:center; gap:14px; }
+.p-full-name { font-weight:700; font-size:15px; color:var(--white); margin-bottom:3px; }
+.p-full-tools { font-size:12px; color:var(--muted); }
+.p-full-right { display:flex; flex-direction:column; align-items:flex-end; gap:5px; flex-shrink:0; }
+
+/* ════════════════════════════════
+   TRACKS
+════════════════════════════════ */
+.tracks { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.tcrd {
+  border-radius:12px; padding:26px;
+  border:1px solid var(--border);
+}
+.tcrd.creator { background: linear-gradient(145deg, #171008, #111111); border-color:rgba(139,92,246,0.2); }
+.tcrd.builder { background: linear-gradient(145deg, #0E0E18, #111111); border-color:rgba(34,211,238,0.15); }
+
+.t-icon { font-size:28px; display:block; margin-bottom:14px; }
+.t-name { font-weight:800; font-size:18px; margin-bottom:5px; }
+.creator .t-name { color:var(--violet); }
+.builder .t-name { color:var(--teal); }
+.t-sub { font-size:12px; color:var(--muted2); margin-bottom:18px; }
+.t-item {
+  display:flex; gap:10px; align-items:flex-start;
+  font-size:13px; color:var(--off); margin-bottom:9px; line-height:1.4;
+}
+.creator .t-item::before { content:'→'; color:var(--violet); font-weight:700; flex-shrink:0; }
+.builder .t-item::before { content:'→'; color:var(--teal); font-weight:700; flex-shrink:0; }
+
+/* ════════════════════════════════
+   PRICING
+════════════════════════════════ */
+.pricing-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; align-items:start; }
+
+.pcard {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px; overflow:hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.pcard:hover { transform:translateY(-4px); box-shadow:0 20px 48px rgba(0,0,0,0.5); }
+
+.pcard.pop {
+  border-color: var(--violet);
+  box-shadow: 0 0 0 1px rgba(139,92,246,0.3), 0 12px 40px rgba(139,92,246,0.1);
+}
+
+.pop-bar {
+  background: var(--violet);
+  padding:10px; text-align:center;
+  font-weight:700; font-size:11px; letter-spacing:0.1em;
+  color:var(--white); text-transform:uppercase;
+}
+
+.pbody { padding:24px; }
+
+.p-tier { font-size:10px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted2); margin-bottom:5px; }
+.p-name-h { font-weight:800; font-size:19px; color:var(--white); margin-bottom:16px; }
+.p-strike { font-size:14px; color:var(--muted2); text-decoration:line-through; margin-bottom:4px; }
+
+.p-price-row { display:flex; align-items:baseline; gap:10px; margin-bottom:8px; flex-wrap:wrap; }
+.p-price { font-family:'DM Sans',sans-serif; font-weight:800; font-size:36px; color:var(--white); letter-spacing:-0.02em; }
+.p-off {
+  font-size:11px; font-weight:700; padding:3px 10px;
+  border-radius:100px; background:rgba(139,92,246,0.15); color:var(--violet);
+  border:1px solid rgba(139,92,246,0.2); white-space:nowrap;
+}
+.pcard.pop .p-off { background:var(--violet); color:var(--white); border-color:transparent; }
+
+.p-sched { font-size:12px; color:var(--violet); margin-bottom:3px; font-weight:500; }
+.p-note  { font-size:11px; color:var(--muted2); margin-bottom:0; }
+
+.pdivider { border:none; border-top:1px solid var(--border); margin:16px 0; }
+
+.p-inc-label { font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted2); margin-bottom:12px; }
+
+.cklist { list-style:none; }
+.cklist li {
+  display:flex; gap:7px; align-items:flex-start;
+  font-size:12.5px; margin-bottom:7px; line-height:1.4;
+}
+.cklist li .ck { flex-shrink:0; margin-top:1px; font-weight:700; font-size:12px; }
+.cklist li.y  .ck { color:var(--green); }
+.cklist li.n { color:var(--muted2); }
+.cklist li.n .ck { color:var(--muted2); }
+.cklist li.y { color:var(--off); }
+
+.emi-box {
+  background:var(--bg2); border:1px solid var(--border); border-radius:7px;
+  padding:9px 12px; text-align:center;
+  font-size:12px; font-weight:700; color:#EAB308;
+  margin:16px 0 12px;
+}
+
+.cta-b {
+  display:block; width:100%; padding:13px;
+  border-radius:8px; border:none;
+  font-family:'DM Sans',sans-serif; font-weight:700; font-size:13px;
+  cursor:pointer; text-align:center; text-decoration:none;
+  transition: opacity 0.2s, transform 0.2s;
+  letter-spacing:0.01em;
+}
+.cta-b:hover { opacity:0.88; transform:translateY(-1px); }
+.pcard:nth-child(1) .cta-b { background:var(--card2); color:var(--off); border:1px solid var(--border2); }
+.pcard.pop         .cta-b { background:var(--violet); color:var(--white); }
+.pcard:nth-child(3) .cta-b { background:var(--card2); color:var(--off); border:1px solid rgba(139,92,246,0.3); }
+
+/* ════════════════════════════════
+   BOTTOM CTA
+════════════════════════════════ */
+.bottom-cta {
+  margin: 60px 0;
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius:16px;
+  padding: 56px 40px;
+  text-align:center;
+  position:relative; overflow:hidden;
+}
+.bottom-cta::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg, transparent, var(--violet), transparent);
+}
+.bottom-cta::after {
+  content:'';
+  position:absolute;
+  width:400px; height:300px;
+  background: radial-gradient(ellipse, rgba(139,92,246,0.06) 0%, transparent 70%);
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.bottom-cta h2 {
+  font-weight:800; font-size:clamp(24px,4vw,36px);
+  color:var(--white); letter-spacing:-0.02em; margin-bottom:12px;
+}
+.bottom-cta h2 em { color:var(--violet); font-style:normal; }
+.bottom-cta p { font-size:14px; color:var(--muted); margin-bottom:28px; max-width:440px; margin-left:auto; margin-right:auto; }
+.cta-main {
+  display:inline-block; background:var(--violet); color:var(--white);
+  font-weight:700; font-size:15px; padding:15px 40px;
+  border-radius:8px; text-decoration:none;
+  box-shadow: 0 8px 28px rgba(139,92,246,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position:relative; z-index:1;
+}
+.cta-main:hover { transform:translateY(-2px); box-shadow: 0 16px 40px rgba(139,92,246,0.4); }
+.cta-disc { font-size:11px; color:var(--muted2); margin-top:14px; position:relative; z-index:1; }
+
+/* ════════════════════════════════
+   FOOTER
+════════════════════════════════ */
+footer {
+  border-top:1px solid var(--border);
+  padding:24px 0; background:var(--bg2);
+}
+footer p { font-size:12px; color:var(--muted2); text-align:center; }
+footer strong { color:var(--muted); }
+
+/* ════════════════════════════════
+   ANIMATIONS
+════════════════════════════════ */
+@keyframes up {
+  from { opacity:0; transform:translateY(22px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ════════════════════════════════
+   RESPONSIVE
+════════════════════════════════ */
+@media (max-width:680px) {
+  .pricing-grid { grid-template-columns:1fr; }
+  .tracks       { grid-template-columns:1fr; }
+  .pillars      { grid-template-columns:1fr; }
+  .stats        { flex-wrap:wrap; }
+  .stat         { min-width:50%; border-bottom:1px solid var(--border); }
+  .hero-logo    { font-size:72px; }
+  .bottom-cta   { padding:36px 24px; }
+  .p-full       { flex-direction:column; align-items:flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP STRIP -->
+<div class="topstrip">
+  <div class="wrap">
+    <div class="topstrip-inner">
+      <span>IgnAIte &nbsp;<span class="dot">·</span>&nbsp; India's AI Career Program</span>
+      <span>2026 Edition &nbsp;<span class="dot">·</span>&nbsp; ignaite.in</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ URGENCY BAR ════════════ -->
+<div style="background:rgba(139,92,246,0.12);border-bottom:1px solid rgba(139,92,246,0.2);padding:10px 0;text-align:center">
+  <div style="font-size:12px;font-weight:700;color:var(--violet);letter-spacing:0.04em">
+    🔥 &nbsp; First cohort launching soon — <span style="color:var(--white)">only 100 seats available</span> &nbsp;·&nbsp; Early access pricing ends soon
+  </div>
+</div>
+
+<!-- ════════════ HERO ════════════ -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="wrap">
+
+    <div class="eyebrow">
+      <span>🇮🇳</span> India's <span class="fire">#1</span> AI Career Program
+    </div>
+
+    <div class="hero-logo">
+      <span class="w">Ign</span><span class="o">AI</span><span class="w">te</span>
+    </div>
+
+    <div class="deco-lines">
+      <div class="deco-line"></div>
+      <div class="deco-dot"></div>
+      <div class="deco-line lit"></div>
+      <div class="deco-diamond"></div>
+      <div class="deco-line lit" style="background:linear-gradient(90deg,transparent,#FFFFFF22,transparent)"></div>
+      <div class="deco-dot"></div>
+      <div class="deco-line"></div>
+    </div>
+
+    <div class="hero-h1">
+      Stop Watching. <em>Start Building.</em>
+    </div>
+
+    <div class="hero-h2">
+      <strong>Most courses give you a certificate.</strong><br>
+      We give you a career — guided, personal, real.
+    </div>
+
+    <p class="hero-hook">
+      Discover your tech passion &nbsp;→&nbsp; Learn with AI &nbsp;→&nbsp; Build real projects &nbsp;→&nbsp; Land your first opportunity.
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-n fire">7+</span>
+        <span class="stat-l">AI Pillars</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">3</span>
+        <span class="stat-l">Tracks</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">12</span>
+        <span class="stat-l">Live Interactions</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n fire">₹1L+</span>
+        <span class="stat-l">Income Potential</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">100%</span>
+        <span class="stat-l">Passion-First</span>
+      </div>
+    </div>
+
+    <div class="feature-tags">
+      <div class="ftag"><span class="icon">🎯</span> All 7 AI Pillars — nothing skipped</div>
+      <div class="ftag"><span class="icon">🔴</span> Live interactions + lifetime recordings</div>
+      <div class="ftag"><span class="icon">💸</span> Real projects — not just certificates</div>
+      <div class="ftag"><span class="icon">🤝</span> City meetups + physical events</div>
+      <div class="ftag"><span class="icon">🌐</span> Telugu · Hindi · English · Hinglish</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════ TRANSFORMATION STORY ════════════ -->
+<div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2);padding:60px 0">
+  <div class="wrap">
+
+    <div style="text-align:center;margin-bottom:40px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--violet);margin-bottom:10px">The Transformation</div>
+      <div style="font-family:&#39;Bebas Neue&#39;,sans-serif;font-size:clamp(32px,6vw,48px);letter-spacing:0.02em;color:var(--white)">
+        Where You Are vs <span style="color:var(--violet)">Where You'll Be</span>
+      </div>
+    </div>
+
+    <!-- BEFORE / AFTER GRID -->
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;margin-bottom:48px">
+
+      <!-- BEFORE -->
+      <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:12px 0 0 12px;padding:28px 24px">
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:20px;display:flex;align-items:center;gap:8px">
+          <span style="width:20px;height:1px;background:var(--muted2);display:inline-block"></span>
+          Before IgnAIte
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <span style="color:#F43F5E;font-size:14px;margin-top:2px;flex-shrink:0">✗</span>
+            <div>
+              <div style="font-size:13.5px;color:var(--muted);line-height:1.4">"I don't know where to start with AI"</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <span style="color:#F43F5E;font-size:14px;margin-top:2px;flex-shrink:0">✗</span>
+            <div style="font-size:13.5px;color:var(--muted);line-height:1.4">Watching YouTube tutorials that go nowhere</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <span style="color:#F43F5E;font-size:14px;margin-top:2px;flex-shrink:0">✗</span>
+            <div style="font-size:13.5px;color:var(--muted);line-height:1.4">Stuck in the same job, same salary, no growth</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <span style="color:#F43F5E;font-size:14px;margin-top:2px;flex-shrink:0">✗</span>
+            <div style="font-size:13.5px;color:var(--muted);line-height:1.4">Bought 3 courses — never finished any of them</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <span style="color:#F43F5E;font-size:14px;margin-top:2px;flex-shrink:0">✗</span>
+            <div style="font-size:13.5px;color:var(--muted);line-height:1.4">No portfolio, no proof, no confidence</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <span style="color:#F43F5E;font-size:14px;margin-top:2px;flex-shrink:0">✗</span>
+            <div style="font-size:13.5px;color:var(--muted);line-height:1.4">AI feels overwhelming — "this is not for me"</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ARROW DIVIDER -->
+      <div style="display:flex;align-items:center;justify-content:center;padding:0 20px;background:rgba(139,92,246,0.05);border-top:1px solid rgba(139,92,246,0.15);border-bottom:1px solid rgba(139,92,246,0.15)">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+          <div style="width:2px;height:40px;background:linear-gradient(180deg,transparent,var(--violet))"></div>
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--violet);display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 0 24px rgba(139,92,246,0.4)">→</div>
+          <div style="width:2px;height:40px;background:linear-gradient(180deg,var(--violet),transparent)"></div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--violet);white-space:nowrap;writing-mode:vertical-lr;transform:rotate(180deg)">IgnAIte</div>
+        </div>
+      </div>
+
+      <!-- AFTER -->
+      <div style="background:rgba(139,92,246,0.04);border:1px solid rgba(139,92,246,0.2);border-radius:0 12px 12px 0;padding:28px 24px">
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--violet);margin-bottom:20px;display:flex;align-items:center;gap:8px">
+          <span style="width:20px;height:1px;background:var(--violet);display:inline-block"></span>
+          After IgnAIte
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <span style="color:var(--green);font-size:14px;margin-top:2px;flex-shrink:0">✓</span>
+            <div style="font-size:13.5px;color:var(--off);line-height:1.4">Clear path — you know exactly what to build and why</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <span style="color:var(--green);font-size:14px;margin-top:2px;flex-shrink:0">✓</span>
+            <div style="font-size:13.5px;color:var(--off);line-height:1.4">6+ real projects live — clients can see your work</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <span style="color:var(--green);font-size:14px;margin-top:2px;flex-shrink:0">✓</span>
+            <div style="font-size:13.5px;color:var(--off);line-height:1.4">First freelance income or job offer in AI</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <span style="color:var(--green);font-size:14px;margin-top:2px;flex-shrink:0">✓</span>
+            <div style="font-size:13.5px;color:var(--off);line-height:1.4">Automations running — saving you 2-3 hrs every day</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <span style="color:var(--green);font-size:14px;margin-top:2px;flex-shrink:0">✓</span>
+            <div style="font-size:13.5px;color:var(--off);line-height:1.4">Community of builders — city meetups, events, network</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <span style="color:var(--green);font-size:14px;margin-top:2px;flex-shrink:0">✓</span>
+            <div style="font-size:13.5px;color:var(--off);line-height:1.4">Confident — AI is your skill, not someone else's</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- WHO IS THIS FOR — personas -->
+    <div style="margin-bottom:0">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted2);text-align:center;margin-bottom:20px">This is for you if you are a —</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px">
+
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+          <div style="font-size:24px;margin-bottom:8px">🎓</div>
+          <div style="font-weight:700;font-size:13px;color:var(--white);margin-bottom:4px">Student</div>
+          <div style="font-size:11.5px;color:var(--muted)">Want to build real skills before graduating — not just theory</div>
+        </div>
+
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+          <div style="font-size:24px;margin-bottom:8px">💼</div>
+          <div style="font-weight:700;font-size:13px;color:var(--white);margin-bottom:4px">Working Professional</div>
+          <div style="font-size:11.5px;color:var(--muted)">Want to use AI at work, get promoted, or switch careers</div>
+        </div>
+
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+          <div style="font-size:24px;margin-bottom:8px">🚀</div>
+          <div style="font-weight:700;font-size:13px;color:var(--white);margin-bottom:4px">Freelancer</div>
+          <div style="font-size:11.5px;color:var(--muted)">Want to offer AI services and charge premium rates</div>
+        </div>
+
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+          <div style="font-size:24px;margin-bottom:8px">🏪</div>
+          <div style="font-weight:700;font-size:13px;color:var(--white);margin-bottom:4px">Business Owner</div>
+          <div style="font-size:11.5px;color:var(--muted)">Want to automate ops, cut costs, and grow using AI</div>
+        </div>
+
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+          <div style="font-size:24px;margin-bottom:8px">💻</div>
+          <div style="font-weight:700;font-size:13px;color:var(--white);margin-bottom:4px">Developer</div>
+          <div style="font-size:11.5px;color:var(--muted)">Want to build AI products, agents, and ship real SaaS</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════ PILLARS ════════════ -->
+<section>
+  <div class="wrap">
+    <div class="s-label">What You Learn</div>
+    <div class="s-title">7 Pillars. <em>Zero Gaps.</em></div>
+    <div class="s-desc">No other Indian course covers all of this. Every pillar is a full module — not a bonus video.</div>
+    <div class="s-hr"><div class="s-hr-line"></div><div class="s-hr-dot"></div></div>
+
+    <div class="pillars">
+      <div class="pcrd p-o">
+        <div class="p-top"><span class="p-icon">⚡</span><span class="p-num">Pillar 01</span></div>
+        <div class="p-name">AI Tools for Productivity</div>
+        <div class="p-tools">ChatGPT · Claude · Gemini · Midjourney · Runway · ElevenLabs · Voice Clone · Notion AI · Gamma</div>
+        <span class="p-badge">6 Sessions</span>
+      </div>
+      <div class="pcrd p-w">
+        <div class="p-top"><span class="p-icon">🧠</span><span class="p-num">Pillar 02</span></div>
+        <div class="p-name">Prompt Engineering</div>
+        <div class="p-tools">CRISP Framework · Chain-of-Thought · Prompt Chaining · System Prompts · Structured Output</div>
+        <span class="p-badge">3 Sessions</span>
+      </div>
+      <div class="pcrd p-t">
+        <div class="p-top"><span class="p-icon">🤖</span><span class="p-num">Pillar 03</span></div>
+        <div class="p-name">AI Agents &amp; Automations</div>
+        <div class="p-tools">n8n · Make · Zapier · Custom GPTs · LangChain · Botpress · Customer Voice AI Bot · VAPI</div>
+        <span class="p-badge">6 Sessions</span>
+      </div>
+      <div class="pcrd p-g">
+        <div class="p-top"><span class="p-icon">🛠️</span><span class="p-num">Pillar 04</span></div>
+        <div class="p-name">No-Code AI App Building</div>
+        <div class="p-tools">Bubble · Webflow · Glide · FlutterFlow · OpenAI API + No-Code · Stripe Payments</div>
+        <span class="p-badge">4 Sessions</span>
+      </div>
+      <div class="pcrd p-r">
+        <div class="p-top"><span class="p-icon">🎬</span><span class="p-num">Pillar 05</span></div>
+        <div class="p-name">AI for Content Creators</div>
+        <div class="p-tools">YouTube AI · Reels/Shorts · AI Thumbnails · Podcast AI · Voice Clone · AI Dubbing · Blog Pipeline</div>
+        <span class="p-badge">4 Sessions</span>
+      </div>
+      <div class="pcrd p-y">
+        <div class="p-top"><span class="p-icon">💼</span><span class="p-num">Pillar 06</span></div>
+        <div class="p-name">AI Freelancing &amp; Business</div>
+        <div class="p-tools">10 AI Niches · Client Acquisition · Pricing Strategy · Upwork · LinkedIn · Indian Tax &amp; GST</div>
+        <span class="p-badge">4 Sessions</span>
+      </div>
+    </div>
+
+    <div class="p-full">
+      <div class="p-full-info">
+        <span style="font-size:26px">💻</span>
+        <div>
+          <div class="p-full-name">Technical AI — Python, LLMs &amp; Deployment</div>
+          <div class="p-full-tools">Python · OpenAI API · LangChain · RAG · ChromaDB · FastAPI · Docker · GitHub Actions · Cloud Deploy</div>
+        </div>
+      </div>
+      <div class="p-full-right">
+        <span class="p-badge p-o" style="background:rgba(139,92,246,0.12);color:var(--violet)">Builder Track Only</span>
+        <span class="p-badge p-o" style="background:rgba(139,92,246,0.08);color:var(--muted)">8 Sessions</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ TRACKS ════════════ -->
+<section>
+  <div class="wrap">
+    <div class="s-title">One Course. <em>Two Paths.</em></div>
+    <div class="s-desc">Same cohort · same sessions · different depth based on your background.</div>
+    <div class="s-hr"><div class="s-hr-line"></div><div class="s-hr-dot"></div></div>
+
+    <div class="tracks">
+      <div class="tcrd creator">
+        <span class="t-icon">🎨</span>
+        <div class="t-name">Creator Track</div>
+        <div class="t-sub">Students · Marketers · Freelancers · Entrepreneurs · Business Owners</div>
+        <div class="t-item">Use AI tools without any coding</div>
+        <div class="t-item">Build apps with no-code platforms</div>
+        <div class="t-item">Automate workflows visually (n8n / Make)</div>
+        <div class="t-item">Create content systems on autopilot</div>
+        <div class="t-item">Land AI service clients and earn</div>
+        <div class="t-item">No math. No coding. Required.</div>
+      </div>
+      <div class="tcrd builder">
+        <span class="t-icon">⚙️</span>
+        <div class="t-name">Builder Track</div>
+        <div class="t-sub">Developers · Engineers · Data Analysts · Ambitious Builders</div>
+        <div class="t-item">Build with OpenAI, Claude, Gemini APIs</div>
+        <div class="t-item">Create RAG apps with LangChain</div>
+        <div class="t-item">Deploy AI to cloud with Docker + CI/CD</div>
+        <div class="t-item">Build FastAPI backends for AI products</div>
+        <div class="t-item">Ship your own AI SaaS or tool</div>
+        <div class="t-item">Land AI engineering roles or contracts</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ TRUST SIGNALS ════════════ -->
+<div style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:32px 0">
+  <div class="wrap">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:32px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:22px">🏆</span>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--white)">Curriculum Reviewed</div>
+          <div style="font-size:11px;color:var(--muted)">by Industry Professionals</div>
+        </div>
+      </div>
+      <div style="width:1px;height:36px;background:var(--border)"></div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:22px">🔒</span>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--white)">No-Risk Enrollment</div>
+          <div style="font-size:11px;color:var(--muted)">7-day refund if not satisfied</div>
+        </div>
+      </div>
+      <div style="width:1px;height:36px;background:var(--border)"></div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:22px">📲</span>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--white)">Lifetime Access</div>
+          <div style="font-size:11px;color:var(--muted)">All recordings, forever</div>
+        </div>
+      </div>
+      <div style="width:1px;height:36px;background:var(--border)"></div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:22px">🤝</span>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--white)">EMI Available</div>
+          <div style="font-size:11px;color:var(--muted)">No-cost on Pro &amp; Elite</div>
+        </div>
+      </div>
+      <div style="width:1px;height:36px;background:var(--border)"></div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:22px">🌐</span>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--white)">Telugu + Hindi</div>
+          <div style="font-size:11px;color:var(--muted)">In your language</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ PRICING ════════════ -->
+<section>
+  <div class="wrap">
+    <div class="s-label">Investment</div>
+    <div class="s-title">Simple. Transparent. <em>Worth It.</em></div>
+    <div class="s-desc">Three tiers. Every rupee counts. No hidden fees. EMI on all plans.</div>
+    <div class="s-hr"><div class="s-hr-line"></div><div class="s-hr-dot"></div></div>
+
+    <div class="pricing-grid">
+
+      <!-- T1 -->
+      <div class="pcard">
+        <div class="pbody">
+          <div class="p-tier">Tier 1</div>
+          <div class="p-name-h">AI Starter Pack</div>
+          <div class="p-strike">₹15,999</div>
+          <div class="p-price-row">
+            <div class="p-price">₹4,999</div>
+            <span class="p-off">69% OFF</span>
+          </div>
+          <div class="p-sched">Self-paced · No live sessions</div>
+          <div class="p-note">📚 Learn at your own pace — anytime, anywhere</div>
+          <hr class="pdivider">
+          <div class="p-inc-label">What's Included</div>
+          <ul class="cklist">
+            <li class="y"><span class="ck">✓</span> AI Tools for Productivity module</li>
+            <li class="y"><span class="ck">✓</span> Prompt Engineering module</li>
+            <li class="y"><span class="ck">✓</span> All recorded lessons — lifetime access</li>
+            <li class="y"><span class="ck">✓</span> 100+ Prompt Library PDF</li>
+            <li class="y"><span class="ck">✓</span> AI Tools Cheat Sheet</li>
+            <li class="y"><span class="ck">✓</span> Certificate of completion</li>
+            <li class="y"><span class="ck">✓</span> Discord community access</li>
+            <li class="n"><span class="ck">✗</span> No live sessions</li>
+            <li class="n"><span class="ck">✗</span> No mentorship</li>
+            <li class="n"><span class="ck">✗</span> No agents / apps / freelancing</li>
+          </ul>
+          <div class="emi-box">EMI: ₹1,667 × 3 months</div>
+          <a href="file:///D:/Downloads/IgnAIte_Brochure_v3_1.html#" class="cta-b">Get Started →</a>
+        </div>
+      </div>
+
+      <!-- T2 POPULAR -->
+      <div class="pcard pop">
+        <div class="pop-bar">⭐ &nbsp; Most Popular</div>
+        <div class="pbody">
+          <div class="p-tier">Tier 2</div>
+          <div class="p-name-h">AI Pro Cohort</div>
+          <div class="p-strike">₹34,999</div>
+          <div class="p-price-row">
+            <div class="p-price">₹14,999</div>
+            <span class="p-off">57% OFF</span>
+          </div>
+          <div class="p-sched">12 Live Interactions · Tue 8 PM + Sat 6 PM IST</div>
+          <div class="p-note">🔴 or ₹3,750/month × 4 · No-Cost EMI</div>
+          <hr class="pdivider">
+          <div class="p-inc-label">Everything in Tier 1, Plus</div>
+          <ul class="cklist">
+            <li class="y"><span class="ck">✓</span> Modules 3–6: Agents · No-Code · Content</li>
+            <li class="y"><span class="ck">✓</span> AI Freelancing — full coverage</li>
+            <li class="y"><span class="ck">✓</span> Build a Customer Voice AI Bot — ElevenLabs + VAPI</li>
+            <li class="y"><span class="ck">✓</span> 12 live sessions (2 per week)</li>
+            <li class="y"><span class="ck">✓</span> All recordings for 6 months</li>
+            <li class="y"><span class="ck">✓</span> Weekly assignments with feedback</li>
+            <li class="y"><span class="ck">✓</span> Private Discord — cohort + alumni</li>
+            <li class="y"><span class="ck">✓</span> 25 n8n automation templates</li>
+            <li class="y"><span class="ck">✓</span> AI Freelancing pitch kit</li>
+            <li class="y"><span class="ck">✓</span> LinkedIn-grade portfolio certificate</li>
+            <li class="y"><span class="ck">✓</span> Job &amp; client referral board</li>
+            <li class="y"><span class="ck">✓</span> City meetups &amp; events access</li>
+            <li class="n"><span class="ck">✗</span> No Technical AI (Python / deploy)</li>
+            <li class="n"><span class="ck">✗</span> No 1:1 mentorship</li>
+          </ul>
+          <div class="emi-box">EMI: ₹3,750 × 4 — No Cost EMI</div>
+          <a href="file:///D:/Downloads/IgnAIte_Brochure_v3_1.html#" class="cta-b">Enroll Now — ₹14,999 →</a>
+        </div>
+      </div>
+
+      <!-- T3 -->
+      <div class="pcard">
+        <div class="pbody">
+          <div class="p-tier">Tier 3</div>
+          <div class="p-name-h">IgnAIte Elite</div>
+          <div class="p-strike">₹79,999</div>
+          <div class="p-price-row">
+            <div class="p-price">₹49,999</div>
+            <span class="p-off">37% OFF</span>
+          </div>
+          <div class="p-sched">30 Live Sessions + Capstone Sprint</div>
+          <div class="p-note">👑 or ₹8,334/month × 6 · No-Cost EMI</div>
+          <hr class="pdivider">
+          <div class="p-inc-label">Everything in Tier 2, Plus</div>
+          <ul class="cklist">
+            <li class="y"><span class="ck">✓</span> Module 7: Full Technical AI — Python to Deploy</li>
+            <li class="y"><span class="ck">✓</span> Python · LangChain · RAG · FastAPI · Docker</li>
+            <li class="y"><span class="ck">✓</span> GitHub Actions · CI/CD · Cloud Deploy</li>
+            <li class="y"><span class="ck">✓</span> Module 8: AI Engineering &amp; Agent Systems</li>
+            <li class="y"><span class="ck">✓</span> MCP — Model Context Protocol (Anthropic)</li>
+            <li class="y"><span class="ck">✓</span> A2A Protocol — Agent-to-Agent (Google)</li>
+            <li class="y"><span class="ck">✓</span> OpenAI Agents SDK + Codex / Operator</li>
+            <li class="y"><span class="ck">✓</span> Claude Tool Use + Computer Use</li>
+            <li class="y"><span class="ck">✓</span> LangGraph · CrewAI · AutoGen · LlamaIndex</li>
+            <li class="y"><span class="ck">✓</span> 6 Agent Patterns — ReAct, RAG, Multi-Agent</li>
+            <li class="y"><span class="ck">✓</span> Production project structure + deployment</li>
+            <li class="y"><span class="ck">✓</span> Capstone — ship a real multi-agent AI product</li>
+            <li class="y"><span class="ck">✓</span> 2 × 1:1 mentorship sessions (30 min each)</li>
+            <li class="y"><span class="ck">✓</span> Personal resume + portfolio review</li>
+            <li class="y"><span class="ck">✓</span> Job Support — dedicated placement assistance</li>
+            <li class="y"><span class="ck">✓</span> Dedicated personal mentor throughout</li>
+            <li class="y"><span class="ck">✓</span> Internship + placement support</li>
+            <li class="y"><span class="ck">✓</span> VIP conference access every year</li>
+            <li class="y"><span class="ck">✓</span> Lifetime community access</li>
+            <li class="y"><span class="ck">✓</span> All future cohort recordings — 12 months</li>
+          </ul>
+          <div class="emi-box">EMI: ₹8,334 × 6 — No Cost EMI</div>
+          <a href="file:///D:/Downloads/IgnAIte_Brochure_v3_1.html#" class="cta-b">Join Elite Track →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ BOTTOM CTA ════════════ -->
+<div class="wrap">
+  <div class="bottom-cta">
+    <div style="display:inline-block;background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.3);border-radius:100px;padding:6px 16px;font-size:11px;font-weight:700;color:#A78BFA;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px;position:relative;z-index:1">
+      🔥 Limited Seats · First Cohort
+    </div>
+    <h2>Your Career Won't <em>Build Itself.</em></h2>
+    <p>100 seats. Early pricing. One decision that changes everything.<br>Don't let another year pass watching others build with AI.</p>
+    <a href="https://ignaite.in/" class="cta-main">Claim Your Seat — ignaite.in →</a>
+    <div class="cta-disc">7-day refund policy · No hidden fees · EMI available · Job support on Elite tier</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <p><strong>IgnAIte</strong> &nbsp;·&nbsp; India's AI Career Program &nbsp;·&nbsp; ignaite.in &nbsp;·&nbsp; <a href="file:///D:/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="79111c15151639101e1718100d1c571017">[email&nbsp;protected]</a></p>
+    <p style="margin-top:6px">© 2026 IgnAIt</p></div></footer></body></html>

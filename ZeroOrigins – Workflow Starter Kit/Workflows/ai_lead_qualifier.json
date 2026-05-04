@@ -1,0 +1,471 @@
+{
+  "name": "ZeroOrigins — AI Lead Qualifier & Smart Router",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "qualify-lead",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "alf-001",
+      "name": "New Lead Received",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 300],
+      "webhookId": "zeroorigins-qualify-lead"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "f1", "name": "name",      "value": "={{ $json.body.name || $json.body.full_name || '' }}", "type": "string" },
+            { "id": "f2", "name": "email",     "value": "={{ $json.body.email || '' }}", "type": "string" },
+            { "id": "f3", "name": "business",  "value": "={{ $json.body.business || $json.body.company || '' }}", "type": "string" },
+            { "id": "f4", "name": "message",   "value": "={{ $json.body.message || '' }}", "type": "string" },
+            { "id": "f5", "name": "source",    "value": "={{ $json.body.source || $json.body.utm_source || 'Website' }}", "type": "string" },
+            { "id": "f6", "name": "domain",    "value": "={{ $json.body.email ? $json.body.email.split('@')[1] : '' }}", "type": "string" },
+            { "id": "f7", "name": "timestamp", "value": "={{ new Date().toISOString() }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "alf-002",
+      "name": "Normalize Lead Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [420, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"status\": \"received\", \"message\": \"Your submission is being processed.\" }",
+        "options": {}
+      },
+      "id": "alf-003",
+      "name": "Ack Immediately",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [640, 140]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://person.clearbit.com/v2/combined/find?email={{ encodeURIComponent($json.email) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "response": { "response": { "neverError": true } }
+        }
+      },
+      "id": "alf-004",
+      "name": "Clearbit Enrich Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [640, 340],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "YOUR_CLEARBIT_CREDENTIAL_ID",
+          "name": "Clearbit API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "m1",  "name": "name",           "value": "={{ $json.person?.name?.fullName || $('Normalize Lead Fields').item.json.name }}", "type": "string" },
+            { "id": "m2",  "name": "email",          "value": "={{ $('Normalize Lead Fields').item.json.email }}", "type": "string" },
+            { "id": "m3",  "name": "business",       "value": "={{ $json.company?.name || $('Normalize Lead Fields').item.json.business }}", "type": "string" },
+            { "id": "m4",  "name": "message",        "value": "={{ $('Normalize Lead Fields').item.json.message }}", "type": "string" },
+            { "id": "m5",  "name": "source",         "value": "={{ $('Normalize Lead Fields').item.json.source }}", "type": "string" },
+            { "id": "m6",  "name": "jobTitle",       "value": "={{ $json.person?.employment?.title || '' }}", "type": "string" },
+            { "id": "m7",  "name": "companySize",    "value": "={{ $json.company?.metrics?.employees || 0 }}", "type": "number" },
+            { "id": "m8",  "name": "industry",       "value": "={{ $json.company?.category?.industry || '' }}", "type": "string" },
+            { "id": "m9",  "name": "companyRevenue", "value": "={{ $json.company?.metrics?.estimatedAnnualRevenue || '' }}", "type": "string" },
+            { "id": "m10", "name": "linkedinUrl",    "value": "={{ $json.person?.linkedin?.handle ? 'https://linkedin.com/in/' + $json.person.linkedin.handle : '' }}", "type": "string" },
+            { "id": "m11", "name": "timestamp",      "value": "={{ $('Normalize Lead Fields').item.json.timestamp }}", "type": "string" },
+            { "id": "m12", "name": "domain",         "value": "={{ $('Normalize Lead Fields').item.json.domain }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "alf-005",
+      "name": "Merge Enrichment Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [860, 340]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "complete",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a B2B lead qualification expert for ZeroOrigins AI, an AI systems and automation agency. Analyze the lead and respond ONLY with valid JSON in exactly this format:\n{\n  \"score\": <integer 1-10>,\n  \"intent\": \"<buy_now|explore|research|unclear>\",\n  \"urgency\": \"<high|medium|low>\",\n  \"budget_signal\": \"<high|medium|low|unknown>\",\n  \"ideal_customer\": <true|false>,\n  \"reasoning\": \"<2-3 sentence summary>\",\n  \"recommended_action\": \"<specific first-response suggestion>\"\n}\n\nScoring guide:\n10 = Decision-maker, specific problem, clear budget and urgency\n7-9 = Clear need, relevant business, engaged message\n4-6 = Vague interest, could qualify with follow-up\n1-3 = Student/researcher/competitor, no buying signals"
+            },
+            {
+              "role": "user",
+              "content": "=Qualify this inbound lead:\n\nName: {{ $json.name }}\nEmail: {{ $json.email }}\nJob Title: {{ $json.jobTitle }}\nBusiness: {{ $json.business }}\nIndustry: {{ $json.industry }}\nCompany size: {{ $json.companySize }} employees\nEst. revenue: {{ $json.companyRevenue }}\nMessage: {{ $json.message }}\nSource: {{ $json.source }}"
+            }
+          ]
+        },
+        "simplifyOutput": true,
+        "options": {
+          "temperature": 0.2,
+          "maxTokens": 400
+        }
+      },
+      "id": "alf-006",
+      "name": "AI Lead Qualification",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.7,
+      "position": [1080, 340],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = $('Merge Enrichment Data').item.json;\nlet ai;\ntry {\n  const raw = $input.item.json.content || $input.item.json.message?.content || '{}';\n  ai = JSON.parse(raw);\n} catch (e) {\n  ai = { score: 5, intent: 'unclear', urgency: 'medium', budget_signal: 'unknown', ideal_customer: false, reasoning: 'AI parse error — manual review needed', recommended_action: 'Reply with discovery questions' };\n}\n\nconst tier = ai.score >= 8 ? 'HOT' : ai.score >= 5 ? 'WARM' : 'COLD';\n\nreturn [{\n  json: {\n    ...lead,\n    score: ai.score || 5,\n    intent: ai.intent || 'unclear',\n    urgency: ai.urgency || 'medium',\n    budgetSignal: ai.budget_signal || 'unknown',\n    isIdealCustomer: ai.ideal_customer || false,\n    aiReasoning: ai.reasoning || '',\n    recommendedAction: ai.recommended_action || '',\n    leadTier: tier\n  }\n}];"
+      },
+      "id": "alf-007",
+      "name": "Parse AI Score",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1300, 340]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "rules": [
+            {
+              "conditions": {
+                "conditions": [{ "leftValue": "={{ $json.score }}", "rightValue": 8, "operator": { "type": "number", "operation": "gte" } }],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Hot"
+            },
+            {
+              "conditions": {
+                "conditions": [{ "leftValue": "={{ $json.score }}", "rightValue": 5, "operator": { "type": "number", "operation": "gte" } }],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Warm"
+            }
+          ]
+        },
+        "options": { "fallbackOutput": "extra" }
+      },
+      "id": "alf-008",
+      "name": "Route by Lead Score",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [1520, 340]
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": { "__rl": true, "value": "YOUR_SLACK_CHANNEL_ID", "mode": "id" },
+        "text": "=:fire: *HOT LEAD — Score {{ $json.score }}/10*\n\n*Name:* {{ $json.name }}\n*Business:* {{ $json.business }}\n*Title:* {{ $json.jobTitle || 'Unknown' }}\n*Industry:* {{ $json.industry || 'Unknown' }}\n*Company size:* {{ $json.companySize || '?' }} employees | Rev: {{ $json.companyRevenue || 'Unknown' }}\n*Source:* {{ $json.source }}\n\n*Message:*\n> {{ $json.message }}\n\n*AI Analysis:* {{ $json.aiReasoning }}\n*Intent:* {{ $json.intent }} | *Urgency:* {{ $json.urgency }} | *Budget Signal:* {{ $json.budgetSignal }}\n\n:dart: *Recommended:* {{ $json.recommendedAction }}\n\n:email: {{ $json.email }}{{ $json.linkedinUrl ? '\n:linkedin: ' + $json.linkedinUrl : '' }}",
+        "otherOptions": { "mrkdwn": true }
+      },
+      "id": "alf-009",
+      "name": "Slack HOT Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [1740, 120],
+      "credentials": {
+        "slackApi": {
+          "id": "YOUR_SLACK_CREDENTIAL_ID",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "complete",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are Naveen from ZeroOrigins AI, an AI systems and automation agency. Write a short, sharp, personalized reply to a high-value inbound lead. Rules: warm but direct, reference their specific message, no generic openers like 'Great to hear from you', no fluff. Maximum 100 words. Sign off: Naveen. Output ONLY the email body — no subject line, no extra commentary."
+            },
+            {
+              "role": "user",
+              "content": "=Write a personalized reply to this lead:\n\nName: {{ $json.name }}\nBusiness: {{ $json.business }}\nTitle: {{ $json.jobTitle }}\nIndustry: {{ $json.industry }}\nMessage they sent: {{ $json.message }}\nAI recommended action: {{ $json.recommendedAction }}\n\nInclude this Calendly link naturally: https://calendly.com/zeroorigins"
+            }
+          ]
+        },
+        "simplifyOutput": true,
+        "options": { "temperature": 0.7, "maxTokens": 250 }
+      },
+      "id": "alf-010",
+      "name": "Write Personalized Email",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.7,
+      "position": [1960, 120],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Parse AI Score').item.json.email }}",
+        "subject": "=Re: your message about {{ $('Parse AI Score').item.json.business || 'your project' }}",
+        "message": "=Hi {{ $('Parse AI Score').item.json.name }},\n\n{{ $json.content }}\n\n—\nNaveen\nZeroOrigins AI\nhello@zeroorigins.in",
+        "options": { "appendAttribution": false, "senderName": "Naveen at ZeroOrigins" }
+      },
+      "id": "alf-011",
+      "name": "Send HOT Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [2180, 120],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_GMAIL_CREDENTIAL_ID",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "from": "whatsapp:+14155238886",
+        "to": "whatsapp:YOUR_WHATSAPP_NUMBER",
+        "message": "=🔥 HOT LEAD ({{ $('Parse AI Score').item.json.score }}/10)\n{{ $('Parse AI Score').item.json.name }} — {{ $('Parse AI Score').item.json.business }}\n{{ $('Parse AI Score').item.json.email }}\n\nMessage: {{ $('Parse AI Score').item.json.message.substring(0, 120) }}...\n\nPersonalized email sent. Check Slack for full details."
+      },
+      "id": "alf-012",
+      "name": "WhatsApp Owner Alert",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [2400, 120],
+      "credentials": {
+        "twilioApi": {
+          "id": "YOUR_TWILIO_CREDENTIAL_ID",
+          "name": "Twilio account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "Quick question about your automation setup",
+        "message": "=<p>Hi {{ $json.name }},</p>\n\n<p>Thanks for reaching out.</p>\n\n<p>We build AI automation systems for {{ $json.industry || 'businesses' }} — the kind that run lead capture, qualification, and follow-up without anyone manually touching a thing.</p>\n\n<p>From your message it sounds like there might be a fit. The fastest way to find out is a 30-minute call — no prep needed from your side.</p>\n\n<p><a href=\"https://calendly.com/zeroorigins\" style=\"background:#111;color:#fff;padding:10px 24px;border-radius:6px;text-decoration:none;display:inline-block;font-family:sans-serif\">Book a 30-minute call</a></p>\n\n<p>Talk soon,<br>Naveen<br>ZeroOrigins AI<br>hello@zeroorigins.in</p>",
+        "options": { "appendAttribution": false, "senderName": "Naveen at ZeroOrigins" }
+      },
+      "id": "alf-013",
+      "name": "Send WARM Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1740, 380],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_GMAIL_CREDENTIAL_ID",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "cx1", "name": "leadTier",       "value": "COLD", "type": "string" },
+            { "id": "cx2", "name": "name",            "value": "={{ $json.name }}", "type": "string" },
+            { "id": "cx3", "name": "email",           "value": "={{ $json.email }}", "type": "string" },
+            { "id": "cx4", "name": "business",        "value": "={{ $json.business }}", "type": "string" },
+            { "id": "cx5", "name": "industry",        "value": "={{ $json.industry }}", "type": "string" },
+            { "id": "cx6", "name": "jobTitle",        "value": "={{ $json.jobTitle }}", "type": "string" },
+            { "id": "cx7", "name": "companySize",     "value": "={{ $json.companySize }}", "type": "number" },
+            { "id": "cx8", "name": "score",           "value": "={{ $json.score }}", "type": "number" },
+            { "id": "cx9", "name": "aiReasoning",     "value": "={{ $json.aiReasoning }}", "type": "string" },
+            { "id": "cx10","name": "message",         "value": "={{ $json.message }}", "type": "string" },
+            { "id": "cx11","name": "source",          "value": "={{ $json.source }}", "type": "string" },
+            { "id": "cx12","name": "intent",          "value": "={{ $json.intent }}", "type": "string" },
+            { "id": "cx13","name": "urgency",         "value": "={{ $json.urgency }}", "type": "string" },
+            { "id": "cx14","name": "budgetSignal",    "value": "={{ $json.budgetSignal }}", "type": "string" },
+            { "id": "cx15","name": "recommendedAction","value": "={{ $json.recommendedAction }}", "type": "string" },
+            { "id": "cx16","name": "linkedinUrl",     "value": "={{ $json.linkedinUrl }}", "type": "string" },
+            { "id": "cx17","name": "timestamp",       "value": "={{ $json.timestamp }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "alf-014",
+      "name": "Tag as COLD",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1740, 580]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/{{ encodeURIComponent($json.email) }}/",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"properties\": [\n    {\"property\": \"firstname\", \"value\": \"{{ $json.name.split(' ')[0] }}\"},\n    {\"property\": \"lastname\", \"value\": \"{{ $json.name.split(' ').slice(1).join(' ') }}\"},\n    {\"property\": \"company\", \"value\": \"{{ $json.business }}\"},\n    {\"property\": \"jobtitle\", \"value\": \"{{ $json.jobTitle || '' }}\"},\n    {\"property\": \"industry\", \"value\": \"{{ $json.industry || '' }}\"},\n    {\"property\": \"message\", \"value\": \"{{ $json.message }}\"},\n    {\"property\": \"numemployees\", \"value\": \"{{ $json.companySize || 0 }}\"},\n    {\"property\": \"lifecyclestage\", \"value\": \"lead\"},\n    {\"property\": \"hs_lead_status\", \"value\": \"{{ $json.leadTier === 'HOT' ? 'IN_PROGRESS' : 'NEW' }}\"},\n    {\"property\": \"lead_score\", \"value\": \"{{ $json.score }}\"},\n    {\"property\": \"leadsource\", \"value\": \"{{ $json.source }}\"}\n  ]\n}",
+        "options": { "response": { "response": { "neverError": true } } }
+      },
+      "id": "alf-015",
+      "name": "HubSpot Upsert Contact",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2620, 380],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "YOUR_HUBSPOT_CREDENTIAL_ID",
+          "name": "HubSpot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "baseId": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "ZeroOrigins CRM"
+        },
+        "tableId": {
+          "__rl": true,
+          "value": "tblLeads",
+          "mode": "list",
+          "cachedResultName": "Leads"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name":               "={{ $json.name }}",
+            "Email":              "={{ $json.email }}",
+            "Business":           "={{ $json.business }}",
+            "Industry":           "={{ $json.industry || '' }}",
+            "Job Title":          "={{ $json.jobTitle || '' }}",
+            "Company Size":       "={{ $json.companySize || 0 }}",
+            "Message":            "={{ $json.message }}",
+            "Source":             "={{ $json.source }}",
+            "Score":              "={{ $json.score }}",
+            "Tier":               "={{ $json.leadTier }}",
+            "Intent":             "={{ $json.intent }}",
+            "Urgency":            "={{ $json.urgency }}",
+            "Budget Signal":      "={{ $json.budgetSignal }}",
+            "AI Reasoning":       "={{ $json.aiReasoning }}",
+            "Recommended Action": "={{ $json.recommendedAction }}",
+            "LinkedIn URL":       "={{ $json.linkedinUrl || '' }}",
+            "Submitted At":       "={{ $json.timestamp }}",
+            "Status":             "New"
+          },
+          "schema": [],
+          "matchingColumns": []
+        }
+      },
+      "id": "alf-016",
+      "name": "Airtable Log Lead",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [2840, 380],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "YOUR_AIRTABLE_CREDENTIAL_ID",
+          "name": "Airtable account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "New Lead Received": {
+      "main": [[{ "node": "Normalize Lead Fields", "type": "main", "index": 0 }]]
+    },
+    "Normalize Lead Fields": {
+      "main": [
+        [
+          { "node": "Ack Immediately",      "type": "main", "index": 0 },
+          { "node": "Clearbit Enrich Lead", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Clearbit Enrich Lead": {
+      "main": [[{ "node": "Merge Enrichment Data", "type": "main", "index": 0 }]]
+    },
+    "Merge Enrichment Data": {
+      "main": [[{ "node": "AI Lead Qualification", "type": "main", "index": 0 }]]
+    },
+    "AI Lead Qualification": {
+      "main": [[{ "node": "Parse AI Score", "type": "main", "index": 0 }]]
+    },
+    "Parse AI Score": {
+      "main": [[{ "node": "Route by Lead Score", "type": "main", "index": 0 }]]
+    },
+    "Route by Lead Score": {
+      "main": [
+        [{ "node": "Slack HOT Alert",  "type": "main", "index": 0 }],
+        [{ "node": "Send WARM Email",  "type": "main", "index": 0 }],
+        [{ "node": "Tag as COLD",      "type": "main", "index": 0 }]
+      ]
+    },
+    "Slack HOT Alert": {
+      "main": [[{ "node": "Write Personalized Email", "type": "main", "index": 0 }]]
+    },
+    "Write Personalized Email": {
+      "main": [[{ "node": "Send HOT Email", "type": "main", "index": 0 }]]
+    },
+    "Send HOT Email": {
+      "main": [[{ "node": "WhatsApp Owner Alert", "type": "main", "index": 0 }]]
+    },
+    "WhatsApp Owner Alert": {
+      "main": [[{ "node": "HubSpot Upsert Contact", "type": "main", "index": 0 }]]
+    },
+    "Send WARM Email": {
+      "main": [[{ "node": "HubSpot Upsert Contact", "type": "main", "index": 0 }]]
+    },
+    "Tag as COLD": {
+      "main": [[{ "node": "HubSpot Upsert Contact", "type": "main", "index": 0 }]]
+    },
+    "HubSpot Upsert Contact": {
+      "main": [[{ "node": "Airtable Log Lead", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "errorWorkflow": ""
+  },
+  "versionId": "zo-alf-v1-2026",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": "zeroorigins-workflow-starter-kit"
+  },
+  "id": "zeroorigins-ai-lead-qualifier-v1",
+  "tags": [
+    { "name": "ZeroOrigins" },
+    { "name": "Lead Generation" },
+    { "name": "AI" }
+  ]
+}

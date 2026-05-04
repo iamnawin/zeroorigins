@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///D:/Downloads/IgnAIte_AgentBootcamp_Poster_1.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IgnAIte — Build AI Agent in 1 Day</title>
+<link href="./IgnAIte — Build AI Agent in 1 Day_files/css2" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:#111;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  font-family:'DM Sans',sans-serif;
+}
+
+.poster {
+  width:420px;
+  height:748px;
+  background:#060608;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ── GRID ── */
+.poster::before {
+  content:'';
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(139,92,246,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,92,246,0.045) 1px, transparent 1px);
+  background-size:28px 28px;
+  pointer-events:none; z-index:0;
+}
+
+/* ── GLOWS ── */
+.glow-tl {
+  position:absolute;
+  width:260px; height:260px;
+  background:radial-gradient(ellipse, rgba(139,92,246,0.2) 0%, transparent 65%);
+  top:-80px; left:-60px;
+  pointer-events:none; z-index:0;
+}
+.glow-br {
+  position:absolute;
+  width:220px; height:220px;
+  background:radial-gradient(ellipse, rgba(99,60,220,0.15) 0%, transparent 65%);
+  bottom:60px; right:-40px;
+  pointer-events:none; z-index:0;
+}
+.glow-center {
+  position:absolute;
+  width:320px; height:180px;
+  background:radial-gradient(ellipse, rgba(139,92,246,0.08) 0%, transparent 65%);
+  top:38%; left:50%; transform:translateX(-50%);
+  pointer-events:none; z-index:0;
+}
+
+/* ── FREE STAMP ── */
+.free-stamp {
+  position:absolute;
+  top:22px; right:22px; z-index:10;
+  width:72px; height:72px;
+  border:2px solid rgba(139,92,246,0.7);
+  border-radius:50%;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  transform:rotate(12deg);
+  background:rgba(139,92,246,0.12);
+}
+.stamp-free { font-size:19px; font-weight:900; color:#fff; line-height:1; }
+.stamp-sub  { font-size:7.5px; font-weight:700; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.08em; }
+
+/* ── TOP SECTION ── */
+.top-section {
+  position:relative; z-index:2;
+  padding:32px 28px 0;
+}
+
+.live-tag {
+  display:inline-flex; align-items:center; gap:7px;
+  background:rgba(139,92,246,0.14);
+  border:1px solid rgba(139,92,246,0.3);
+  border-radius:100px;
+  padding:6px 14px;
+  font-size:10.5px; font-weight:700;
+  color:#A78BFA; letter-spacing:0.1em; text-transform:uppercase;
+  margin-bottom:22px;
+}
+.live-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:#8B5CF6; box-shadow:0 0 8px #8B5CF6;
+  animation:pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100%{opacity:1;transform:scale(1);}
+  50%{opacity:0.4;transform:scale(0.75);}
+}
+
+.presents {
+  font-size:11px; font-weight:700; letter-spacing:0.14em;
+  text-transform:uppercase; color:rgba(255,255,255,0.25);
+  margin-bottom:10px;
+}
+
+/* ── BIG HEADLINE ── */
+.headline {
+  font-weight:900;
+  line-height:1.0;
+  letter-spacing:-0.03em;
+  margin-bottom:6px;
+}
+.hl-1 { font-size:44px; color:rgba(255,255,255,0.9); display:block; }
+.hl-2 { font-size:56px; color:#8B5CF6; display:block; }
+.hl-3 { font-size:38px; color:rgba(255,255,255,0.85); display:block; }
+.hl-4 { font-size:30px; color:rgba(255,255,255,0.4); display:block; font-weight:700; letter-spacing:-0.01em; margin-top:4px; }
+
+/* deco line under headline */
+.hl-line {
+  width:100%; height:1px; margin:18px 0 18px;
+  background:linear-gradient(90deg, #8B5CF6, rgba(139,92,246,0.3), transparent);
+}
+
+/* ── DESCRIPTION ── */
+.desc {
+  font-size:13.5px; color:rgba(255,255,255,0.45);
+  line-height:1.55; margin-bottom:22px; font-weight:400;
+  max-width:320px;
+}
+.desc strong { color:rgba(255,255,255,0.8); font-weight:600; }
+
+/* ── LEARN ITEMS ── */
+.learn-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:8px; margin-bottom:22px;
+}
+.li {
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:8px;
+  padding:10px 12px;
+  display:flex; align-items:flex-start; gap:8px;
+}
+.li-icon { font-size:15px; flex-shrink:0; margin-top:1px; }
+.li-text { font-size:12px; color:rgba(255,255,255,0.65); line-height:1.35; font-weight:500; }
+.li-accent { color:#8B5CF6; }
+
+/* ── STACK PILLS ── */
+.stack-row {
+  display:flex; flex-wrap:wrap; gap:6px; margin-bottom:24px;
+}
+.sp {
+  background:rgba(139,92,246,0.1);
+  border:1px solid rgba(139,92,246,0.2);
+  border-radius:100px;
+  padding:4px 12px;
+  font-size:11px; font-weight:700; color:#A78BFA;
+}
+
+/* ── CTA ── */
+.cta-block {
+  display:flex; flex-direction:column; gap:8px;
+  margin-bottom:16px;
+}
+.cta-btn {
+  display:block; width:100%;
+  background:#8B5CF6;
+  color:#fff;
+  font-weight:800; font-size:16px;
+  padding:14px;
+  border-radius:8px; border:none; cursor:pointer;
+  letter-spacing:0.01em;
+  box-shadow:0 8px 28px rgba(139,92,246,0.4);
+  text-align:center; text-decoration:none;
+  position:relative; overflow:hidden;
+}
+.cta-btn::before {
+  content:'';
+  position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.1) 0%,transparent 50%);
+}
+.cta-note {
+  text-align:center;
+  font-size:10.5px; color:rgba(255,255,255,0.25);
+  letter-spacing:0.04em;
+}
+
+/* ── META ROW ── */
+.meta-row {
+  display:flex; align-items:center; justify-content:center;
+  gap:14px; margin-bottom:0;
+  position:relative; z-index:2;
+  padding:0 28px;
+}
+.mi {
+  display:flex; align-items:center; gap:5px;
+  font-size:11px; color:rgba(255,255,255,0.3);
+  font-weight:600; letter-spacing:0.04em; text-transform:uppercase;
+}
+.mi .ic { font-size:12px; }
+.msep { width:1px; height:12px; background:rgba(255,255,255,0.1); }
+
+/* ── AGENT VISUAL ── */
+.agent-visual {
+  position:relative; z-index:1;
+  flex:1;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+
+.node-graph {
+  position:relative;
+  width:240px; height:90px;
+  opacity:0.15;
+}
+.node {
+  position:absolute;
+  border-radius:50%;
+  background:#8B5CF6;
+}
+.edge {
+  position:absolute;
+  height:1px;
+  background:linear-gradient(90deg,#8B5CF6,transparent);
+  transform-origin:left center;
+}
+
+/* ── BOTTOM STRIP ── */
+.bottom-strip {
+  background:#8B5CF6;
+  padding:13px 24px;
+  display:flex; align-items:center; justify-content:space-between;
+  z-index:10; position:relative; flex-shrink:0;
+}
+.bs-name { font-weight:800; font-size:14px; color:#fff; }
+.bs-url  { font-size:10.5px; color:rgba(255,255,255,0.7); letter-spacing:0.04em; margin-top:1px; }
+.bs-arr  {
+  width:32px; height:32px;
+  background:rgba(255,255,255,0.2);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px; color:#fff;
+}
+</style>
+</head>
+<body>
+
+<div class="poster">
+
+  <div class="glow-tl"></div>
+  <div class="glow-br"></div>
+  <div class="glow-center"></div>
+
+  <!-- FREE STAMP -->
+  <div class="free-stamp">
+    <div class="stamp-free">FREE</div>
+    <div class="stamp-sub">Event</div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="top-section">
+
+    <div class="live-tag">
+      <span class="live-dot"></span>
+      1 Day Live Bootcamp
+    </div>
+
+    <div class="presents">IgnAIte Presents</div>
+
+    <div class="headline">
+      <span class="hl-1">Build an</span>
+      <span class="hl-2">AI Agent</span>
+      <span class="hl-3">in 1 Day</span>
+      <span class="hl-4">From Zero to Deployed.</span>
+    </div>
+
+    <div class="hl-line"></div>
+
+    <div class="desc">
+      <strong>No prior AI experience needed.</strong> Build, connect tools, and deploy a real working AI agent — live, hands-on, in one day.
+    </div>
+
+    <!-- WHAT YOU BUILD -->
+    <div class="learn-grid">
+      <div class="li">
+        <span class="li-icon">🤖</span>
+        <div class="li-text">Build a <span class="li-accent">ReAct Agent</span> from scratch</div>
+      </div>
+      <div class="li">
+        <span class="li-icon">🛠️</span>
+        <div class="li-text">Give your agent <span class="li-accent">real tools</span> — search, code, API</div>
+      </div>
+      <div class="li">
+        <span class="li-icon">🔗</span>
+        <div class="li-text">Connect via <span class="li-accent">MCP protocol</span></div>
+      </div>
+      <div class="li">
+        <span class="li-icon">🚀</span>
+        <div class="li-text"><span class="li-accent">Deploy live</span> with a public URL</div>
+      </div>
+    </div>
+
+    <!-- STACK -->
+    <div class="stack-row">
+      <span class="sp">LangChain</span>
+      <span class="sp">OpenAI SDK</span>
+      <span class="sp">Claude API</span>
+      <span class="sp">MCP</span>
+      <span class="sp">FastAPI</span>
+      <span class="sp">Python</span>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-block">
+      <a href="https://ignaite.in/" class="cta-btn">Register Free — ignaite.in →</a>
+      <div class="cta-note">Limited seats · Hands-on · Telugu + Hindi + English</div>
+    </div>
+
+    <!-- META -->
+    <div class="meta-row">
+      <div class="mi"><span class="ic">📅</span> 1 Day</div>
+      <div class="msep"></div>
+      <div class="mi"><span class="ic">🔴</span> 3 Live Sessions</div>
+      <div class="msep"></div>
+      <div class="mi"><span class="ic">💻</span> Hands-On Build</div>
+    </div>
+
+  </div>
+
+  <!-- AGENT NODE GRAPH VISUAL -->
+  <div class="agent-visual">
+    <div class="node-graph">
+      <!-- center node -->
+      <div class="node" style="width:18px;height:18px;top:36px;left:111px;box-shadow:0 0 14px #8B5CF6"></div>
+      <!-- surrounding nodes -->
+      <div class="node" style="width:10px;height:10px;top:10px;left:50px"></div>
+      <div class="node" style="width:10px;height:10px;top:10px;left:180px"></div>
+      <div class="node" style="width:10px;height:10px;top:65px;left:30px"></div>
+      <div class="node" style="width:10px;height:10px;top:65px;left:200px"></div>
+      <div class="node" style="width:8px;height:8px;top:40px;left:10px"></div>
+      <div class="node" style="width:8px;height:8px;top:40px;left:222px"></div>
+      <!-- edges -->
+      <div class="edge" style="width:70px;top:45px;left:120px;transform:rotate(-30deg)"></div>
+      <div class="edge" style="width:70px;top:45px;left:120px;transform:rotate(30deg)"></div>
+      <div class="edge" style="width:90px;top:45px;left:30px;transform:rotate(10deg)"></div>
+      <div class="edge" style="width:90px;top:45px;left:120px;transform:rotate(-10deg)"></div>
+    </div>
+  </div>
+
+  <!-- BOTTOM STRIP -->
+  <div class="bottom-strip">
+    <div>
+      <div class="bs-name">IgnAIte — AI Agent Bootcamp</div>
+      <div class="bs-url">ignaite.in · Register Now · Free</div>
+    </div>
+    <div class="bs-arr">→</div>
+  </div>
+
+</div>
+
+
+
+</body></html>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)file:///D:/Downloads/IgnAIte_VoiceAI_Poster.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IgnAIte — Voice AI Workshop</title>
+<link href="./IgnAIte — Voice AI Workshop_files/css2" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:#111;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  font-family:'DM Sans',sans-serif;
+}
+
+.poster {
+  width: 420px;
+  height: 748px;
+  background: #080808;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── GRID ── */
+.poster::before {
+  content:'';
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(139,92,246,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,92,246,0.05) 1px, transparent 1px);
+  background-size:32px 32px;
+  pointer-events:none; z-index:0;
+}
+
+/* ── GLOWS ── */
+.glow-top {
+  position:absolute;
+  width:320px; height:280px;
+  background:radial-gradient(ellipse, rgba(139,92,246,0.22) 0%, transparent 65%);
+  top:-60px; left:50%; transform:translateX(-50%);
+  pointer-events:none; z-index:0;
+}
+.glow-mid {
+  position:absolute;
+  width:280px; height:200px;
+  background:radial-gradient(ellipse, rgba(139,92,246,0.1) 0%, transparent 65%);
+  bottom:180px; left:50%; transform:translateX(-50%);
+  pointer-events:none; z-index:0;
+}
+
+/* ── TOP TAG ── */
+.top-tag {
+  position:relative; z-index:2;
+  display:flex; align-items:center; justify-content:center;
+  padding-top: 36px;
+  margin-bottom: 20px;
+}
+.top-tag-inner {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(139,92,246,0.15);
+  border:1px solid rgba(139,92,246,0.35);
+  border-radius:100px;
+  padding:7px 18px;
+  font-size:11px; font-weight:700;
+  color:#A78BFA; letter-spacing:0.1em; text-transform:uppercase;
+}
+.live-dot {
+  width:7px; height:7px; border-radius:50%;
+  background:#8B5CF6;
+  box-shadow:0 0 8px #8B5CF6;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.5; transform:scale(0.8); }
+}
+
+/* ── FREE BADGE ── */
+.free-badge {
+  position:absolute;
+  top:28px; right:24px; z-index:10;
+  width:68px; height:68px;
+  border:2px solid rgba(255,255,255,0.5);
+  border-radius:50%;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  transform:rotate(15deg);
+  background:rgba(139,92,246,0.1);
+}
+.free-badge .f1 {
+  font-size:18px; font-weight:900; color:#fff;
+  line-height:1; letter-spacing:-0.02em;
+}
+.free-badge .f2 {
+  font-size:8px; font-weight:700; color:rgba(255,255,255,0.6);
+  text-transform:uppercase; letter-spacing:0.08em;
+}
+
+/* ── HEADLINE BLOCK ── */
+.headline-block {
+  position:relative; z-index:2;
+  padding:0 32px;
+  text-align:center;
+  flex:1;
+  display:flex; flex-direction:column; align-items:center;
+}
+
+.event-type {
+  font-size:12px; font-weight:700; color:rgba(255,255,255,0.3);
+  letter-spacing:0.14em; text-transform:uppercase;
+  margin-bottom:14px;
+}
+
+.headline {
+  font-weight:900;
+  font-size:50px;
+  line-height:1.0;
+  letter-spacing:-0.03em;
+  color:#fff;
+  margin-bottom:4px;
+}
+.headline .v { color:#8B5CF6; display:block; }
+.headline .sm { font-size:34px; }
+
+.sub-head {
+  font-size:16px; font-weight:700;
+  color:rgba(255,255,255,0.5);
+  margin-bottom:24px;
+  line-height:1.3;
+}
+.sub-head span { color:rgba(255,255,255,0.8); }
+
+/* ── WHAT YOU LEARN ── */
+.learn-list {
+  display:flex; flex-direction:column; gap:9px;
+  width:100%; margin-bottom:28px; text-align:left;
+}
+.learn-item {
+  display:flex; align-items:center; gap:10px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.07);
+  border-left:2px solid #8B5CF6;
+  border-radius:8px;
+  padding:10px 14px;
+  font-size:13px; color:rgba(255,255,255,0.75); font-weight:500;
+}
+.learn-item .num {
+  font-size:10px; font-weight:800; color:#8B5CF6;
+  min-width:18px; letter-spacing:0.06em;
+}
+
+/* ── CTA ── */
+.cta-wrap {
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  margin-bottom:20px;
+}
+.cta-btn {
+  background:#8B5CF6;
+  color:#fff;
+  font-weight:800; font-size:17px;
+  padding:15px 52px;
+  border-radius:8px;
+  border:none; cursor:pointer;
+  letter-spacing:0.01em;
+  box-shadow:0 8px 32px rgba(139,92,246,0.45);
+  position:relative; overflow:hidden;
+  text-decoration:none; display:inline-block;
+  width:100%;
+  text-align:center;
+}
+.cta-btn::before {
+  content:'';
+  position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.1) 0%,transparent 50%);
+}
+.cta-note {
+  font-size:11px; color:rgba(255,255,255,0.3);
+  letter-spacing:0.04em;
+}
+
+/* ── META ROW ── */
+.meta-row {
+  display:flex; align-items:center; justify-content:center;
+  gap:18px; margin-bottom:0;
+  position:relative; z-index:2;
+  padding: 0 32px;
+}
+.meta-item {
+  display:flex; align-items:center; gap:6px;
+  font-size:11.5px; color:rgba(255,255,255,0.35);
+  font-weight:600; letter-spacing:0.04em; text-transform:uppercase;
+}
+.meta-item .icon { font-size:13px; }
+.meta-sep { width:1px; height:14px; background:rgba(255,255,255,0.1); }
+
+/* ── VISUAL AREA ── */
+.visual-area {
+  position:relative; z-index:1;
+  width:100%; height:110px;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+
+.wave-rings {
+  position:relative;
+  width:260px; height:100px;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0.18;
+}
+.wave-ring {
+  position:absolute;
+  border-radius:50%;
+  border:1px solid #8B5CF6;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+}
+
+/* mic icon center */
+.mic-icon {
+  position:absolute;
+  font-size:28px;
+  opacity:0.4;
+  z-index:2;
+}
+
+/* ── BOTTOM STRIP ── */
+.bottom-strip {
+  background:#8B5CF6;
+  padding:14px 28px;
+  display:flex; align-items:center; justify-content:space-between;
+  z-index:10; position:relative;
+  flex-shrink:0;
+}
+.bs-left { display:flex; flex-direction:column; gap:1px; }
+.bs-name {
+  font-weight:800; font-size:14px; color:#fff; letter-spacing:0.01em;
+}
+.bs-url { font-size:11px; color:rgba(255,255,255,0.7); letter-spacing:0.04em; }
+.bs-arrow {
+  width:34px; height:34px;
+  background:rgba(255,255,255,0.2);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; color:#fff;
+}
+
+</style>
+</head>
+<body>
+
+<div class="poster">
+
+  <div class="glow-top"></div>
+  <div class="glow-mid"></div>
+
+  <!-- FREE STAMP -->
+  <div class="free-badge">
+    <div class="f1">FREE</div>
+    <div class="f2">Event</div>
+  </div>
+
+  <!-- TOP TAG -->
+  <div class="top-tag">
+    <div class="top-tag-inner">
+      <span class="live-dot"></span>
+      1 Day Live Workshop
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="headline-block">
+
+    <div class="event-type">IgnAIte Presents</div>
+
+    <div class="headline">
+      Build Your
+      <span class="v">Voice AI</span>
+      <span class="sm">Bot From Zero</span>
+    </div>
+
+    <div class="sub-head">
+      Clone voices. Build <span>talking AI agents.</span><br>
+      Deploy for real businesses. In one day.
+    </div>
+
+    <!-- WHAT YOU LEARN -->
+    <div class="learn-list">
+      <div class="learn-item">
+        <span class="num">01</span>
+        Clone any voice using ElevenLabs &amp; HeyGen
+      </div>
+      <div class="learn-item">
+        <span class="num">02</span>
+        Build a talking AI customer support bot
+      </div>
+      <div class="learn-item">
+        <span class="num">03</span>
+        Stack: Whisper + ElevenLabs + VAPI + LangChain
+      </div>
+      <div class="learn-item">
+        <span class="num">04</span>
+        Deploy &amp; sell Voice AI to real businesses
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-wrap">
+      <a href="https://ignaite.in/" class="cta-btn">Register for Free →</a>
+      <div class="cta-note">Limited seats · No payment required · Telugu + Hindi</div>
+    </div>
+
+    <!-- META -->
+    <div class="meta-row">
+      <div class="meta-item"><span class="icon">📅</span> 1 Day</div>
+      <div class="meta-sep"></div>
+      <div class="meta-item"><span class="icon">🔴</span> 3 Live Sessions</div>
+      <div class="meta-sep"></div>
+      <div class="meta-item"><span class="icon">🎙️</span> Hands-On</div>
+    </div>
+
+  </div>
+
+  <!-- SOUND WAVE VISUAL -->
+  <div class="visual-area">
+    <div class="wave-rings">
+      <div class="wave-ring" style="width:240px;height:100px"></div>
+      <div class="wave-ring" style="width:190px;height:80px"></div>
+      <div class="wave-ring" style="width:145px;height:60px"></div>
+      <div class="wave-ring" style="width:105px;height:44px"></div>
+      <div class="wave-ring" style="width:70px;height:30px"></div>
+      <div class="wave-ring" style="width:40px;height:18px"></div>
+    </div>
+    <div class="mic-icon">🎙️</div>
+  </div>
+
+  <!-- BOTTOM STRIP -->
+  <div class="bottom-strip">
+    <div class="bs-left">
+      <div class="bs-name">IgnAIte — Voice AI Workshop</div>
+      <div class="bs-url">ignaite.in · Register Now</div>
+    </div>
+    <div class="bs-arrow">→</div>
+  </div>
+
+</div>
+
+
+
+</body></html>

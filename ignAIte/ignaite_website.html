@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IgnAIte — AI Automation for Small Businesses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #080B14;
+    --bg2: #0D1220;
+    --bg3: #111827;
+    --orange: #E8711A;
+    --orange2: #F5893A;
+    --gold: #C9A84C;
+    --white: #F4F1EC;
+    --white2: #BDB8AF;
+    --white3: #7A7570;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(232,113,26,0.25);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--orange);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 32px; height: 32px;
+    border: 1px solid rgba(232,113,26,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.15s ease, width 0.2s, height 0.2s;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid transparent;
+    transition: all 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(8,11,20,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom-color: var(--border);
+    padding: 18px 48px;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--orange); }
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--white2);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 400;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: transparent;
+    border: 1px solid var(--orange);
+    color: var(--orange);
+    padding: 10px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: none;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+  .nav-cta:hover {
+    background: var(--orange);
+    color: var(--bg);
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 120px 48px 80px;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(232,113,26,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,113,26,0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%);
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(232,113,26,0.12) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .hero-glow2 {
+    position: absolute;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+    top: 20%; right: 15%;
+    pointer-events: none;
+    animation: pulse 4s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+
+  .hero-content {
+    max-width: 900px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border2);
+    background: rgba(232,113,26,0.06);
+    padding: 8px 16px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--orange);
+    border-radius: 50%;
+    animation: blink 2s infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 8vw, 96px);
+    font-weight: 300;
+    line-height: 1.0;
+    letter-spacing: -1px;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--orange);
+  }
+  .hero-title .line2 {
+    display: block;
+    color: var(--white2);
+    font-weight: 300;
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    color: var(--white2);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 52px;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.8s forwards;
+  }
+
+  .btn-primary {
+    background: var(--orange);
+    color: var(--bg);
+    padding: 16px 36px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 500;
+    border: none;
+    cursor: none;
+    text-decoration: none;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .btn-primary:hover::after { opacity: 1; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(232,113,26,0.3); }
+
+  .btn-ghost {
+    color: var(--white2);
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+    font-weight: 400;
+  }
+  .btn-ghost:hover { color: var(--white); }
+  .btn-ghost::after { content: '↓'; font-size: 16px; }
+
+  /* STATS BAR */
+  .stats-bar {
+    padding: 40px 48px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 0;
+    background: rgba(255,255,255,0.015);
+    overflow: hidden;
+  }
+  .stat {
+    flex: 1;
+    padding: 0 40px;
+    border-right: 1px solid var(--border);
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards;
+  }
+  .stat:first-child { padding-left: 0; }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-num span { color: var(--orange); }
+  .stat-label {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--white3);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SECTION COMMON */
+  section { padding: 120px 48px; }
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 20px;
+    font-family: 'DM Mono', monospace;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+  .section-title em { font-style: italic; color: var(--orange); }
+  .section-sub {
+    font-size: 16px;
+    color: var(--white2);
+    max-width: 560px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* WHAT WE BUILD */
+  .services { background: var(--bg); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 72px;
+    border: 1px solid var(--border);
+  }
+  .service-card {
+    background: var(--bg);
+    padding: 48px 40px;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: var(--orange);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-card:hover { background: var(--bg2); }
+
+  .service-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--orange);
+    letter-spacing: 2px;
+    margin-bottom: 32px;
+    opacity: 0.6;
+  }
+  .service-icon {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  .service-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+  .service-desc {
+    font-size: 14px;
+    color: var(--white2);
+    line-height: 1.7;
+    margin-bottom: 28px;
+    font-weight: 300;
+  }
+  .service-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--white3);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    font-family: 'DM Mono', monospace;
+    transition: all 0.2s;
+  }
+  .service-card:hover .tag {
+    border-color: var(--border2);
+    color: var(--orange);
+  }
+
+  /* PORTFOLIO / SOLUTIONS BUILT */
+  .portfolio { background: var(--bg2); }
+  .portfolio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 72px;
+  }
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+  }
+  .portfolio-item {
+    background: var(--bg2);
+    padding: 56px 48px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+    cursor: none;
+  }
+  .portfolio-item.featured {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    background: var(--bg3);
+  }
+  .portfolio-item:hover { background: var(--bg3); }
+  .portfolio-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    border: 1px solid var(--border2);
+    background: rgba(232,113,26,0.06);
+    padding: 4px 12px;
+    display: inline-block;
+    margin-bottom: 24px;
+  }
+  .portfolio-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .portfolio-desc {
+    font-size: 14px;
+    color: var(--white2);
+    line-height: 1.7;
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+  .portfolio-stats {
+    display: flex;
+    gap: 32px;
+  }
+  .p-stat { text-align: left; }
+  .p-stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--white);
+  }
+  .p-stat-num span { color: var(--orange); }
+  .p-stat-label {
+    font-size: 11px;
+    color: var(--white3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* Flow diagram for portfolio */
+  .flow-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .flow-step {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 20px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    position: relative;
+  }
+  .flow-step + .flow-step { margin-top: -1px; }
+  .flow-step.active {
+    border-color: var(--border2);
+    background: rgba(232,113,26,0.05);
+  }
+  .flow-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  .flow-step.active .flow-dot { background: var(--orange); }
+  .flow-text {
+    font-size: 13px;
+    color: var(--white2);
+    font-family: 'DM Mono', monospace;
+  }
+  .flow-step.active .flow-text { color: var(--white); }
+  .flow-arrow {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--orange);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .flow-step.active .flow-arrow { opacity: 1; }
+
+  /* HOW IT WORKS */
+  .process { background: var(--bg); }
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: var(--border);
+    margin-top: 72px;
+    border: 1px solid var(--border);
+  }
+  .process-step {
+    background: var(--bg);
+    padding: 48px 32px;
+    position: relative;
+  }
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px;
+    font-weight: 300;
+    color: rgba(232,113,26,0.08);
+    line-height: 1;
+    position: absolute;
+    top: 24px; right: 24px;
+    pointer-events: none;
+    transition: color 0.3s;
+  }
+  .process-step:hover .step-num { color: rgba(232,113,26,0.15); }
+  .step-icon {
+    width: 48px; height: 48px;
+    border: 1px solid var(--border2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 24px;
+    background: rgba(232,113,26,0.04);
+  }
+  .step-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .step-desc {
+    font-size: 13px;
+    color: var(--white2);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* PRICING */
+  .pricing { background: var(--bg2); }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+    margin-top: 72px;
+    border: 1px solid var(--border);
+  }
+  .pricing-card {
+    background: var(--bg2);
+    padding: 48px 40px;
+    position: relative;
+    transition: background 0.3s;
+  }
+  .pricing-card.featured {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    margin: -1px;
+    z-index: 1;
+  }
+  .pricing-card.featured::before {
+    content: 'Most Popular';
+    position: absolute;
+    top: -1px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--orange);
+    color: var(--bg);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 16px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+  }
+  .pricing-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--white3);
+    margin-bottom: 12px;
+    font-family: 'DM Mono', monospace;
+  }
+  .pricing-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .pricing-price span { font-size: 22px; color: var(--white3); vertical-align: super; }
+  .pricing-period {
+    font-size: 13px;
+    color: var(--white3);
+    margin-bottom: 32px;
+  }
+  .pricing-divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 28px;
+  }
+  .pricing-features {
+    list-style: none;
+    margin-bottom: 40px;
+  }
+  .pricing-features li {
+    font-size: 14px;
+    color: var(--white2);
+    padding: 8px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-weight: 300;
+    line-height: 1.4;
+  }
+  .pricing-features li::before {
+    content: '→';
+    color: var(--orange);
+    font-size: 12px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .pricing-cta {
+    display: block;
+    text-align: center;
+    padding: 14px;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--white2);
+    text-decoration: none;
+    transition: all 0.3s;
+    font-weight: 400;
+  }
+  .pricing-cta:hover, .featured .pricing-cta {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: var(--bg);
+  }
+
+  /* TESTIMONIAL / SOCIAL PROOF */
+  .proof { background: var(--bg); padding: 80px 48px; }
+  .proof-inner {
+    border: 1px solid var(--border);
+    padding: 72px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .proof-inner::before {
+    content: '"';
+    position: absolute;
+    top: -20px; left: 48px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 200px;
+    color: rgba(232,113,26,0.06);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .proof-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--white);
+    position: relative;
+    z-index: 1;
+  }
+  .proof-quote em { color: var(--orange); font-style: normal; }
+  .proof-right { position: relative; z-index: 1; }
+  .proof-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+  .proof-text {
+    font-size: 14px;
+    color: var(--white2);
+    line-height: 1.7;
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+  .proof-checks {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .proof-check {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--white2);
+  }
+  .proof-check::before {
+    content: '✓';
+    color: var(--orange);
+    font-size: 12px;
+    width: 20px; height: 20px;
+    border: 1px solid var(--border2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* CTA SECTION */
+  .cta-section {
+    background: var(--bg2);
+    padding: 120px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    width: 800px; height: 400px;
+    background: radial-gradient(ellipse, rgba(232,113,26,0.08) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .cta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(48px, 7vw, 80px);
+    font-weight: 300;
+    line-height: 1.0;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
+  }
+  .cta-title em { font-style: italic; color: var(--orange); }
+  .cta-sub {
+    font-size: 16px;
+    color: var(--white2);
+    max-width: 480px;
+    margin: 0 auto 48px;
+    line-height: 1.7;
+    font-weight: 300;
+    position: relative;
+    z-index: 1;
+  }
+  .cta-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+  .cta-note {
+    font-size: 12px;
+    color: var(--white3);
+    margin-top: 20px;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 60px 48px 40px;
+  }
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .footer-logo span { color: var(--orange); }
+  .footer-tagline {
+    font-size: 13px;
+    color: var(--white3);
+    margin-top: 8px;
+    font-weight: 300;
+  }
+  .footer-links {
+    display: flex;
+    gap: 40px;
+  }
+  .footer-col-title {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--white3);
+    margin-bottom: 16px;
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 14px;
+    color: var(--white2);
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: color 0.2s;
+    font-weight: 300;
+  }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-copy {
+    font-size: 12px;
+    color: var(--white3);
+    letter-spacing: 0.5px;
+  }
+  .footer-parent {
+    font-size: 12px;
+    color: var(--white3);
+    letter-spacing: 1px;
+  }
+  .footer-parent span { color: var(--orange); }
+
+  /* SCROLL ANIMATIONS */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* TICKER */
+  .ticker {
+    background: var(--orange);
+    padding: 12px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-inner {
+    display: inline-flex;
+    animation: ticker 20s linear infinite;
+  }
+  .ticker-item {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--bg);
+    font-weight: 500;
+    padding: 0 40px;
+    font-family: 'DM Mono', monospace;
+  }
+  .ticker-dot {
+    color: rgba(8,11,20,0.4);
+    padding: 0 4px;
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    nav.scrolled { padding: 16px 24px; }
+    .nav-links { display: none; }
+    section, .hero { padding: 80px 24px; }
+    .stats-bar { padding: 32px 24px; flex-wrap: wrap; gap: 32px; }
+    .stat { border: none; padding: 0; flex: 0 0 calc(50% - 16px); }
+    .services-grid, .process-steps, .pricing-grid { grid-template-columns: 1fr; }
+    .portfolio-grid { grid-template-columns: 1fr; }
+    .portfolio-item.featured { grid-column: span 1; grid-template-columns: 1fr; }
+    .proof-inner { grid-template-columns: 1fr; padding: 40px; gap: 40px; }
+    .footer-top { flex-direction: column; gap: 40px; }
+    .footer-links { flex-wrap: wrap; gap: 32px; }
+    .cta-actions { flex-direction: column; }
+    .hero-title { font-size: 48px; }
+    .portfolio-header { flex-direction: column; gap: 20px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Ign<span>AI</span>te</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#solutions">Solutions</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <a href="mailto:hello@getignaite.com" class="nav-cta">Book a Call</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Available for new projects</div>
+    <h1 class="hero-title">
+      Stop losing leads<br>
+      <em>to slow follow-up.</em>
+      <span class="line2">We build the automation.</span>
+    </h1>
+    <p class="hero-sub">
+      IgnAIte builds done-for-you AI workflow systems that help small businesses respond faster, capture every lead, and eliminate hours of manual work — every week.
+    </p>
+    <div class="hero-actions">
+      <a href="mailto:hello@getignaite.com" class="btn-primary">Start a Project</a>
+      <a href="#solutions" class="btn-ghost">See Our Work</a>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">Lead Capture Automation <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Client Onboarding Systems <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">AI Workflow Builds <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">n8n Specialists <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Follow-Up Sequences <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">CRM Automation <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Repetitive Ops Eliminated <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Lead Capture Automation <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Client Onboarding Systems <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">AI Workflow Builds <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">n8n Specialists <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Follow-Up Sequences <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">CRM Automation <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Repetitive Ops Eliminated <span class="ticker-dot">◆</span></span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat" style="animation-delay:0.1s">
+    <div class="stat-num">10<span>hrs</span></div>
+    <div class="stat-label">Saved per client per week</div>
+  </div>
+  <div class="stat" style="animation-delay:0.2s">
+    <div class="stat-num">$300<span>+</span></div>
+    <div class="stat-label">Starting price per workflow</div>
+  </div>
+  <div class="stat" style="animation-delay:0.3s">
+    <div class="stat-num">48<span>hrs</span></div>
+    <div class="stat-label">Average delivery time</div>
+  </div>
+  <div class="stat" style="animation-delay:0.4s">
+    <div class="stat-num">3<span>x</span></div>
+    <div class="stat-label">Markets — USA, UAE, Australia</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-label reveal">What We Build</div>
+  <div class="section-title reveal">Automation systems that<br><em>run while you sleep</em></div>
+  <p class="section-sub reveal">We build practical, working automations — not overengineered solutions. Every workflow we deliver has a clear problem, a clear outcome, and a clear ROI.</p>
+
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-num">01</div>
+      <div class="service-icon">⚡</div>
+      <div class="service-title">Lead Capture & Follow-Up</div>
+      <p class="service-desc">New lead comes in — they get an instant response, get added to your CRM, and receive a multi-step follow-up sequence. All without you touching anything.</p>
+      <div class="service-tags">
+        <span class="tag">n8n</span>
+        <span class="tag">Gmail</span>
+        <span class="tag">Notion</span>
+        <span class="tag">Webhooks</span>
+      </div>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-num">02</div>
+      <div class="service-icon">🔄</div>
+      <div class="service-title">Client Onboarding Systems</div>
+      <p class="service-desc">New client signs → contract sent → welcome email → project folder created → kickoff call booked. Cut your onboarding from hours to under 10 minutes.</p>
+      <div class="service-tags">
+        <span class="tag">Zapier</span>
+        <span class="tag">Calendly</span>
+        <span class="tag">Google Drive</span>
+        <span class="tag">Slack</span>
+      </div>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-num">03</div>
+      <div class="service-icon">🤖</div>
+      <div class="service-title">AI-Powered Workflows</div>
+      <p class="service-desc">Connect AI to your existing tools. Auto-categorise support tickets, draft responses, summarise calls, generate reports — the tedious work, handled.</p>
+      <div class="service-tags">
+        <span class="tag">OpenAI</span>
+        <span class="tag">Claude</span>
+        <span class="tag">Make.com</span>
+        <span class="tag">Airtable</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">04</div>
+      <div class="service-icon">📊</div>
+      <div class="service-title">CRM & Pipeline Automation</div>
+      <p class="service-desc">Your CRM updates itself. Leads move through stages automatically. Status changes trigger the right actions. Your team sees what matters, when it matters.</p>
+      <div class="service-tags">
+        <span class="tag">HubSpot</span>
+        <span class="tag">Notion</span>
+        <span class="tag">Pipedrive</span>
+        <span class="tag">n8n</span>
+      </div>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-num">05</div>
+      <div class="service-icon">📬</div>
+      <div class="service-title">Outreach Automation</div>
+      <p class="service-desc">Personalised cold outreach at scale. Build sequences that feel human, run automatically, and log every interaction back to your CRM without lifting a finger.</p>
+      <div class="service-tags">
+        <span class="tag">Apollo</span>
+        <span class="tag">Gmail API</span>
+        <span class="tag">LinkedIn</span>
+        <span class="tag">n8n</span>
+      </div>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-num">06</div>
+      <div class="service-icon">🔍</div>
+      <div class="service-title">Operations Audit</div>
+      <p class="service-desc">Not sure where to start? We map your current workflows, identify the top 3 automation opportunities, and deliver a prioritised action plan. Results in 48 hours.</p>
+      <div class="service-tags">
+        <span class="tag">Audit</span>
+        <span class="tag">Strategy</span>
+        <span class="tag">Roadmap</span>
+        <span class="tag">Quick Win</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTIONS BUILT -->
+<section class="portfolio" id="solutions">
+  <div class="portfolio-header">
+    <div>
+      <div class="section-label reveal">Already Implemented</div>
+      <div class="section-title reveal">Real systems.<br><em>Real results.</em></div>
+    </div>
+    <p class="section-sub reveal" style="max-width:320px; font-size:14px;">These aren't mockups or concepts. These are live systems we've built and deployed.</p>
+  </div>
+
+  <div class="portfolio-grid">
+
+    <!-- FEATURED -->
+    <div class="portfolio-item featured reveal">
+      <div>
+        <div class="portfolio-tag">Live System</div>
+        <h3 class="portfolio-title">Automated Cold Outreach Pipeline</h3>
+        <p class="portfolio-desc">A fully automated outreach system built on n8n that pulls leads from a Notion CRM, builds personalised cold emails per audience segment, sends via Gmail, tracks every interaction, schedules follow-ups, and delivers a weekly performance report — all without touching it manually.</p>
+        <div class="portfolio-stats">
+          <div class="p-stat">
+            <div class="p-stat-num">3<span>x</span></div>
+            <div class="p-stat-label">Follow-up sequences</div>
+          </div>
+          <div class="p-stat">
+            <div class="p-stat-num">5<span></span></div>
+            <div class="p-stat-label">Audience segments</div>
+          </div>
+          <div class="p-stat">
+            <div class="p-stat-num">0<span>hrs</span></div>
+            <div class="p-stat-label">Manual work required</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-diagram">
+        <div class="flow-step active">
+          <div class="flow-dot"></div>
+          <span class="flow-text">⏰  Daily trigger at 9am</span>
+          <span class="flow-arrow">→</span>
+        </div>
+        <div class="flow-step active">
+          <div class="flow-dot"></div>
+          <span class="flow-text">📋  Fetch leads from Notion CRM</span>
+          <span class="flow-arrow">→</span>
+        </div>
+        <div class="flow-step active">
+          <div class="flow-dot"></div>
+          <span class="flow-text">🔀  Route by channel — Email / LinkedIn</span>
+          <span class="flow-arrow">→</span>
+        </div>
+        <div class="flow-step active">
+          <div class="flow-dot"></div>
+          <span class="flow-text">✍️  Build personalised message per segment</span>
+          <span class="flow-arrow">→</span>
+        </div>
+        <div class="flow-step active">
+          <div class="flow-dot"></div>
+          <span class="flow-text">📧  Send via Gmail automatically</span>
+          <span class="flow-arrow">→</span>
+        </div>
+        <div class="flow-step active">
+          <div class="flow-dot"></div>
+          <span class="flow-text">✅  Update Notion CRM status</span>
+          <span class="flow-arrow">→</span>
+        </div>
+        <div class="flow-step active">
+          <div class="flow-dot"></div>
+          <span class="flow-text">🔁  Schedule follow-up in 5 days</span>
+          <span class="flow-arrow">→</span>
+        </div>
+        <div class="flow-step active">
+          <div class="flow-dot"></div>
+          <span class="flow-text">📊  Weekly summary report every Friday</span>
+          <span class="flow-arrow">→</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="portfolio-item reveal">
+      <div class="portfolio-tag">Strategy Document</div>
+      <h3 class="portfolio-title">Full GTM Plan — USA, UAE & Australia</h3>
+      <p class="portfolio-desc">A 12-section go-to-market plan covering target demographics, 5 buyer personas, channel strategy, outreach playbooks, 90-day execution plan, and pricing — built specifically for international AI automation services.</p>
+      <div class="portfolio-stats" style="margin-top:32px">
+        <div class="p-stat">
+          <div class="p-stat-num">3<span></span></div>
+          <div class="p-stat-label">Tier 1 markets</div>
+        </div>
+        <div class="p-stat">
+          <div class="p-stat-num">5<span></span></div>
+          <div class="p-stat-label">Buyer personas</div>
+        </div>
+        <div class="p-stat">
+          <div class="p-stat-num">90<span>d</span></div>
+          <div class="p-stat-label">Execution roadmap</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="portfolio-item reveal reveal-delay-1">
+      <div class="portfolio-tag">Live System</div>
+      <h3 class="portfolio-title">Notion CRM — Lead Tracking System</h3>
+      <p class="portfolio-desc">A purpose-built Notion CRM database with full outreach tracking — lead status, channel, segment, outreach step, contact dates, and follow-up scheduling. Fully integrated with n8n automation.</p>
+      <div class="portfolio-stats" style="margin-top:32px">
+        <div class="p-stat">
+          <div class="p-stat-num">11<span></span></div>
+          <div class="p-stat-label">Tracked fields</div>
+        </div>
+        <div class="p-stat">
+          <div class="p-stat-num">Auto<span></span></div>
+          <div class="p-stat-label">Status updates</div>
+        </div>
+        <div class="p-stat">
+          <div class="p-stat-num">0<span></span></div>
+          <div class="p-stat-label">Manual data entry</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="section-label reveal">How It Works</div>
+  <div class="section-title reveal">From problem to<br><em>running automation</em></div>
+  <p class="section-sub reveal">No bloated discovery processes. No six-week timelines. We move fast and deliver working systems.</p>
+
+  <div class="process-steps">
+    <div class="process-step reveal">
+      <div class="step-num">01</div>
+      <div class="step-icon">💬</div>
+      <div class="step-title">Discovery Call</div>
+      <p class="step-desc">15 minutes. We understand your current process, identify where time is being wasted, and define exactly what we'll automate.</p>
+    </div>
+    <div class="process-step reveal reveal-delay-1">
+      <div class="step-num">02</div>
+      <div class="step-icon">📐</div>
+      <div class="step-title">Workflow Mapping</div>
+      <p class="step-desc">We map the exact steps, tools, triggers, and outcomes — then show you what the automated version looks like before we build it.</p>
+    </div>
+    <div class="process-step reveal reveal-delay-2">
+      <div class="step-num">03</div>
+      <div class="step-icon">⚙️</div>
+      <div class="step-title">Build & Test</div>
+      <p class="step-desc">We build the workflow, test it with real data, iron out edge cases, and make sure it runs clean before handing it over.</p>
+    </div>
+    <div class="process-step reveal reveal-delay-3">
+      <div class="step-num">04</div>
+      <div class="step-icon">🚀</div>
+      <div class="step-title">Handover & Support</div>
+      <p class="step-desc">Full walkthrough of how it works, documentation, and 7 days of support. You own it — we just make sure you understand it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<div class="proof">
+  <div class="proof-inner reveal">
+    <div class="proof-quote">
+      "Most businesses aren't losing leads because of bad marketing. They're losing them because <em>nobody followed up fast enough.</em>"
+    </div>
+    <div class="proof-right">
+      <div class="proof-title">The automation<br>advantage</div>
+      <p class="proof-text">Businesses that respond to leads within 5 minutes are 100x more likely to connect than those that respond in an hour. Most small businesses are responding in days — if at all.</p>
+      <div class="proof-checks">
+        <div class="proof-check">Instant lead response — 24/7, no delays</div>
+        <div class="proof-check">Consistent follow-up — no lead forgotten</div>
+        <div class="proof-check">CRM updated automatically — no manual entry</div>
+        <div class="proof-check">Your team focuses on closing, not chasing</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-label reveal">Pricing</div>
+  <div class="section-title reveal">Simple, transparent<br><em>project-based pricing</em></div>
+  <p class="section-sub reveal">Priced in USD. No retainers required to start. No hidden costs.</p>
+
+  <div class="pricing-grid">
+    <div class="pricing-card reveal">
+      <div class="pricing-label">Starter</div>
+      <div class="pricing-price"><span>$</span>300</div>
+      <div class="pricing-period">per workflow build</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li>One automation workflow built & delivered</li>
+        <li>Lead capture or follow-up sequence</li>
+        <li>Full documentation included</li>
+        <li>1 revision round</li>
+        <li>7 days post-delivery support</li>
+      </ul>
+      <a href="mailto:hello@getignaite.com" class="pricing-cta">Get Started</a>
+    </div>
+
+    <div class="pricing-card featured reveal reveal-delay-1">
+      <div class="pricing-label">Growth</div>
+      <div class="pricing-price"><span>$</span>800</div>
+      <div class="pricing-period">system build — 2 to 3 workflows</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li>2–3 connected workflows built together</li>
+        <li>Lead capture + onboarding + CRM logging</li>
+        <li>Full walkthrough call on delivery</li>
+        <li>2 revision rounds</li>
+        <li>14 days post-delivery support</li>
+      </ul>
+      <a href="mailto:hello@getignaite.com" class="pricing-cta">Get Started</a>
+    </div>
+
+    <div class="pricing-card reveal reveal-delay-2">
+      <div class="pricing-label">Retainer</div>
+      <div class="pricing-price"><span>$</span>500</div>
+      <div class="pricing-period">per month — ongoing</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li>Monthly automation builds & improvements</li>
+        <li>Maintain & update existing workflows</li>
+        <li>Priority response — 24hr turnaround</li>
+        <li>Monthly strategy call included</li>
+        <li>Unlimited revisions within scope</li>
+      </ul>
+      <a href="mailto:hello@getignaite.com" class="pricing-cta">Get Started</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-label" style="display:block; margin-bottom:16px; text-align:center;">Ready to automate?</div>
+  <h2 class="cta-title">Let's build your<br><em>first workflow</em></h2>
+  <p class="cta-sub">Book a free 15-minute discovery call. We'll identify your biggest automation opportunity and show you exactly what's possible.</p>
+  <div class="cta-actions">
+    <a href="mailto:hello@getignaite.com" class="btn-primary">Book a Free Call</a>
+    <a href="mailto:hello@getignaite.com" style="color:var(--white2); font-size:13px; letter-spacing:1px; text-decoration:none; transition:color 0.2s" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--white2)'">hello@getignaite.com</a>
+  </div>
+  <p class="cta-note">No obligation. No pitch deck. Just a direct conversation about your automation opportunities.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">Ign<span>AI</span>te</div>
+      <div class="footer-tagline">AI Automation for Small Businesses & Agencies</div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <div class="footer-col-title">Services</div>
+        <a href="#services">Lead Capture</a>
+        <a href="#services">Client Onboarding</a>
+        <a href="#services">CRM Automation</a>
+        <a href="#services">Outreach Systems</a>
+        <a href="#services">Operations Audit</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="#solutions">Our Work</a>
+        <a href="#process">How It Works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="mailto:hello@getignaite.com">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Contact</div>
+        <a href="mailto:hello@getignaite.com">hello@getignaite.com</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Twitter / X</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 IgnAIte. All rights reserved.</div>
+    <div class="footer-parent">Part of <span>ZeroOrigins</span></div>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursor.style.left = mouseX - 4 + 'px';
+    cursor.style.top = mouseY - 4 + 'px';
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    ring.style.left = ringX + 'px';
+    ring.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      ring.style.width = '48px';
+      ring.style.height = '48px';
+      ring.style.borderColor = 'rgba(232,113,26,0.8)';
+    });
+    el.addEventListener('mouseleave', () => {
+      ring.style.width = '32px';
+      ring.style.height = '32px';
+      ring.style.borderColor = 'rgba(232,113,26,0.5)';
+    });
+  });
+
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => observer.observe(el));
+
+  // Stats counter animation
+  const stats = document.querySelectorAll('.stat');
+  const statsObserver = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        e.target.style.animationDelay = (i * 0.1) + 's';
+        e.target.style.animationFillMode = 'forwards';
+      }
+    });
+  }, { threshold: 0.3 });
+  stats.forEach(s => statsObserver.observe(s));
+
+  // Smooth anchor scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>

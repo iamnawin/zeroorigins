@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIwithNoBrain — AI Music & Creative Experiments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Share+Tech+Mono&family=Rubik+Glitch&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --pink: #FF2D78;
+  --pink2: #FF6BA8;
+  --hot: #FF0055;
+  --cyan: #00FFEE;
+  --yellow: #FFE600;
+  --black: #0A0A0A;
+  --white: #F5F5F0;
+  --gray: #C8C8C0;
+  --win-gray: #C0C0C0;
+  --win-dark: #808080;
+  --win-blue: #000080;
+  --win-light: #DFDFDF;
+  --dither: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect x='0' y='0' width='2' height='2' fill='%23FF2D78' opacity='0.15'/%3E%3Crect x='2' y='2' width='2' height='2' fill='%23FF2D78' opacity='0.15'/%3E%3C/svg%3E");
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--pink);
+  color: var(--black);
+  font-family: 'Share Tech Mono', monospace;
+  overflow-x: hidden;
+  cursor: none;
+  position: relative;
+}
+
+/* Dither texture overlay */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: var(--dither);
+  background-size: 4px 4px;
+  pointer-events: none;
+  z-index: 1000;
+  mix-blend-mode: multiply;
+  opacity: 0.6;
+}
+
+/* CRT scanlines */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* Custom cursor — crosshair pixel style */
+.cursor {
+  position: fixed;
+  width: 16px; height: 16px;
+  border: 2px solid var(--black);
+  background: var(--yellow);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  image-rendering: pixelated;
+}
+
+/* ═══════════════════════════════════════
+   NAVBAR — Windows 95 taskbar style
+═══════════════════════════════════════ */
+nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 500;
+  background: var(--win-gray);
+  border-top: 2px solid var(--white);
+  height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 8px;
+}
+.start-btn {
+  background: var(--win-gray);
+  border: 2px solid;
+  border-color: var(--white) var(--win-dark) var(--win-dark) var(--white);
+  padding: 2px 12px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: var(--black);
+  cursor: none;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+.start-btn:hover {
+  border-color: var(--win-dark) var(--white) var(--white) var(--win-dark);
+  background: var(--win-blue);
+  color: var(--white);
+}
+.taskbar-items {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+.task-item {
+  background: var(--win-gray);
+  border: 2px solid;
+  border-color: var(--win-dark) var(--white) var(--white) var(--win-dark);
+  padding: 2px 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--black);
+  cursor: none;
+  text-decoration: none;
+}
+.task-item:hover {
+  border-color: var(--white) var(--win-dark) var(--win-dark) var(--white);
+}
+.taskbar-clock {
+  border: 2px solid;
+  border-color: var(--win-dark) var(--white) var(--white) var(--win-dark);
+  padding: 2px 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--black);
+}
+
+/* ═══════════════════════════════════════
+   HERO SECTION
+═══════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px 100px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Big pixel grid bg */
+.hero-bg {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.12) 1px, transparent 1px);
+  background-size: 32px 32px;
+  image-rendering: pixelated;
+}
+
+.hero-title-wrap {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.hero-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(28px, 5vw, 64px);
+  color: var(--black);
+  text-shadow:
+    4px 4px 0 var(--hot),
+    8px 8px 0 rgba(0,0,0,0.3);
+  line-height: 1.4;
+  letter-spacing: 2px;
+  animation: titleGlitch 6s infinite;
+}
+
+@keyframes titleGlitch {
+  0%, 90%, 100% {
+    text-shadow: 4px 4px 0 var(--hot), 8px 8px 0 rgba(0,0,0,0.3);
+    transform: translate(0);
+  }
+  91% {
+    text-shadow: -4px 4px 0 var(--cyan), 8px -4px 0 var(--hot);
+    transform: translate(3px, -2px);
+  }
+  92% {
+    text-shadow: 4px -4px 0 var(--yellow), -4px 4px 0 var(--cyan);
+    transform: translate(-3px, 2px);
+  }
+  93% {
+    text-shadow: 4px 4px 0 var(--hot), 8px 8px 0 rgba(0,0,0,0.3);
+    transform: translate(0);
+  }
+}
+
+.hero-sub {
+  font-family: 'VT323', monospace;
+  font-size: clamp(22px, 3vw, 36px);
+  color: var(--black);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-top: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-sub::after {
+  content: '█';
+  animation: blink 1s step-end infinite;
+  color: var(--black);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Loading bar */
+.loading-wrap {
+  position: relative; z-index: 2;
+  margin: 40px auto;
+  width: min(480px, 90vw);
+}
+.loading-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  color: var(--black);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.loading-bar-bg {
+  background: var(--black);
+  height: 20px;
+  border: 2px solid var(--black);
+  position: relative;
+  overflow: hidden;
+}
+.loading-bar-fill {
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--cyan) 0px,
+    var(--cyan) 12px,
+    var(--black) 12px,
+    var(--black) 16px
+  );
+  animation: loadFill 3s ease-out forwards, loadPulse 2s ease-in-out 3s infinite;
+  width: 0%;
+}
+@keyframes loadFill {
+  to { width: 87%; }
+}
+@keyframes loadPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Error window floating in hero */
+.error-win {
+  position: absolute;
+  background: var(--win-gray);
+  border: 3px solid;
+  border-color: var(--white) var(--win-dark) var(--win-dark) var(--white);
+  min-width: 260px;
+  z-index: 10;
+  box-shadow: 4px 4px 0 var(--black);
+  animation: float1 6s ease-in-out infinite;
+}
+.error-win.win2 {
+  animation: float2 8s ease-in-out infinite;
+}
+.error-win.win3 {
+  animation: float3 7s ease-in-out infinite;
+}
+
+@keyframes float1 {
+  0%, 100% { transform: translate(0, 0) rotate(-1deg); }
+  50% { transform: translate(-8px, 12px) rotate(1deg); }
+}
+@keyframes float2 {
+  0%, 100% { transform: translate(0, 0) rotate(2deg); }
+  50% { transform: translate(10px, -8px) rotate(-1deg); }
+}
+@keyframes float3 {
+  0%, 100% { transform: translate(0, 0) rotate(-2deg); }
+  33% { transform: translate(6px, 10px) rotate(1deg); }
+  66% { transform: translate(-6px, 5px) rotate(-1deg); }
+}
+
+.win-1 { top: 10%; left: 5%; }
+.win-2 { top: 15%; right: 8%; }
+.win-3 { bottom: 20%; left: 3%; }
+.win-4 { bottom: 25%; right: 5%; }
+
+.win-titlebar {
+  background: var(--win-blue);
+  color: var(--white);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  padding: 4px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  letter-spacing: 0;
+}
+.win-close {
+  background: var(--win-gray);
+  border: 1px solid;
+  border-color: var(--white) var(--win-dark) var(--win-dark) var(--white);
+  width: 14px; height: 14px;
+  font-size: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: monospace;
+  cursor: none;
+  color: var(--black);
+}
+.win-body {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--black);
+  line-height: 1.5;
+}
+.win-body-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.win-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.win-btn-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.win-btn {
+  background: var(--win-gray);
+  border: 2px solid;
+  border-color: var(--white) var(--win-dark) var(--win-dark) var(--white);
+  padding: 2px 20px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  cursor: none;
+  color: var(--black);
+  text-decoration: none;
+  display: inline-block;
+}
+.win-btn:hover {
+  border-color: var(--win-dark) var(--white) var(--white) var(--win-dark);
+  background: var(--win-blue);
+  color: var(--white);
+}
+
+/* Progress win */
+.win-progress-bg {
+  height: 14px;
+  background: var(--white);
+  border: 1px inset var(--win-dark);
+  overflow: hidden;
+}
+.win-progress-fill {
+  height: 100%;
+  background: var(--win-blue);
+  animation: winProgress 3s ease-in-out infinite alternate;
+}
+@keyframes winProgress {
+  from { width: 20%; }
+  to { width: 85%; }
+}
+
+/* ═══════════════════════════════════════
+   GLITCH DIVIDER
+═══════════════════════════════════════ */
+.glitch-divider {
+  background: var(--black);
+  padding: 16px 0;
+  overflow: hidden;
+  position: relative;
+}
+.glitch-divider-inner {
+  display: flex;
+  white-space: nowrap;
+  animation: glitchScroll 12s linear infinite;
+}
+.glitch-item {
+  font-family: 'VT323', monospace;
+  font-size: 22px;
+  color: var(--cyan);
+  padding: 0 32px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.glitch-item span { color: var(--pink); }
+@keyframes glitchScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ═══════════════════════════════════════
+   ABOUT / WHAT IS THIS
+═══════════════════════════════════════ */
+.about {
+  background: var(--black);
+  padding: 100px 40px;
+  position: relative;
+  overflow: hidden;
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: center;
+}
+.about-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--pink);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.about-title {
+  font-family: 'VT323', monospace;
+  font-size: clamp(52px, 6vw, 80px);
+  color: var(--white);
+  line-height: 0.95;
+  letter-spacing: 2px;
+  margin-bottom: 32px;
+}
+.about-title .glitch-word {
+  color: var(--cyan);
+  display: inline-block;
+  animation: wordGlitch 4s infinite;
+}
+@keyframes wordGlitch {
+  0%, 85%, 100% { transform: skew(0deg); color: var(--cyan); }
+  86% { transform: skew(-5deg); color: var(--yellow); clip-path: inset(20% 0 30% 0); }
+  87% { transform: skew(3deg); color: var(--pink); clip-path: none; }
+  88% { transform: skew(0deg); color: var(--cyan); }
+}
+.about-text {
+  font-size: 15px;
+  color: var(--gray);
+  line-height: 1.8;
+  max-width: 480px;
+}
+.about-text p + p { margin-top: 16px; }
+.about-text span { color: var(--pink); }
+
+/* ASCII art box */
+.ascii-box {
+  border: 2px solid var(--pink);
+  padding: 32px;
+  position: relative;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  color: var(--cyan);
+  line-height: 1.9;
+  background: rgba(255,45,120,0.05);
+}
+.ascii-box::before {
+  content: '[ SYSTEM.EXE ]';
+  position: absolute;
+  top: -10px; left: 16px;
+  background: var(--black);
+  padding: 0 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: var(--pink);
+  letter-spacing: 1px;
+}
+.ascii-line { display: flex; gap: 8px; }
+.ascii-key { color: var(--pink2); width: 140px; flex-shrink: 0; }
+.ascii-val { color: var(--cyan); }
+.ascii-val.blink { animation: blink 1.5s step-end infinite; }
+
+/* ═══════════════════════════════════════
+   RELEASES / EXPERIMENTS
+═══════════════════════════════════════ */
+.releases {
+  background: var(--pink);
+  padding: 100px 40px;
+  position: relative;
+}
+.releases-header {
+  text-align: center;
+  margin-bottom: 72px;
+}
+.releases-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(18px, 3vw, 32px);
+  color: var(--black);
+  letter-spacing: 2px;
+  text-shadow: 3px 3px 0 var(--hot);
+  margin-bottom: 16px;
+}
+.releases-sub {
+  font-family: 'VT323', monospace;
+  font-size: 24px;
+  color: var(--black);
+  letter-spacing: 2px;
+}
+
+.releases-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.release-card {
+  background: var(--black);
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  cursor: none;
+  group: true;
+}
+.release-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 4px,
+    rgba(255,45,120,0.08) 4px,
+    rgba(255,45,120,0.08) 8px
+  );
+}
+.release-card:hover .release-overlay { opacity: 1; }
+.release-overlay {
+  position: absolute; inset: 0;
+  background: rgba(255,0,85,0.15);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+/* Different card patterns */
+.card-1 { background: #0D0D0D; }
+.card-2 { background: #060610; }
+.card-3 { background: #10060A; }
+.card-4 { background: #0A0A0A; }
+.card-5 { background: #08080E; }
+.card-6 { background: #0D0608; }
+
+.card-art {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  font-size: 64px;
+  opacity: 0.15;
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+}
+.release-card:hover .card-art {
+  opacity: 0.4;
+  transform: translate(-50%, -60%) scale(1.1);
+}
+.release-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: var(--pink);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  position: relative; z-index: 1;
+}
+.release-title {
+  font-family: 'VT323', monospace;
+  font-size: 28px;
+  color: var(--white);
+  letter-spacing: 1px;
+  line-height: 1.1;
+  position: relative; z-index: 1;
+  margin-bottom: 4px;
+}
+.release-type {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: 1px;
+  position: relative; z-index: 1;
+}
+.release-badge {
+  position: absolute;
+  top: 16px; right: 16px;
+  background: var(--pink);
+  color: var(--black);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  padding: 4px 8px;
+  letter-spacing: 1px;
+  z-index: 1;
+}
+.release-badge.new { background: var(--yellow); }
+.release-badge.live {
+  background: var(--cyan);
+  animation: badgePulse 2s infinite;
+}
+@keyframes badgePulse {
+  0%, 100% { background: var(--cyan); }
+  50% { background: var(--white); }
+}
+
+/* ═══════════════════════════════════════
+   MANIFESTO
+═══════════════════════════════════════ */
+.manifesto {
+  background: var(--black);
+  padding: 100px 40px;
+  position: relative;
+  overflow: hidden;
+}
+.manifesto::before {
+  content: 'ERROR';
+  position: absolute;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 200px;
+  color: rgba(255,45,120,0.04);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  pointer-events: none;
+  letter-spacing: 8px;
+  white-space: nowrap;
+}
+.manifesto-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative; z-index: 1;
+}
+.manifesto-pre {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--pink);
+  letter-spacing: 3px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.manifesto-pre::before, .manifesto-pre::after {
+  content: '';
+  width: 60px; height: 1px;
+  background: var(--pink);
+}
+.manifesto-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 48px;
+}
+.manifesto-line {
+  font-family: 'VT323', monospace;
+  font-size: clamp(36px, 5vw, 64px);
+  color: var(--white);
+  letter-spacing: 2px;
+  line-height: 1.0;
+  transition: color 0.1s;
+}
+.manifesto-line:hover { color: var(--pink); }
+.manifesto-line.accent { color: var(--cyan); }
+.manifesto-line.strike {
+  text-decoration: line-through;
+  text-decoration-color: var(--hot);
+  color: var(--gray);
+  opacity: 0.5;
+}
+
+.manifesto-cta {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  color: var(--gray);
+  letter-spacing: 1px;
+  line-height: 1.7;
+}
+.manifesto-cta span { color: var(--pink); }
+
+/* ═══════════════════════════════════════
+   CONTACT — WIN95 FORM STYLE
+═══════════════════════════════════════ */
+.contact {
+  background: var(--pink);
+  padding: 100px 40px;
+}
+.contact-win {
+  max-width: 560px;
+  margin: 0 auto;
+  background: var(--win-gray);
+  border: 3px solid;
+  border-color: var(--white) var(--win-dark) var(--win-dark) var(--white);
+  box-shadow: 6px 6px 0 var(--black);
+}
+.contact-titlebar {
+  background: var(--win-blue);
+  color: var(--white);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  padding: 6px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  letter-spacing: 0;
+}
+.contact-titlebar-btns {
+  display: flex;
+  gap: 4px;
+}
+.win-titlebar-btn {
+  width: 16px; height: 14px;
+  background: var(--win-gray);
+  border: 1px solid;
+  border-color: var(--white) var(--win-dark) var(--win-dark) var(--white);
+  font-size: 8px;
+  color: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: none;
+  font-family: 'Courier New', monospace;
+}
+.contact-body {
+  padding: 20px 24px;
+}
+.contact-field {
+  margin-bottom: 16px;
+}
+.contact-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--black);
+  margin-bottom: 4px;
+  display: block;
+  letter-spacing: 1px;
+}
+.contact-input {
+  width: 100%;
+  background: var(--white);
+  border: 2px solid;
+  border-color: var(--win-dark) var(--white) var(--white) var(--win-dark);
+  padding: 6px 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  color: var(--black);
+  outline: none;
+  cursor: none;
+}
+.contact-input:focus {
+  outline: 1px dotted var(--black);
+}
+.contact-textarea {
+  width: 100%;
+  background: var(--white);
+  border: 2px solid;
+  border-color: var(--win-dark) var(--white) var(--white) var(--win-dark);
+  padding: 6px 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  color: var(--black);
+  outline: none;
+  resize: none;
+  height: 80px;
+  cursor: none;
+}
+.contact-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+.contact-submit {
+  background: var(--win-gray);
+  border: 2px solid;
+  border-color: var(--white) var(--win-dark) var(--win-dark) var(--white);
+  padding: 4px 24px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  color: var(--black);
+  cursor: none;
+  text-decoration: none;
+  display: inline-block;
+}
+.contact-submit:hover {
+  border-color: var(--win-dark) var(--white) var(--white) var(--win-dark);
+}
+.contact-submit.primary {
+  background: var(--win-blue);
+  color: var(--white);
+  border-color: rgba(255,255,255,0.5) var(--black) var(--black) rgba(255,255,255,0.5);
+}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer {
+  background: var(--black);
+  padding: 48px 40px 80px;
+  border-top: 3px solid var(--pink);
+}
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.footer-logo {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 16px;
+  color: var(--white);
+  letter-spacing: 2px;
+  line-height: 1.5;
+  text-decoration: none;
+}
+.footer-logo span { color: var(--pink); }
+.footer-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--gray);
+  margin-top: 12px;
+  letter-spacing: 1px;
+}
+.footer-right {
+  text-align: right;
+}
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+.footer-links a {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  color: var(--gray);
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: color 0.1s;
+}
+.footer-links a:hover { color: var(--pink); }
+.footer-copy {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+  margin-top: 16px;
+  letter-spacing: 1px;
+}
+.footer-parent {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: rgba(255,255,255,0.2);
+  margin-top: 8px;
+  letter-spacing: 1px;
+}
+.footer-parent span { color: var(--pink); opacity: 0.6; }
+
+/* SCROLL REVEAL */
+.rev {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.rev.in { opacity: 1; transform: translateY(0); }
+.rev.d1 { transition-delay: 0.1s; }
+.rev.d2 { transition-delay: 0.2s; }
+.rev.d3 { transition-delay: 0.3s; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  nav { display: none; }
+  .hero { padding: 60px 20px 80px; }
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .releases-grid { grid-template-columns: 1fr 1fr; }
+  .footer-inner { flex-direction: column; gap: 40px; align-items: flex-start; }
+  .footer-links { align-items: flex-start; }
+  .footer-right { text-align: left; }
+  .hero-title { font-size: 24px; }
+  .win-1, .win-2, .win-3, .win-4 { display: none; }
+  .error-win.win-1 { display: block; position: relative; top: auto; left: auto; margin: 20px auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<!-- FLOATING WINDOWS -->
+<div class="error-win win-1">
+  <div class="win-titlebar">
+    <span>⚠ BRAIN.EXE</span>
+    <div class="win-close">✕</div>
+  </div>
+  <div class="win-body">
+    <div class="win-body-row">
+      <span class="win-icon">⚠️</span>
+      <span>brain.exe has stopped<br>working correctly</span>
+    </div>
+    <div class="win-btn-row">
+      <span class="win-btn">OK</span>
+    </div>
+  </div>
+</div>
+
+<div class="error-win win2 win-2">
+  <div class="win-titlebar">
+    <span>LOADING...</span>
+    <div class="win-close">✕</div>
+  </div>
+  <div class="win-body">
+    <div style="font-size:11px; margin-bottom:6px;">Copying MUSIC.AI to SOUL...</div>
+    <div class="win-progress-bg">
+      <div class="win-progress-fill"></div>
+    </div>
+    <div style="font-size:10px; color:#555; margin-top:4px; text-align:center;">87%</div>
+    <div class="win-btn-row" style="margin-top:6px;">
+      <span class="win-btn">CANCEL</span>
+    </div>
+  </div>
+</div>
+
+<div class="error-win win3 win-3">
+  <div class="win-titlebar">
+    <span>FILE.EXE</span>
+    <div class="win-close">✕</div>
+  </div>
+  <div class="win-body">
+    <div style="font-size:10px; line-height:1.6;">
+      COPYING...<br>
+      FILE: <span style="color:var(--win-blue); font-weight:bold;">CREATIVITY.MP3</span><br>
+      FROM: /imagination/<br>
+      TO: /reality/
+    </div>
+    <div class="win-btn-row" style="margin-top:8px;">
+      <span class="win-btn">CANCEL</span>
+    </div>
+  </div>
+</div>
+
+<div class="error-win win2 win-4">
+  <div class="win-titlebar">
+    <span>ALERT</span>
+    <div class="win-close">✕</div>
+  </div>
+  <div class="win-body">
+    <div class="win-body-row">
+      <span class="win-icon">🤖</span>
+      <span>AI has achieved<br>musical sentience.<br>Proceed?</span>
+    </div>
+    <div class="win-btn-row">
+      <span class="win-btn">YES</span>
+      <span class="win-btn">NO</span>
+    </div>
+  </div>
+</div>
+
+<!-- NAV — TASKBAR -->
+<nav>
+  <a href="#" class="start-btn">▶ START</a>
+  <div class="taskbar-items">
+    <a href="#releases" class="task-item">RELEASES.EXE</a>
+    <a href="#about" class="task-item">ABOUT.TXT</a>
+    <a href="#contact" class="task-item">CONTACT.BAT</a>
+    <a href="mailto:hello@aiwithnobrain.com" class="task-item">EMAIL_US</a>
+  </div>
+  <div class="taskbar-clock" id="clock">00:00</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-title-wrap">
+    <h1 class="hero-title">AI WITH<br>NO BRAIN</h1>
+    <p class="hero-sub">AI MUSIC · EPIC · EDM · DEEP HOUSE</p>
+  </div>
+  <div class="loading-wrap rev">
+    <div class="loading-label">> INITIALISING CREATIVE_ENGINE.EXE...</div>
+    <div class="loading-bar-bg">
+      <div class="loading-bar-fill"></div>
+    </div>
+    <div style="font-family:'Share Tech Mono',monospace; font-size:11px; margin-top:4px; color:var(--black);">
+      LOADED: ramayanam.epic · narasimha.edm · harekrishna.house · srirama.chant
+    </div>
+  </div>
+</section>
+
+<!-- GLITCH DIVIDER -->
+<div class="glitch-divider">
+  <div class="glitch-divider-inner">
+    <span class="glitch-item">AI MUSIC <span>◆</span></span>
+    <span class="glitch-item">CREATIVE EXPERIMENTS <span>◆</span></span>
+    <span class="glitch-item">ZERO LIMITS <span>◆</span></span>
+    <span class="glitch-item">GLITCH FOREVER <span>◆</span></span>
+    <span class="glitch-item">NO BRAIN REQUIRED <span>◆</span></span>
+    <span class="glitch-item">PART OF ZEROORIGINS <span>◆</span></span>
+    <span class="glitch-item">AI MUSIC <span>◆</span></span>
+    <span class="glitch-item">CREATIVE EXPERIMENTS <span>◆</span></span>
+    <span class="glitch-item">ZERO LIMITS <span>◆</span></span>
+    <span class="glitch-item">GLITCH FOREVER <span>◆</span></span>
+    <span class="glitch-item">NO BRAIN REQUIRED <span>◆</span></span>
+    <span class="glitch-item">PART OF ZEROORIGINS <span>◆</span></span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="rev">
+      <div class="about-label">WHAT IS THIS_</div>
+      <h2 class="about-title">
+        WHERE AI MEETS<br>
+        <span class="glitch-word">CHAOS</span><br>
+        AND CALLS IT<br>
+        MUSIC.
+      </h2>
+      <div class="about-text">
+        <p>AIwithNoBrain is an experimental creative lab. We feed AI systems into music production, visual art, and generative media — and see what breaks.</p>
+        <p>This is not polished. This is not safe. This is <span>what happens when the machine improvises.</span></p>
+        <p>Part of <span>ZeroOrigins</span> — the parent company building AI systems across music, automation, and digital products.</p>
+      </div>
+    </div>
+    <div class="ascii-box rev d1">
+      <div class="ascii-line"><span class="ascii-key">ENTITY:</span><span class="ascii-val">AIwithNoBrain</span></div>
+      <div class="ascii-line"><span class="ascii-key">TYPE:</span><span class="ascii-val">AI Music Lab</span></div>
+      <div class="ascii-line"><span class="ascii-key">STATUS:</span><span class="ascii-val blink">ACTIVE ●</span></div>
+      <div class="ascii-line"><span class="ascii-key">RELEASES:</span><span class="ascii-val">4 (and counting)</span></div>
+      <div class="ascii-line"><span class="ascii-key">TRACKS:</span><span class="ascii-val">9 total</span></div>
+      <div class="ascii-line"><span class="ascii-key">PLATFORMS:</span><span class="ascii-val">24 streaming stores</span></div>
+      <div class="ascii-line"><span class="ascii-key">LABEL:</span><span class="ascii-val">AIwNoBrain Audio Labs</span></div>
+      <div class="ascii-line"><span class="ascii-key">GENRE:</span><span class="ascii-val">AI Epic / EDM / House</span></div>
+      <div class="ascii-line"><span class="ascii-key">BRAIN:</span><span class="ascii-val" style="color:var(--hot)">NOT FOUND</span></div>
+      <div class="ascii-line"><span class="ascii-key">PARENT:</span><span class="ascii-val">ZeroOrigins</span></div>
+      <div class="ascii-line"><span class="ascii-key">SIBLING:</span><span class="ascii-val">IgnAIte.io</span></div>
+      <br>
+      <div style="color: var(--pink); font-size:12px; letter-spacing:1px;">
+        > press any key to continue_<span style="animation: blink 1s step-end infinite; display:inline-block">█</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RELEASES -->
+<section class="releases" id="releases">
+  <div class="releases-header rev">
+    <div class="releases-title">RELEASES.DIR</div>
+    <div class="releases-sub">> 4 releases · 24 streaming platforms · live now</div>
+  </div>
+
+  <div class="releases-grid">
+
+    <!-- Ramayanam War of Dharma -->
+    <div class="release-card card-1 rev" style="aspect-ratio:auto; min-height:280px;">
+      <div class="release-overlay"></div>
+      <div class="card-art">🏹</div>
+      <div class="release-badge live">LIVE</div>
+      <div class="release-num">ALBUM_001 · DEC 2025</div>
+      <div class="release-title">RAMAYANAM<br>WAR OF DHARMA</div>
+      <div class="release-type">AI EPIC · 6 TRACKS</div>
+      <div style="margin-top:10px; font-family:'Share Tech Mono',monospace; font-size:10px; color:rgba(255,255,255,0.4); position:relative; z-index:1; line-height:1.8;">
+        01 Roudra Raghurama<br>
+        02 Hanuman Vajra Deham<br>
+        03 Rama Kodanda Pani<br>
+        04 Lanka Dahana<br>
+        05 Kodanda Pralayam<br>
+        06 Two Hearts, One Pain
+      </div>
+    </div>
+
+    <!-- Hare Krishna Deep House -->
+    <div class="release-card card-2 rev d1">
+      <div class="release-overlay"></div>
+      <div class="card-art">🎶</div>
+      <div class="release-badge new">NEW</div>
+      <div class="release-num">SINGLE_003 · APR 2026</div>
+      <div class="release-title">HARE KRISHNA<br>DEEP HOUSE</div>
+      <div class="release-type">PSYCHEDELIC BASS · AI MUSIC</div>
+    </div>
+
+    <!-- Sri Rama Nama -->
+    <div class="release-card card-3 rev d2">
+      <div class="release-overlay"></div>
+      <div class="card-art">🔥</div>
+      <div class="release-num">SINGLE_002 · FEB 2026</div>
+      <div class="release-title">SRI RAMA NAMA<br>AKHANDA GARJANA</div>
+      <div class="release-type">RITUALISTIC DREAM CHANT</div>
+    </div>
+
+    <!-- Narasimha EDM Anthem -->
+    <div class="release-card card-4 rev">
+      <div class="release-overlay"></div>
+      <div class="card-art">⚡</div>
+      <div class="release-num">SINGLE_001 · DEC 2025</div>
+      <div class="release-title">NARASIMHA<br>EDM ANTHEM</div>
+      <div class="release-type">THE DIVINE ROAR · EDM</div>
+    </div>
+
+    <!-- Stream card -->
+    <div class="release-card card-5 rev d1" style="background: rgba(0,0,0,0.85); border: 2px solid var(--pink); justify-content:center; align-items:center; text-align:center;">
+      <div style="position:relative; z-index:1;">
+        <div style="font-family:'Press Start 2P',monospace; font-size:9px; color:var(--cyan); letter-spacing:2px; margin-bottom:16px;">AVAILABLE ON</div>
+        <div style="font-family:'VT323',monospace; font-size:28px; color:var(--white); line-height:1.4; letter-spacing:2px;">
+          SPOTIFY<br>
+          APPLE MUSIC<br>
+          YOUTUBE<br>
+          + 21 MORE
+        </div>
+        <div style="margin-top:16px; font-family:'Share Tech Mono',monospace; font-size:11px; color:var(--pink);">
+          AlwithNoBrain Audio Labs
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats card -->
+    <div class="release-card card-6 rev d2" style="background:#0A0008; justify-content:center; align-items:flex-start; text-align:left;">
+      <div style="position:relative; z-index:1; width:100%;">
+        <div style="font-family:'Press Start 2P',monospace; font-size:8px; color:var(--yellow); letter-spacing:2px; margin-bottom:20px;">STATS.LOG</div>
+        <div style="font-family:'Share Tech Mono',monospace; font-size:13px; color:var(--cyan); line-height:2.2;">
+          <span style="color:var(--pink)">RELEASES:</span> 4 (+ growing)<br>
+          <span style="color:var(--pink)">TRACKS:</span> 9 total<br>
+          <span style="color:var(--pink)">PLATFORMS:</span> 24 stores<br>
+          <span style="color:var(--pink)">GENRE:</span> AI Epic / EDM / Deep House<br>
+          <span style="color:var(--pink)">LABEL:</span> AIwNoBrain Audio Labs<br>
+          <span style="color:var(--pink)">STATUS:</span> <span style="animation: blink 1s infinite step-end">ACTIVE ●</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto">
+  <div class="manifesto-inner rev">
+    <div class="manifesto-pre">MANIFESTO.TXT</div>
+    <div class="manifesto-lines">
+      <div class="manifesto-line">WE DON'T SAMPLE.</div>
+      <div class="manifesto-line accent">WE HALLUCINATE.</div>
+      <div class="manifesto-line">WE DON'T FOLLOW RULES.</div>
+      <div class="manifesto-line strike">WE FOLLOW RULES.</div>
+      <div class="manifesto-line">WE BREAK THE OUTPUT.</div>
+      <div class="manifesto-line accent">AND KEEP WHAT'S STRANGE.</div>
+    </div>
+    <div class="manifesto-cta">
+      Every track is an accident. Every visual is a mistake we kept.<br>
+      <span>AIwithNoBrain</span> is the creative arm of ZeroOrigins —<br>
+      where automation stops and experimentation begins.
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div style="text-align:center; margin-bottom:40px;">
+    <div class="releases-title rev">CONNECT.EXE</div>
+    <div class="releases-sub rev" style="margin-top:8px;">> send message to the machine_</div>
+  </div>
+  <div class="contact-win rev">
+    <div class="contact-titlebar">
+      <span>NEW MESSAGE — AIwithNoBrain</span>
+      <div class="contact-titlebar-btns">
+        <div class="win-titlebar-btn">_</div>
+        <div class="win-titlebar-btn">□</div>
+        <div class="win-titlebar-btn">✕</div>
+      </div>
+    </div>
+    <div class="contact-body">
+      <div class="contact-field">
+        <label class="contact-label">FROM:</label>
+        <input class="contact-input" type="text" placeholder="your@email.com" />
+      </div>
+      <div class="contact-field">
+        <label class="contact-label">SUBJECT:</label>
+        <input class="contact-input" type="text" placeholder="collab / feature / just saying hi" />
+      </div>
+      <div class="contact-field">
+        <label class="contact-label">MESSAGE:</label>
+        <textarea class="contact-textarea" placeholder="type here..."></textarea>
+      </div>
+      <div class="contact-actions">
+        <span class="contact-submit">CANCEL</span>
+        <a href="mailto:hello@aiwithnobrain.com" class="contact-submit primary">SEND ▶</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <a href="#" class="footer-logo">AI WITH<br><span>NO BRAIN</span></a>
+      <div class="footer-sub">AI Music · Creative Experiments · Generative Visuals</div>
+      <div class="footer-copy" style="margin-top:16px;">© 2025 AIwithNoBrain. All rights reserved.</div>
+      <div class="footer-parent">Part of <span>ZeroOrigins</span> · Sibling: IgnAIte</div>
+    </div>
+    <div class="footer-right">
+      <div class="footer-links">
+        <a href="#releases">Releases</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <a href="mailto:hello@aiwithnobrain.com">hello@aiwithnobrain.com</a>
+        <a href="#">SoundCloud</a>
+        <a href="#">YouTube</a>
+        <a href="#">Instagram</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+
+  // Clock
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    document.getElementById('clock').textContent = `${h}:${m}`;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // Scroll reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.rev').forEach(el => obs.observe(el));
+
+  // Random glitch flashes on release cards
+  const cards = document.querySelectorAll('.release-card');
+  setInterval(() => {
+    const card = cards[Math.floor(Math.random() * cards.length)];
+    card.style.filter = 'invert(1)';
+    setTimeout(() => card.style.filter = '', 80);
+  }, 3000);
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+
+  // Win buttons — close windows when clicked
+  document.querySelectorAll('.win-close, .win-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const win = btn.closest('.error-win');
+      if (win) {
+        win.style.opacity = '0';
+        win.style.transform += ' scale(0.8)';
+        win.style.transition = 'all 0.2s';
+        setTimeout(() => win.remove(), 200);
+      }
+    });
+  });
+</script>
+</body>
+</html>

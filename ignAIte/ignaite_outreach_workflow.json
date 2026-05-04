@@ -1,0 +1,559 @@
+{
+  "name": "IgnAIte — Outreach Automation System",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "node-trigger",
+      "name": "⏰ Daily Trigger (9am Weekdays)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300],
+      "notes": "Runs every weekday at 9am. Change time in cron expression if needed."
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "YOUR_NOTION_DATABASE_ID",
+          "mode": "id"
+        },
+        "filterType": "manual",
+        "filters": {
+          "conditions": [
+            {
+              "key": "Status|select",
+              "condition": "equals",
+              "value": "To Contact"
+            }
+          ]
+        },
+        "limit": 20,
+        "options": {}
+      },
+      "id": "node-notion-fetch",
+      "name": "📋 Fetch Leads from Notion CRM",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [460, 300],
+      "notes": "Pulls leads with status = 'To Contact' from your Notion CRM. Limit 20 per day to stay safe for cold outreach."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-channel",
+              "leftValue": "={{ $json.properties.Channel.select.name }}",
+              "rightValue": "LinkedIn",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node-router",
+      "name": "🔀 Route by Channel",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [680, 300],
+      "notes": "Routes leads to LinkedIn or Email flow based on Channel field in Notion."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build personalised LinkedIn connection message\nconst lead = $input.item.json;\n\nconst firstName = lead.properties?.['First Name']?.title?.[0]?.plain_text || 'there';\nconst company = lead.properties?.Company?.rich_text?.[0]?.plain_text || 'your company';\nconst segment = lead.properties?.Segment?.select?.name || 'agency';\nconst linkedinUrl = lead.properties?.['LinkedIn URL']?.url || '';\n\n// Choose message variant based on segment\nlet message = '';\n\nif (segment === 'Agency Owner') {\n  message = `Hi ${firstName}, I help marketing agencies automate their client onboarding and lead follow-up so nothing falls through the cracks. Noticed ${company} — would love to connect.`;\n} else if (segment === 'Coach / Consultant') {\n  message = `Hi ${firstName}, I build automated lead follow-up systems for coaches and consultants so no inquiry ever goes cold. Came across your work — would love to connect.`;\n} else if (segment === 'E-commerce') {\n  message = `Hi ${firstName}, I help e-commerce founders automate their post-purchase follow-up and support workflows. Saw ${company} and thought there might be a fit — would love to connect.`;\n} else if (segment === 'SaaS Founder') {\n  message = `Hi ${firstName}, I work with SaaS founders to automate their user onboarding and trial follow-up sequences. Came across ${company} — would love to connect.`;\n} else if (segment === 'Real Estate') {\n  message = `Hi ${firstName}, I help real estate agencies automate their lead response and follow-up — so no inquiry gets missed. Noticed ${company} and thought it could be relevant. Would love to connect.`;\n} else {\n  message = `Hi ${firstName}, I help businesses automate their lead follow-up and repetitive ops work. Noticed ${company} — would love to connect.`;\n}\n\nreturn {\n  leadId: lead.id,\n  firstName,\n  company,\n  segment,\n  linkedinUrl,\n  connectionMessage: message,\n  channel: 'LinkedIn',\n  step: 'Connection Request'\n};"
+      },
+      "id": "node-linkedin-message",
+      "name": "✍️ Build LinkedIn Connection Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 180],
+      "notes": "Personalises the connection request message based on lead segment. Edit the message templates here."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build personalised cold email\nconst lead = $input.item.json;\n\nconst firstName = lead.properties?.['First Name']?.title?.[0]?.plain_text || 'there';\nconst company = lead.properties?.Company?.rich_text?.[0]?.plain_text || 'your company';\nconst segment = lead.properties?.Segment?.select?.name || 'agency';\nconst email = lead.properties?.Email?.email || '';\n\nlet subject = '';\nlet body = '';\n\nif (segment === 'Agency Owner') {\n  subject = 'quick question about your client onboarding';\n  body = `Hi ${firstName},\\n\\nHow long does it take your team to onboard a new client right now? From signed contract to fully set up?\\n\\nMost agencies I talk to spend 2–4 hours on it manually every single time — welcome emails, access setup, project folders, briefs.\\n\\nI build automated onboarding systems that cut that to under 10 minutes — no manual work, runs itself every time a new client signs.\\n\\nWould a 15-minute call this week make sense? Happy to show you what one of these looks like for a ${company}-sized agency.\\n\\nBest,\\n[Your Name]\\nIgnAIte | getignaite.com`;\n} else if (segment === 'Coach / Consultant') {\n  subject = 'quick question about your lead follow-up';\n  body = `Hi ${firstName},\\n\\nHow fast does your team typically respond when a new inquiry comes in — a DM, a form submission, a website lead?\\n\\nMost coaches I speak with lose 30–40% of potential clients simply because follow-up is too slow or gets forgotten in a busy week.\\n\\nI build automated follow-up systems that respond instantly and keep following up until someone replies — without you doing anything manually.\\n\\nWould a 15-minute call make sense this week?\\n\\nBest,\\n[Your Name]\\nIgnAIte | getignaite.com`;\n} else if (segment === 'E-commerce') {\n  subject = 'reducing manual support work at ${company}';\n  body = `Hi ${firstName},\\n\\nHow many customer support emails or post-purchase messages does your team handle manually every week at ${company}?\\n\\nI help e-commerce founders automate the repetitive side of customer comms — order updates, follow-ups, support triage — so the team only handles the things that actually need a human.\\n\\nHappy to show you a quick demo of what this looks like. 15 minutes — would that be useful?\\n\\nBest,\\n[Your Name]\\nIgnAIte | getignaite.com`;\n} else {\n  subject = 'quick question about your lead follow-up process';\n  body = `Hi ${firstName},\\n\\nHow does ${company} currently handle new lead inquiries — is there a follow-up system in place, or is it mostly manual?\\n\\nI ask because I work with small businesses to automate exactly that — so no lead goes cold and no follow-up gets forgotten.\\n\\nWould a quick 15-minute call this week make sense?\\n\\nBest,\\n[Your Name]\\nIgnAIte | getignaite.com`;\n}\n\nreturn {\n  leadId: lead.id,\n  firstName,\n  company,\n  segment,\n  toEmail: email,\n  subject,\n  body,\n  channel: 'Email',\n  step: 'Cold Email 1'\n};"
+      },
+      "id": "node-email-build",
+      "name": "✍️ Build Cold Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 420],
+      "notes": "Builds personalised cold emails per segment. Edit sender name and email templates in the code."
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.toEmail }}",
+        "subject": "={{ $json.subject }}",
+        "emailType": "text",
+        "message": "={{ $json.body }}",
+        "options": {
+          "fromEmail": "hello@getignaite.com",
+          "fromName": "IgnAIte"
+        }
+      },
+      "id": "node-send-email",
+      "name": "📧 Send Cold Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1120, 420],
+      "notes": "Sends the cold email via Gmail. Connect your hello@getignaite.com Gmail account here. For ImprovMX forwarding setup, use SMTP node instead."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Log outreach action — prepare data for Notion update\nconst data = $input.item.json;\nconst today = new Date().toISOString().split('T')[0];\n\nreturn {\n  leadId: data.leadId,\n  newStatus: 'Contacted',\n  channel: data.channel,\n  step: data.step,\n  lastContactDate: today,\n  followUpDate: getFollowUpDate(5),\n  notes: `${data.step} sent on ${today}`\n};\n\nfunction getFollowUpDate(daysAhead) {\n  const d = new Date();\n  d.setDate(d.getDate() + daysAhead);\n  // Skip weekends\n  if (d.getDay() === 6) d.setDate(d.getDate() + 2);\n  if (d.getDay() === 0) d.setDate(d.getDate() + 1);\n  return d.toISOString().split('T')[0];\n}"
+      },
+      "id": "node-prep-log",
+      "name": "📝 Prepare CRM Log Entry",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 180],
+      "notes": "Prepares the data to update the lead record in Notion after outreach is sent."
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "resource": "databasePage",
+        "pageId": {
+          "__rl": true,
+          "value": "={{ $json.leadId }}",
+          "mode": "id"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Status|select",
+              "selectValue": "Contacted"
+            },
+            {
+              "key": "Last Contact Date|date",
+              "dateValue": "={{ $json.lastContactDate }}"
+            },
+            {
+              "key": "Follow Up Date|date",
+              "dateValue": "={{ $json.followUpDate }}"
+            },
+            {
+              "key": "Outreach Step|select",
+              "selectValue": "={{ $json.step }}"
+            },
+            {
+              "key": "Notes|rich_text",
+              "textValue": "={{ $json.notes }}"
+            }
+          ]
+        }
+      },
+      "id": "node-notion-update-linkedin",
+      "name": "✅ Update Notion — LinkedIn Lead",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [1340, 180],
+      "notes": "Updates the lead status in Notion CRM after LinkedIn message is prepared."
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "resource": "databasePage",
+        "pageId": {
+          "__rl": true,
+          "value": "={{ $json.leadId }}",
+          "mode": "id"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Status|select",
+              "selectValue": "Contacted"
+            },
+            {
+              "key": "Last Contact Date|date",
+              "dateValue": "={{ $json.lastContactDate }}"
+            },
+            {
+              "key": "Follow Up Date|date",
+              "dateValue": "={{ $json.followUpDate }}"
+            },
+            {
+              "key": "Outreach Step|select",
+              "selectValue": "Cold Email 1"
+            },
+            {
+              "key": "Notes|rich_text",
+              "textValue": "={{ $json.notes }}"
+            }
+          ]
+        }
+      },
+      "id": "node-notion-update-email",
+      "name": "✅ Update Notion — Email Lead",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [1340, 420],
+      "notes": "Updates the lead status in Notion CRM after cold email is sent."
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 10 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "node-followup-trigger",
+      "name": "⏰ Follow-Up Trigger (10am Weekdays)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 700],
+      "notes": "Runs every weekday at 10am to check for leads that need a follow-up today."
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "YOUR_NOTION_DATABASE_ID",
+          "mode": "id"
+        },
+        "filterType": "manual",
+        "filters": {
+          "conditions": [
+            {
+              "key": "Status|select",
+              "condition": "equals",
+              "value": "Contacted"
+            },
+            {
+              "key": "Follow Up Date|date",
+              "condition": "equals",
+              "value": "={{ new Date().toISOString().split('T')[0] }}"
+            }
+          ]
+        },
+        "limit": 30,
+        "options": {}
+      },
+      "id": "node-fetch-followups",
+      "name": "📋 Fetch Leads Due for Follow-Up",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [460, 700],
+      "notes": "Finds leads with status 'Contacted' where Follow Up Date = today."
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = $input.item.json;\n\nconst firstName = lead.properties?.['First Name']?.title?.[0]?.plain_text || 'there';\nconst company = lead.properties?.Company?.rich_text?.[0]?.plain_text || '';\nconst channel = lead.properties?.Channel?.select?.name || 'Email';\nconst step = lead.properties?.['Outreach Step']?.select?.name || 'Cold Email 1';\nconst email = lead.properties?.Email?.email || '';\nconst today = new Date().toISOString().split('T')[0];\n\nlet nextStep = '';\nlet subject = '';\nlet body = '';\nlet shouldSend = true;\n\n// Determine next follow-up step\nif (step === 'Cold Email 1' || step === 'Connection Request') {\n  nextStep = 'Follow-Up 1';\n  subject = 're: quick question';\n  body = `Hi ${firstName},\\n\\nJust bumping this in case my last message got buried.\\n\\nI work with businesses like ${company || 'yours'} to automate lead follow-up and client onboarding — so nothing falls through the cracks.\\n\\nHappy to share a quick 2-minute demo if that sounds relevant. Worth a look?\\n\\nBest,\\n[Your Name]\\nIgnAIte | getignaite.com`;\n} else if (step === 'Follow-Up 1') {\n  nextStep = 'Follow-Up 2';\n  subject = 'one last note';\n  body = `Hi ${firstName},\\n\\nLast note from me — I promise!\\n\\nIf automating your lead follow-up or client onboarding is something on your radar for the next few months, I'd love to show you what we built for similar businesses.\\n\\nIf the timing's just not right, completely fine — I'll leave it here.\\n\\nBest,\\n[Your Name]\\nIgnAIte | getignaite.com`;\n} else {\n  // Already followed up twice — mark as done\n  nextStep = 'Sequence Complete';\n  shouldSend = false;\n}\n\n// Calculate next follow-up date (5 business days ahead)\nfunction getFollowUpDate(daysAhead) {\n  const d = new Date();\n  d.setDate(d.getDate() + daysAhead);\n  if (d.getDay() === 6) d.setDate(d.getDate() + 2);\n  if (d.getDay() === 0) d.setDate(d.getDate() + 1);\n  return d.toISOString().split('T')[0];\n}\n\nreturn {\n  leadId: lead.id,\n  firstName,\n  company,\n  channel,\n  toEmail: email,\n  subject,\n  body,\n  currentStep: step,\n  nextStep,\n  shouldSend,\n  lastContactDate: today,\n  followUpDate: shouldSend ? getFollowUpDate(5) : null,\n  newStatus: nextStep === 'Sequence Complete' ? 'No Response' : 'Contacted'\n};"
+      },
+      "id": "node-followup-build",
+      "name": "✍️ Build Follow-Up Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 700],
+      "notes": "Determines which follow-up step to send (Follow-Up 1 or Follow-Up 2) and builds the message. After 2 follow-ups, marks lead as 'No Response'."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-should-send",
+              "leftValue": "={{ $json.shouldSend }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node-should-send",
+      "name": "🔀 Should Send Follow-Up?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [900, 700],
+      "notes": "Checks if we should still send a follow-up or if the sequence is complete."
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.toEmail }}",
+        "subject": "={{ $json.subject }}",
+        "emailType": "text",
+        "message": "={{ $json.body }}",
+        "options": {
+          "fromEmail": "hello@getignaite.com",
+          "fromName": "IgnAIte"
+        }
+      },
+      "id": "node-send-followup",
+      "name": "📧 Send Follow-Up Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1120, 640],
+      "notes": "Sends the follow-up email via Gmail."
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "resource": "databasePage",
+        "pageId": {
+          "__rl": true,
+          "value": "={{ $json.leadId }}",
+          "mode": "id"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Status|select",
+              "selectValue": "={{ $json.newStatus }}"
+            },
+            {
+              "key": "Outreach Step|select",
+              "selectValue": "={{ $json.nextStep }}"
+            },
+            {
+              "key": "Last Contact Date|date",
+              "dateValue": "={{ $json.lastContactDate }}"
+            },
+            {
+              "key": "Follow Up Date|date",
+              "dateValue": "={{ $json.followUpDate }}"
+            }
+          ]
+        }
+      },
+      "id": "node-update-followup",
+      "name": "✅ Update Notion After Follow-Up",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [1340, 640],
+      "notes": "Updates the Notion CRM with the new step and next follow-up date."
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "resource": "databasePage",
+        "pageId": {
+          "__rl": true,
+          "value": "={{ $json.leadId }}",
+          "mode": "id"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Status|select",
+              "selectValue": "No Response"
+            },
+            {
+              "key": "Outreach Step|select",
+              "selectValue": "Sequence Complete"
+            }
+          ]
+        }
+      },
+      "id": "node-mark-complete",
+      "name": "🔒 Mark Sequence Complete",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [1120, 800],
+      "notes": "Marks the lead as 'No Response' after 2 follow-ups with no reply. Can be re-activated later manually."
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 18 * * 5"
+            }
+          ]
+        }
+      },
+      "id": "node-weekly-trigger",
+      "name": "⏰ Weekly Summary Trigger (Friday 6pm)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 1100],
+      "notes": "Runs every Friday evening to compile the weekly outreach summary."
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "YOUR_NOTION_DATABASE_ID",
+          "mode": "id"
+        },
+        "filterType": "manual",
+        "filters": {
+          "conditions": [
+            {
+              "key": "Last Contact Date|date",
+              "condition": "pastWeek",
+              "value": ""
+            }
+          ]
+        },
+        "limit": 100,
+        "options": {}
+      },
+      "id": "node-fetch-weekly",
+      "name": "📊 Fetch This Week's Outreach",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [460, 1100],
+      "notes": "Fetches all leads contacted this week for the summary report."
+    },
+    {
+      "parameters": {
+        "jsCode": "const leads = $input.all().map(item => item.json);\n\nconst stats = {\n  totalContacted: 0,\n  linkedin: 0,\n  email: 0,\n  replied: 0,\n  callsBooked: 0,\n  noResponse: 0,\n  sequenceComplete: 0\n};\n\nleads.forEach(lead => {\n  const status = lead.properties?.Status?.select?.name || '';\n  const channel = lead.properties?.Channel?.select?.name || '';\n  \n  if (status === 'Contacted' || status === 'No Response' || status === 'Replied' || status === 'Call Booked') {\n    stats.totalContacted++;\n  }\n  if (channel === 'LinkedIn') stats.linkedin++;\n  if (channel === 'Email') stats.email++;\n  if (status === 'Replied') stats.replied++;\n  if (status === 'Call Booked') stats.callsBooked++;\n  if (status === 'No Response') stats.noResponse++;\n  if (status === 'Sequence Complete') stats.sequenceComplete++;\n});\n\nconst replyRate = stats.totalContacted > 0 \n  ? ((stats.replied + stats.callsBooked) / stats.totalContacted * 100).toFixed(1)\n  : 0;\n\nconst weekStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });\n\nconst summary = `IgnAIte Outreach — Weekly Summary (${weekStr})\n\n📊 THIS WEEK\nTotal Contacted: ${stats.totalContacted}\nLinkedIn: ${stats.linkedin}\nEmail: ${stats.email}\n\n✅ RESPONSES\nReplied: ${stats.replied}\nCalls Booked: ${stats.callsBooked}\nReply Rate: ${replyRate}%\n\n📋 PIPELINE\nNo Response (following up): ${stats.noResponse}\nSequence Complete: ${stats.sequenceComplete}\n\n---\nSent automatically by IgnAIte Outreach System`;\n\nreturn [{ summary, stats, weekStr }];"
+      },
+      "id": "node-weekly-summary",
+      "name": "📊 Build Weekly Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 1100],
+      "notes": "Compiles stats from the week into a clean summary report."
+    },
+    {
+      "parameters": {
+        "sendTo": "your-personal@gmail.com",
+        "subject": "=IgnAIte Outreach Summary — Week of {{ $json.weekStr }}",
+        "emailType": "text",
+        "message": "={{ $json.summary }}",
+        "options": {
+          "fromEmail": "hello@getignaite.com",
+          "fromName": "IgnAIte System"
+        }
+      },
+      "id": "node-send-summary",
+      "name": "📧 Email Weekly Summary to Yourself",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [900, 1100],
+      "notes": "Sends you the weekly outreach summary every Friday. Change 'your-personal@gmail.com' to your actual email."
+    }
+  ],
+  "connections": {
+    "⏰ Daily Trigger (9am Weekdays)": {
+      "main": [
+        [{ "node": "📋 Fetch Leads from Notion CRM", "type": "main", "index": 0 }]
+      ]
+    },
+    "📋 Fetch Leads from Notion CRM": {
+      "main": [
+        [{ "node": "🔀 Route by Channel", "type": "main", "index": 0 }]
+      ]
+    },
+    "🔀 Route by Channel": {
+      "main": [
+        [{ "node": "✍️ Build LinkedIn Connection Message", "type": "main", "index": 0 }],
+        [{ "node": "✍️ Build Cold Email", "type": "main", "index": 0 }]
+      ]
+    },
+    "✍️ Build LinkedIn Connection Message": {
+      "main": [
+        [{ "node": "📝 Prepare CRM Log Entry", "type": "main", "index": 0 }]
+      ]
+    },
+    "✍️ Build Cold Email": {
+      "main": [
+        [{ "node": "📧 Send Cold Email", "type": "main", "index": 0 }]
+      ]
+    },
+    "📧 Send Cold Email": {
+      "main": [
+        [{ "node": "✅ Update Notion — Email Lead", "type": "main", "index": 0 }]
+      ]
+    },
+    "📝 Prepare CRM Log Entry": {
+      "main": [
+        [{ "node": "✅ Update Notion — LinkedIn Lead", "type": "main", "index": 0 }]
+      ]
+    },
+    "⏰ Follow-Up Trigger (10am Weekdays)": {
+      "main": [
+        [{ "node": "📋 Fetch Leads Due for Follow-Up", "type": "main", "index": 0 }]
+      ]
+    },
+    "📋 Fetch Leads Due for Follow-Up": {
+      "main": [
+        [{ "node": "✍️ Build Follow-Up Message", "type": "main", "index": 0 }]
+      ]
+    },
+    "✍️ Build Follow-Up Message": {
+      "main": [
+        [{ "node": "🔀 Should Send Follow-Up?", "type": "main", "index": 0 }]
+      ]
+    },
+    "🔀 Should Send Follow-Up?": {
+      "main": [
+        [{ "node": "📧 Send Follow-Up Email", "type": "main", "index": 0 }],
+        [{ "node": "🔒 Mark Sequence Complete", "type": "main", "index": 0 }]
+      ]
+    },
+    "📧 Send Follow-Up Email": {
+      "main": [
+        [{ "node": "✅ Update Notion After Follow-Up", "type": "main", "index": 0 }]
+      ]
+    },
+    "⏰ Weekly Summary Trigger (Friday 6pm)": {
+      "main": [
+        [{ "node": "📊 Fetch This Week's Outreach", "type": "main", "index": 0 }]
+      ]
+    },
+    "📊 Fetch This Week's Outreach": {
+      "main": [
+        [{ "node": "📊 Build Weekly Summary", "type": "main", "index": 0 }]
+      ]
+    },
+    "📊 Build Weekly Summary": {
+      "main": [
+        [{ "node": "📧 Email Weekly Summary to Yourself", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "tags": ["IgnAIte", "Outreach", "ZeroOrigins"],
+  "triggerCount": 3,
+  "updatedAt": "2025-01-01T00:00:00.000Z",
+  "versionId": "1"
+}

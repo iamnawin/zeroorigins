@@ -1,0 +1,299 @@
+{
+  "name": "ZeroOrigins — Internal Alert System",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "internal-alert",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "ias-001",
+      "name": "Alert Received",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 300],
+      "webhookId": "zeroorigins-internal-alert"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "a1", "name": "alertType",    "value": "={{ $json.body.type || 'general' }}", "type": "string" },
+            { "id": "a2", "name": "urgency",      "value": "={{ ($json.body.urgency || 'normal').toLowerCase() }}", "type": "string" },
+            { "id": "a3", "name": "title",        "value": "={{ $json.body.title || 'New Alert' }}", "type": "string" },
+            { "id": "a4", "name": "body",         "value": "={{ $json.body.body || $json.body.message || '' }}", "type": "string" },
+            { "id": "a5", "name": "source",       "value": "={{ $json.body.source || 'System' }}", "type": "string" },
+            { "id": "a6", "name": "link",         "value": "={{ $json.body.link || '' }}", "type": "string" },
+            { "id": "a7", "name": "metadata",     "value": "={{ JSON.stringify($json.body.metadata || {}) }}", "type": "string" },
+            { "id": "a8", "name": "timestamp",    "value": "={{ new Date().toISOString() }}", "type": "string" },
+            { "id": "a9", "name": "alertId",      "value": "={{ 'ALT-' + Date.now() }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ias-002",
+      "name": "Normalize Alert",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [420, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"status\": \"queued\",\n  \"alertId\": \"{{ $json.alertId }}\",\n  \"urgency\": \"{{ $json.urgency }}\"\n}",
+        "options": {}
+      },
+      "id": "ias-003",
+      "name": "Ack Alert",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [640, 140]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "rules": [
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.urgency }}",
+                    "rightValue": "critical",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Critical"
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.urgency }}",
+                    "rightValue": "high",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "High"
+            }
+          ]
+        },
+        "options": { "fallbackOutput": "extra" }
+      },
+      "id": "ias-004",
+      "name": "Route by Urgency",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [640, 340]
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "from": "whatsapp:+14155238886",
+        "to": "whatsapp:YOUR_WHATSAPP_NUMBER",
+        "message": "=🚨 CRITICAL ALERT — {{ $json.alertType.toUpperCase() }}\n\n{{ $json.title }}\n\n{{ $json.body }}\n\nSource: {{ $json.source }}\nTime: {{ $json.timestamp }}\n{{ $json.link ? 'Link: ' + $json.link : '' }}\n\nAlert ID: {{ $json.alertId }}"
+      },
+      "id": "ias-005",
+      "name": "WhatsApp Critical Alert",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [860, 100],
+      "credentials": {
+        "twilioApi": {
+          "id": "YOUR_TWILIO_CREDENTIAL_ID",
+          "name": "Twilio account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": { "__rl": true, "value": "YOUR_SLACK_CRITICAL_CHANNEL_ID", "mode": "id" },
+        "text": "=:rotating_light: *CRITICAL ALERT* :rotating_light:\n\n*Type:* {{ $json.alertType }}\n*Title:* {{ $json.title }}\n\n{{ $json.body }}\n\n*Source:* {{ $json.source }}\n*Time:* {{ $json.timestamp }}\n{{ $json.link ? '*Link:* ' + $json.link : '' }}\n\n`Alert ID: {{ $json.alertId }}`",
+        "otherOptions": { "mrkdwn": true }
+      },
+      "id": "ias-006",
+      "name": "Slack Critical Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [1080, 100],
+      "credentials": {
+        "slackApi": {
+          "id": "YOUR_SLACK_CREDENTIAL_ID",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "hello@zeroorigins.in",
+        "subject": "=🚨 CRITICAL: {{ $json.title }}",
+        "message": "=<div style=\"font-family:sans-serif;max-width:560px\">\n  <div style=\"background:#c0392b;color:#fff;padding:16px;border-radius:6px 6px 0 0\">\n    <strong style=\"font-size:16px\">🚨 CRITICAL ALERT</strong>\n    <span style=\"float:right;font-size:12px;opacity:0.8\">{{ $json.alertType }}</span>\n  </div>\n  <div style=\"border:2px solid #c0392b;border-top:none;padding:20px;border-radius:0 0 6px 6px\">\n    <h2 style=\"margin:0 0 12px\">{{ $json.title }}</h2>\n    <p style=\"color:#444;line-height:1.6\">{{ $json.body }}</p>\n    {{ $json.link ? '<p><a href=\"' + $json.link + '\" style=\"color:#c0392b\">View details →</a></p>' : '' }}\n    <hr style=\"border:none;border-top:1px solid #eee;margin:16px 0\">\n    <p style=\"font-size:12px;color:#999\">Source: {{ $json.source }} | {{ $json.timestamp }} | ID: {{ $json.alertId }}</p>\n  </div>\n</div>",
+        "options": { "appendAttribution": false, "senderName": "ZeroOrigins Alert System" }
+      },
+      "id": "ias-007",
+      "name": "Email Critical Alert",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1080, 260],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_GMAIL_CREDENTIAL_ID",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": { "__rl": true, "value": "YOUR_SLACK_CHANNEL_ID", "mode": "id" },
+        "text": "=:warning: *HIGH PRIORITY — {{ $json.alertType }}*\n\n*{{ $json.title }}*\n{{ $json.body }}\n\nSource: {{ $json.source }} | {{ $json.timestamp }}\n{{ $json.link ? '<' + $json.link + '|View details>' : '' }}\n`{{ $json.alertId }}`",
+        "otherOptions": { "mrkdwn": true }
+      },
+      "id": "ias-008",
+      "name": "Slack High Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [860, 400],
+      "credentials": {
+        "slackApi": {
+          "id": "YOUR_SLACK_CREDENTIAL_ID",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "hello@zeroorigins.in",
+        "subject": "=⚠️ {{ $json.title }}",
+        "message": "=<div style=\"font-family:sans-serif;max-width:560px\">\n  <div style=\"background:#e67e22;color:#fff;padding:16px;border-radius:6px 6px 0 0\">\n    <strong>⚠️ HIGH PRIORITY</strong>\n    <span style=\"float:right;font-size:12px;opacity:0.8\">{{ $json.alertType }}</span>\n  </div>\n  <div style=\"border:2px solid #e67e22;border-top:none;padding:20px;border-radius:0 0 6px 6px\">\n    <h2 style=\"margin:0 0 12px\">{{ $json.title }}</h2>\n    <p style=\"color:#444;line-height:1.6\">{{ $json.body }}</p>\n    {{ $json.link ? '<p><a href=\"' + $json.link + '\">View details →</a></p>' : '' }}\n    <hr style=\"border:none;border-top:1px solid #eee;margin:16px 0\">\n    <p style=\"font-size:12px;color:#999\">Source: {{ $json.source }} | {{ $json.timestamp }} | ID: {{ $json.alertId }}</p>\n  </div>\n</div>",
+        "options": { "appendAttribution": false, "senderName": "ZeroOrigins Alert System" }
+      },
+      "id": "ias-009",
+      "name": "Email High Alert",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1080, 400],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_GMAIL_CREDENTIAL_ID",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": { "__rl": true, "value": "YOUR_SLACK_CHANNEL_ID", "mode": "id" },
+        "text": "=:information_source: *{{ $json.alertType }}* — {{ $json.title }}\n{{ $json.body }}\n_{{ $json.source }} | {{ $json.timestamp }}_{{ $json.link ? ' | <' + $json.link + '|details>' : '' }}",
+        "otherOptions": { "mrkdwn": true }
+      },
+      "id": "ias-010",
+      "name": "Slack Normal Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [860, 580],
+      "credentials": {
+        "slackApi": {
+          "id": "YOUR_SLACK_CREDENTIAL_ID",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "baseId": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "ZeroOrigins CRM"
+        },
+        "tableId": {
+          "__rl": true,
+          "value": "tblAlerts",
+          "mode": "list",
+          "cachedResultName": "Alerts"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Alert ID":   "={{ $json.alertId }}",
+            "Type":       "={{ $json.alertType }}",
+            "Urgency":    "={{ $json.urgency }}",
+            "Title":      "={{ $json.title }}",
+            "Body":       "={{ $json.body }}",
+            "Source":     "={{ $json.source }}",
+            "Link":       "={{ $json.link || '' }}",
+            "Metadata":   "={{ $json.metadata }}",
+            "Triggered At":"={{ $json.timestamp }}",
+            "Status":     "Fired"
+          },
+          "schema": [],
+          "matchingColumns": []
+        }
+      },
+      "id": "ias-011",
+      "name": "Airtable Log Alert",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [1300, 340],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "YOUR_AIRTABLE_CREDENTIAL_ID",
+          "name": "Airtable account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Alert Received": {
+      "main": [[{ "node": "Normalize Alert", "type": "main", "index": 0 }]]
+    },
+    "Normalize Alert": {
+      "main": [
+        [
+          { "node": "Ack Alert",        "type": "main", "index": 0 },
+          { "node": "Route by Urgency", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Route by Urgency": {
+      "main": [
+        [{ "node": "WhatsApp Critical Alert", "type": "main", "index": 0 }],
+        [{ "node": "Slack High Alert",        "type": "main", "index": 0 }],
+        [{ "node": "Slack Normal Alert",      "type": "main", "index": 0 }]
+      ]
+    },
+    "WhatsApp Critical Alert": {
+      "main": [[{ "node": "Slack Critical Alert",  "type": "main", "index": 0 }]]
+    },
+    "Slack Critical Alert": {
+      "main": [[{ "node": "Email Critical Alert",  "type": "main", "index": 0 }]]
+    },
+    "Email Critical Alert": {
+      "main": [[{ "node": "Airtable Log Alert",    "type": "main", "index": 0 }]]
+    },
+    "Slack High Alert": {
+      "main": [[{ "node": "Email High Alert",      "type": "main", "index": 0 }]]
+    },
+    "Email High Alert": {
+      "main": [[{ "node": "Airtable Log Alert",    "type": "main", "index": 0 }]]
+    },
+    "Slack Normal Alert": {
+      "main": [[{ "node": "Airtable Log Alert",    "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1", "saveManualExecutions": true },
+  "versionId": "zo-ias-v1-2026",
+  "meta": { "templateCredsSetupCompleted": false },
+  "id": "zeroorigins-internal-alert-v1",
+  "tags": [{ "name": "ZeroOrigins" }, { "name": "Alerts" }, { "name": "Operations" }]
+}

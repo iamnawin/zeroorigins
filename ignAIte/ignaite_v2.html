@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IgnAIte — AI Automation for Business</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,700&family=Cinzel:wght@400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:       #0E0C08;
+  --bg2:      #131109;
+  --bg3:      #1A1710;
+  --bg4:      #201D14;
+  --gold:     #C9973A;
+  --gold2:    #E2B35A;
+  --gold3:    #F0CB7A;
+  --gold-dim: #8A6520;
+  --cream:    #F2ECD8;
+  --cream2:   #C8BFA0;
+  --cream3:   #8A8070;
+  --border:   rgba(201,151,58,0.12);
+  --border2:  rgba(201,151,58,0.28);
+  --border3:  rgba(201,151,58,0.5);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Cursor */
+.cur { position: fixed; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.1s; }
+.cur-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(201,151,58,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: width 0.2s, height 0.2s, border-color 0.2s; }
+
+/* Grain overlay */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 500; opacity: 0.5;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+  padding: 28px 56px;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: all 0.5s;
+}
+nav.scrolled {
+  background: rgba(14,12,8,0.95);
+  backdrop-filter: blur(24px);
+  padding: 18px 56px;
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 18px; font-weight: 600;
+  letter-spacing: 6px; text-transform: uppercase;
+  color: var(--gold2); text-decoration: none;
+}
+.nav-links { display: flex; gap: 48px; list-style: none; }
+.nav-links a {
+  font-family: 'Cinzel', serif;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--cream3); text-decoration: none; transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--gold2); }
+.nav-cta {
+  font-family: 'Cinzel', serif;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--bg); background: var(--gold);
+  padding: 11px 28px; text-decoration: none;
+  border: 1px solid var(--gold);
+  transition: all 0.3s;
+}
+.nav-cta:hover { background: transparent; color: var(--gold2); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  position: relative; overflow: hidden;
+  padding: 120px 56px 80px;
+}
+
+/* Radial vignette */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(201,151,58,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Subtle grid */
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(201,151,58,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,151,58,0.035) 1px, transparent 1px);
+  background-size: 100px 100px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 20%, transparent 80%);
+}
+
+/* Corner ornaments */
+.corner { position: absolute; width: 60px; height: 60px; }
+.corner-tl { top: 40px; left: 56px; border-top: 1px solid var(--border3); border-left: 1px solid var(--border3); }
+.corner-tr { top: 40px; right: 56px; border-top: 1px solid var(--border3); border-right: 1px solid var(--border3); }
+.corner-bl { bottom: 40px; left: 56px; border-bottom: 1px solid var(--border3); border-left: 1px solid var(--border3); }
+.corner-br { bottom: 40px; right: 56px; border-bottom: 1px solid var(--border3); border-right: 1px solid var(--border3); }
+
+.hero-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 32px;
+  opacity: 0; animation: fadeIn 1s ease 0.3s forwards;
+  display: flex; align-items: center; gap: 16px;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: ''; width: 40px; height: 1px; background: var(--gold-dim);
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(56px, 9vw, 110px);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -2px;
+  margin-bottom: 12px;
+  color: var(--gold2);
+  opacity: 0; animation: fadeIn 1s ease 0.5s forwards;
+  text-shadow: 0 0 80px rgba(201,151,58,0.15);
+}
+
+.hero-title-sub {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--cream2);
+  letter-spacing: 0;
+  margin-bottom: 48px;
+  line-height: 1.2;
+  opacity: 0; animation: fadeIn 1s ease 0.7s forwards;
+}
+
+.hero-rule {
+  width: 120px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 0 auto 40px;
+  opacity: 0; animation: fadeIn 1s ease 0.8s forwards;
+}
+
+.hero-desc {
+  font-size: 17px; color: var(--cream3);
+  max-width: 520px; line-height: 1.75;
+  margin: 0 auto 56px; font-weight: 300;
+  opacity: 0; animation: fadeIn 1s ease 0.9s forwards;
+}
+
+.hero-actions {
+  display: flex; gap: 24px; justify-content: center; align-items: center;
+  opacity: 0; animation: fadeIn 1s ease 1.1s forwards;
+}
+
+.btn-gold {
+  font-family: 'Cinzel', serif;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  background: var(--gold); color: var(--bg);
+  padding: 16px 40px; border: 1px solid var(--gold);
+  text-decoration: none; transition: all 0.3s;
+  font-weight: 600;
+}
+.btn-gold:hover {
+  background: transparent; color: var(--gold2);
+  box-shadow: 0 0 30px rgba(201,151,58,0.2);
+}
+
+.btn-outline {
+  font-family: 'Cinzel', serif;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--cream2); border: 1px solid var(--border2);
+  padding: 16px 40px; text-decoration: none; transition: all 0.3s;
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold2); }
+
+.hero-scroll {
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--cream3);
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  opacity: 0; animation: fadeIn 1s ease 1.4s forwards;
+}
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.4; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(0.8); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* DIVIDER ORNAMENT */
+.ornament {
+  text-align: center; padding: 20px 0;
+  color: var(--gold-dim); font-size: 20px; letter-spacing: 8px;
+}
+
+/* STATS */
+.stats {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 0 56px;
+  display: flex;
+}
+.stat {
+  flex: 1; padding: 52px 40px;
+  border-right: 1px solid var(--border);
+  text-align: center;
+  transition: background 0.3s;
+}
+.stat:first-child { border-left: none; }
+.stat:last-child { border-right: none; }
+.stat:hover { background: rgba(201,151,58,0.03); }
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px; font-weight: 700;
+  color: var(--gold2); line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-num sup { font-size: 22px; vertical-align: super; }
+.stat-label {
+  font-family: 'Cinzel', serif;
+  font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--cream3);
+}
+
+/* SECTION COMMON */
+section { padding: 120px 56px; }
+.s-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 16px;
+}
+.s-label::before { content: ''; width: 32px; height: 1px; background: var(--gold-dim); }
+.s-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px, 5.5vw, 68px);
+  font-weight: 700; line-height: 1.05;
+  color: var(--cream); margin-bottom: 20px;
+}
+.s-title em { font-style: italic; color: var(--gold2); }
+.s-sub {
+  font-size: 16px; color: var(--cream3);
+  max-width: 520px; line-height: 1.75; font-weight: 300;
+}
+
+/* SERVICES */
+.services { background: var(--bg); }
+.svc-header { margin-bottom: 80px; }
+.svc-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--border);
+}
+.svc-card {
+  padding: 52px 44px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+  transition: background 0.4s;
+}
+.svc-card:nth-child(3n) { border-right: none; }
+.svc-card:nth-child(4), .svc-card:nth-child(5), .svc-card:nth-child(6) { border-bottom: none; }
+.svc-card:hover { background: rgba(201,151,58,0.03); }
+.svc-card::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  transform: scaleX(0); transition: transform 0.4s;
+}
+.svc-card:hover::after { transform: scaleX(1); }
+.svc-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 2px; color: var(--gold-dim);
+  margin-bottom: 32px;
+}
+.svc-icon { font-size: 32px; margin-bottom: 20px; }
+.svc-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 700;
+  color: var(--cream); margin-bottom: 14px; line-height: 1.2;
+}
+.svc-desc {
+  font-size: 14px; color: var(--cream3);
+  line-height: 1.75; margin-bottom: 28px; font-weight: 300;
+}
+.svc-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.stag {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--gold-dim); border: 1px solid var(--border);
+  padding: 3px 10px; transition: all 0.2s;
+}
+.svc-card:hover .stag { border-color: var(--border2); color: var(--gold); }
+
+/* MARQUEE */
+.marquee-wrap {
+  background: var(--bg3);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden; padding: 0;
+}
+.marquee-inner {
+  display: flex; white-space: nowrap;
+  animation: marquee 25s linear infinite;
+  padding: 20px 0;
+}
+.marquee-item {
+  font-family: 'Cinzel', serif;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold); padding: 0 48px;
+  display: flex; align-items: center; gap: 48px;
+}
+.marquee-item::after { content: '✦'; font-size: 8px; color: var(--gold-dim); }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* PORTFOLIO */
+.portfolio { background: var(--bg2); }
+.port-grid {
+  margin-top: 80px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--border); gap: 0;
+}
+.port-item {
+  padding: 60px 52px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+  transition: background 0.3s;
+}
+.port-item:nth-child(2n) { border-right: none; }
+.port-item:nth-child(3), .port-item:nth-child(4) { border-bottom: none; }
+.port-item.span2 {
+  grid-column: span 2; border-right: none;
+  display: grid; grid-template-columns: 1.2fr 1fr; gap: 60px;
+  align-items: center;
+}
+.port-item:hover { background: rgba(201,151,58,0.025); }
+.port-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--gold); border: 1px solid var(--border2);
+  background: rgba(201,151,58,0.07);
+  padding: 4px 14px; display: inline-block; margin-bottom: 28px;
+}
+.port-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px; font-weight: 700;
+  color: var(--cream); margin-bottom: 16px; line-height: 1.2;
+}
+.port-desc {
+  font-size: 14px; color: var(--cream3);
+  line-height: 1.75; margin-bottom: 36px; font-weight: 300;
+}
+.port-stats { display: flex; gap: 36px; }
+.ps-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px; font-weight: 700; color: var(--gold2); line-height: 1;
+}
+.ps-label {
+  font-family: 'Cinzel', serif;
+  font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--cream3); margin-top: 4px;
+}
+
+/* Flow diagram */
+.flow { display: flex; flex-direction: column; gap: 0; }
+.flow-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 13px 18px;
+  border: 1px solid var(--border);
+  margin-top: -1px;
+  background: rgba(0,0,0,0.2);
+  transition: background 0.2s, border-color 0.2s;
+}
+.flow-row.lit {
+  border-color: var(--border2);
+  background: rgba(201,151,58,0.04);
+}
+.flow-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--bg3); border: 1px solid var(--border2);
+  flex-shrink: 0;
+}
+.flow-row.lit .flow-dot { background: var(--gold); border-color: var(--gold); }
+.flow-txt {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px; color: var(--cream3);
+}
+.flow-row.lit .flow-txt { color: var(--cream); }
+.flow-arrow { margin-left: auto; font-size: 10px; color: var(--gold); opacity: 0; }
+.flow-row.lit .flow-arrow { opacity: 1; }
+
+/* PROCESS */
+.process { background: var(--bg); }
+.proc-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--border); margin-top: 80px;
+}
+.proc-step {
+  padding: 52px 36px;
+  border-right: 1px solid var(--border);
+  position: relative; overflow: hidden;
+  transition: background 0.3s;
+}
+.proc-step:last-child { border-right: none; }
+.proc-step:hover { background: rgba(201,151,58,0.03); }
+.proc-bg-num {
+  position: absolute; top: 16px; right: 20px;
+  font-family: 'Playfair Display', serif;
+  font-size: 80px; font-weight: 900;
+  color: rgba(201,151,58,0.04); line-height: 1;
+  pointer-events: none; transition: color 0.3s;
+}
+.proc-step:hover .proc-bg-num { color: rgba(201,151,58,0.08); }
+.proc-icon {
+  width: 52px; height: 52px;
+  border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 28px;
+  background: rgba(201,151,58,0.04);
+}
+.proc-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; font-weight: 700;
+  color: var(--cream); margin-bottom: 14px;
+}
+.proc-desc {
+  font-size: 13px; color: var(--cream3);
+  line-height: 1.75; font-weight: 300;
+}
+
+/* PROOF BAND */
+.proof-band {
+  background: var(--bg3);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 100px 56px;
+}
+.proof-inner {
+  max-width: 960px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 100px; align-items: center;
+}
+.proof-q {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px; font-weight: 400; font-style: italic;
+  color: var(--cream); line-height: 1.5;
+}
+.proof-q em { font-style: normal; color: var(--gold2); }
+.proof-rule { width: 60px; height: 1px; background: var(--gold-dim); margin: 32px 0; }
+.proof-attr {
+  font-family: 'Cinzel', serif;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--cream3);
+}
+.proof-checks { display: flex; flex-direction: column; gap: 16px; }
+.proof-check {
+  display: flex; align-items: flex-start; gap: 16px;
+  font-size: 14px; color: var(--cream2); line-height: 1.5; font-weight: 300;
+}
+.proof-check-icon {
+  width: 22px; height: 22px; flex-shrink: 0;
+  border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: var(--gold);
+  font-family: 'DM Mono', monospace; margin-top: 1px;
+}
+
+/* PRICING */
+.pricing { background: var(--bg2); }
+.price-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--border); margin-top: 80px;
+}
+.price-card {
+  padding: 56px 44px;
+  border-right: 1px solid var(--border);
+  transition: background 0.3s; position: relative;
+}
+.price-card:last-child { border-right: none; }
+.price-card.featured {
+  background: rgba(201,151,58,0.04);
+  border: 1px solid var(--border2); margin: -1px; z-index: 1;
+}
+.price-badge {
+  position: absolute; top: -1px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--gold); color: var(--bg);
+  font-family: 'Cinzel', serif;
+  font-size: 8px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 4px 18px; font-weight: 600; white-space: nowrap;
+}
+.price-plan {
+  font-family: 'Cinzel', serif;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 20px;
+}
+.price-amt {
+  font-family: 'Playfair Display', serif;
+  font-size: 60px; font-weight: 700; line-height: 1;
+  color: var(--cream); margin-bottom: 4px;
+}
+.price-amt sup { font-size: 24px; vertical-align: super; color: var(--cream3); }
+.price-period {
+  font-size: 13px; color: var(--cream3); margin-bottom: 36px; font-weight: 300;
+}
+.price-line { height: 1px; background: var(--border); margin-bottom: 32px; }
+.price-features { list-style: none; margin-bottom: 44px; }
+.price-features li {
+  font-size: 14px; color: var(--cream2);
+  padding: 9px 0; line-height: 1.4;
+  display: flex; align-items: flex-start; gap: 14px;
+  border-bottom: 1px solid rgba(201,151,58,0.05);
+  font-weight: 300;
+}
+.price-features li::before {
+  content: '→'; color: var(--gold); font-size: 11px;
+  flex-shrink: 0; margin-top: 2px;
+}
+.price-btn {
+  display: block; text-align: center;
+  font-family: 'Cinzel', serif;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  padding: 16px; text-decoration: none;
+  border: 1px solid var(--border2); color: var(--cream2);
+  transition: all 0.3s;
+}
+.price-btn:hover, .featured .price-btn {
+  background: var(--gold); border-color: var(--gold); color: var(--bg);
+}
+
+/* CTA */
+.cta-sect {
+  background: var(--bg);
+  text-align: center; padding: 140px 56px;
+  position: relative; overflow: hidden;
+}
+.cta-sect::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(201,151,58,0.07) 0%, transparent 70%);
+}
+.cta-ornament {
+  font-family: 'Cinzel', serif;
+  font-size: 9px; letter-spacing: 5px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 24px; position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+}
+.cta-ornament::before, .cta-ornament::after {
+  content: ''; width: 48px; height: 1px; background: var(--gold-dim);
+}
+.cta-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(48px, 7vw, 88px);
+  font-weight: 900; line-height: 0.95;
+  color: var(--gold2);
+  margin-bottom: 16px; position: relative; z-index: 1;
+}
+.cta-subtitle {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(24px, 3vw, 40px);
+  font-weight: 400; font-style: italic;
+  color: var(--cream2); margin-bottom: 48px;
+  position: relative; z-index: 1;
+}
+.cta-rule {
+  width: 80px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 0 auto 48px; position: relative; z-index: 1;
+}
+.cta-desc {
+  font-size: 16px; color: var(--cream3);
+  max-width: 440px; margin: 0 auto 56px;
+  line-height: 1.75; font-weight: 300; position: relative; z-index: 1;
+}
+.cta-actions {
+  display: flex; gap: 20px; justify-content: center;
+  position: relative; z-index: 1;
+}
+.cta-fine {
+  margin-top: 24px; font-size: 12px; color: var(--cream3);
+  letter-spacing: 1px; position: relative; z-index: 1;
+  font-family: 'DM Mono', monospace;
+}
+
+/* FOOTER */
+footer {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 72px 56px 40px;
+}
+.ft-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 56px; padding-bottom: 56px;
+  border-bottom: 1px solid var(--border);
+}
+.ft-brand-name {
+  font-family: 'Cinzel', serif;
+  font-size: 28px; font-weight: 700; letter-spacing: 6px;
+  text-transform: uppercase; color: var(--gold2);
+}
+.ft-brand-sub {
+  font-size: 12px; color: var(--cream3); margin-top: 8px; font-weight: 300;
+}
+.ft-cols { display: flex; gap: 64px; }
+.ft-col-h {
+  font-family: 'Cinzel', serif;
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 20px;
+}
+.ft-col a {
+  display: block; font-size: 13px; color: var(--cream3);
+  text-decoration: none; margin-bottom: 12px; transition: color 0.2s; font-weight: 300;
+}
+.ft-col a:hover { color: var(--cream); }
+.ft-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.ft-copy, .ft-parent {
+  font-size: 12px; color: var(--cream3); letter-spacing: 0.5px; font-weight: 300;
+}
+.ft-parent span { color: var(--gold); }
+
+/* Scroll reveal */
+.rev { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.rev.in { opacity: 1; transform: translateY(0); }
+.rev.d1 { transition-delay: 0.1s; }
+.rev.d2 { transition-delay: 0.2s; }
+.rev.d3 { transition-delay: 0.3s; }
+.rev.d4 { transition-delay: 0.4s; }
+
+/* Responsive */
+@media (max-width: 960px) {
+  nav { padding: 20px 24px; }
+  nav.scrolled { padding: 16px 24px; }
+  .nav-links { display: none; }
+  section, .proof-band { padding: 80px 24px; }
+  .hero { padding: 100px 24px 80px; }
+  .stats { padding: 0 24px; flex-wrap: wrap; }
+  .stat { flex: 0 0 50%; border-bottom: 1px solid var(--border); padding: 36px 24px; }
+  .svc-grid, .proc-grid, .price-grid { grid-template-columns: 1fr; }
+  .svc-card { border-right: none; }
+  .proc-step { border-right: none; border-bottom: 1px solid var(--border); }
+  .port-grid { grid-template-columns: 1fr; }
+  .port-item.span2 { grid-column: span 1; grid-template-columns: 1fr; gap: 40px; }
+  .port-item { border-right: none; }
+  .proof-inner { grid-template-columns: 1fr; gap: 48px; }
+  .cta-actions { flex-direction: column; align-items: center; }
+  .ft-top { flex-direction: column; gap: 40px; }
+  .ft-cols { flex-wrap: wrap; gap: 32px; }
+  .hero-title { letter-spacing: -1px; }
+  .corner { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="cur" id="cur"></div>
+<div class="cur-ring" id="ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">IgnAIte</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#work">Our Work</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <a href="mailto:hello@getignaite.com" class="nav-cta">Book a Call</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <div class="hero-eyebrow">AI Automation for Small Business</div>
+
+  <h1 class="hero-title">IGNAITE</h1>
+  <p class="hero-title-sub">Stop losing leads. Start automating.</p>
+
+  <div class="hero-rule"></div>
+
+  <p class="hero-desc">We build done-for-you AI workflow systems that capture leads, follow up automatically, and eliminate hours of manual work — every single week.</p>
+
+  <div class="hero-actions">
+    <a href="mailto:hello@getignaite.com" class="btn-gold">Book a Free Call</a>
+    <a href="#work" class="btn-outline">See Our Work</a>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <span class="marquee-item">Lead Capture Automation</span>
+    <span class="marquee-item">Client Onboarding Systems</span>
+    <span class="marquee-item">n8n Workflow Builds</span>
+    <span class="marquee-item">Cold Outreach Automation</span>
+    <span class="marquee-item">CRM Pipeline Systems</span>
+    <span class="marquee-item">AI-Powered Workflows</span>
+    <span class="marquee-item">USA · UAE · Australia</span>
+    <span class="marquee-item">Lead Capture Automation</span>
+    <span class="marquee-item">Client Onboarding Systems</span>
+    <span class="marquee-item">n8n Workflow Builds</span>
+    <span class="marquee-item">Cold Outreach Automation</span>
+    <span class="marquee-item">CRM Pipeline Systems</span>
+    <span class="marquee-item">AI-Powered Workflows</span>
+    <span class="marquee-item">USA · UAE · Australia</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat rev">
+    <div class="stat-num">10<sup>hrs</sup></div>
+    <div class="stat-label">Saved per client weekly</div>
+  </div>
+  <div class="stat rev d1">
+    <div class="stat-num">$300<sup>+</sup></div>
+    <div class="stat-label">Starting price</div>
+  </div>
+  <div class="stat rev d2">
+    <div class="stat-num">48<sup>hrs</sup></div>
+    <div class="stat-label">Average delivery</div>
+  </div>
+  <div class="stat rev d3">
+    <div class="stat-num">3<sup>x</sup></div>
+    <div class="stat-label">Priority markets</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="svc-header">
+    <div class="s-label rev">What We Build</div>
+    <h2 class="s-title rev">Automation that works<br><em>while you don't.</em></h2>
+    <p class="s-sub rev">Practical, real-world automations. Built fast, delivered working, documented clearly.</p>
+  </div>
+
+  <div class="svc-grid">
+    <div class="svc-card rev">
+      <div class="svc-num">01</div>
+      <div class="svc-icon">⚡</div>
+      <div class="svc-title">Lead Capture & Follow-Up</div>
+      <p class="svc-desc">New lead arrives — instant response sent, lead added to CRM, multi-step follow-up sequence started. Zero manual work required from your side.</p>
+      <div class="svc-tags"><span class="stag">n8n</span><span class="stag">Gmail</span><span class="stag">Notion</span><span class="stag">Webhooks</span></div>
+    </div>
+    <div class="svc-card rev d1">
+      <div class="svc-num">02</div>
+      <div class="svc-icon">🔄</div>
+      <div class="svc-title">Client Onboarding Systems</div>
+      <p class="svc-desc">New client signs → contract sent → welcome email → project folder created → kickoff booked. Cut onboarding from hours to under 10 minutes.</p>
+      <div class="svc-tags"><span class="stag">Calendly</span><span class="stag">Drive</span><span class="stag">Slack</span><span class="stag">n8n</span></div>
+    </div>
+    <div class="svc-card rev d2">
+      <div class="svc-num">03</div>
+      <div class="svc-icon">🤖</div>
+      <div class="svc-title">AI-Powered Workflows</div>
+      <p class="svc-desc">Connect AI to your existing tools. Auto-categorise tickets, draft responses, summarise calls, generate reports. The tedious work — handled.</p>
+      <div class="svc-tags"><span class="stag">OpenAI</span><span class="stag">Claude</span><span class="stag">Make</span><span class="stag">Airtable</span></div>
+    </div>
+    <div class="svc-card rev">
+      <div class="svc-num">04</div>
+      <div class="svc-icon">📊</div>
+      <div class="svc-title">CRM & Pipeline Automation</div>
+      <p class="svc-desc">Your CRM updates itself. Leads move through stages automatically. Status changes trigger the right next actions. Your team focuses on closing.</p>
+      <div class="svc-tags"><span class="stag">HubSpot</span><span class="stag">Notion</span><span class="stag">Pipedrive</span><span class="stag">n8n</span></div>
+    </div>
+    <div class="svc-card rev d1">
+      <div class="svc-num">05</div>
+      <div class="svc-icon">📬</div>
+      <div class="svc-title">Outreach Automation</div>
+      <p class="svc-desc">Personalised outreach at scale. Sequences that feel human, run automatically, and log every interaction back to your CRM without a single manual step.</p>
+      <div class="svc-tags"><span class="stag">Apollo</span><span class="stag">Gmail API</span><span class="stag">LinkedIn</span><span class="stag">n8n</span></div>
+    </div>
+    <div class="svc-card rev d2">
+      <div class="svc-num">06</div>
+      <div class="svc-icon">🔍</div>
+      <div class="svc-title">Operations Audit</div>
+      <p class="svc-desc">Not sure where to start? We map your workflows, find the top 3 automation opportunities, and deliver a prioritised action plan. Done in 48 hours.</p>
+      <div class="svc-tags"><span class="stag">Audit</span><span class="stag">Strategy</span><span class="stag">Roadmap</span><span class="stag">Quick Win</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="portfolio" id="work">
+  <div class="s-label rev">Already Implemented</div>
+  <h2 class="s-title rev">Real systems.<br><em>Live and running.</em></h2>
+  <p class="s-sub rev">Not concepts or mockups. These are live automations we've built and deployed.</p>
+
+  <div class="port-grid">
+
+    <div class="port-item span2 rev">
+      <div>
+        <div class="port-badge">Live System</div>
+        <h3 class="port-title">Automated Cold Outreach Pipeline</h3>
+        <p class="port-desc">A complete outreach automation built on n8n — pulls leads from Notion CRM, builds personalised cold emails per segment (Agency, Coach, E-commerce, SaaS, Real Estate), sends via Gmail, tracks every interaction, schedules follow-ups, and emails a weekly performance summary — fully automated.</p>
+        <div class="port-stats">
+          <div><div class="ps-num">3</div><div class="ps-label">Follow-up sequences</div></div>
+          <div><div class="ps-num">5</div><div class="ps-label">Audience segments</div></div>
+          <div><div class="ps-num">0 hrs</div><div class="ps-label">Manual work required</div></div>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="flow-row lit"><div class="flow-dot"></div><span class="flow-txt">⏰  Daily trigger — 9am weekdays</span><span class="flow-arrow">→</span></div>
+        <div class="flow-row lit"><div class="flow-dot"></div><span class="flow-txt">📋  Fetch leads from Notion CRM</span><span class="flow-arrow">→</span></div>
+        <div class="flow-row lit"><div class="flow-dot"></div><span class="flow-txt">🔀  Route by channel — Email / LinkedIn</span><span class="flow-arrow">→</span></div>
+        <div class="flow-row lit"><div class="flow-dot"></div><span class="flow-txt">✍️  Build personalised message per segment</span><span class="flow-arrow">→</span></div>
+        <div class="flow-row lit"><div class="flow-dot"></div><span class="flow-txt">📧  Send via Gmail automatically</span><span class="flow-arrow">→</span></div>
+        <div class="flow-row lit"><div class="flow-dot"></div><span class="flow-txt">✅  Update Notion CRM status</span><span class="flow-arrow">→</span></div>
+        <div class="flow-row lit"><div class="flow-dot"></div><span class="flow-txt">🔁  Auto-schedule follow-up in 5 days</span><span class="flow-arrow">→</span></div>
+        <div class="flow-row lit"><div class="flow-dot"></div><span class="flow-txt">📊  Weekly summary report — every Friday</span><span class="flow-arrow">→</span></div>
+      </div>
+    </div>
+
+    <div class="port-item rev">
+      <div class="port-badge">Strategy Document</div>
+      <h3 class="port-title">Full GTM Plan — USA, UAE & Australia</h3>
+      <p class="port-desc">A 12-section go-to-market plan with target demographics, 5 buyer personas, channel strategies with outreach templates, 90-day execution roadmap, and USD pricing — built for international AI automation services.</p>
+      <div class="port-stats">
+        <div><div class="ps-num">3</div><div class="ps-label">Tier 1 markets</div></div>
+        <div><div class="ps-num">5</div><div class="ps-label">Buyer personas</div></div>
+        <div><div class="ps-num">90d</div><div class="ps-label">Execution plan</div></div>
+      </div>
+    </div>
+
+    <div class="port-item rev d1">
+      <div class="port-badge">Live System</div>
+      <h3 class="port-title">Notion CRM — Lead Tracking System</h3>
+      <p class="port-desc">A purpose-built Notion CRM with full outreach tracking — lead status, channel, segment, outreach step, contact dates, and follow-up scheduling. Fully integrated with n8n for automatic updates.</p>
+      <div class="port-stats">
+        <div><div class="ps-num">11</div><div class="ps-label">Tracked fields</div></div>
+        <div><div class="ps-num">Auto</div><div class="ps-label">Status updates</div></div>
+        <div><div class="ps-num">0</div><div class="ps-label">Manual data entry</div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="s-label rev">How It Works</div>
+  <h2 class="s-title rev">From conversation<br><em>to running system.</em></h2>
+  <p class="s-sub rev">No bloated timelines. No unnecessary complexity. We move fast and deliver clean, working systems.</p>
+
+  <div class="proc-grid">
+    <div class="proc-step rev">
+      <div class="proc-bg-num">01</div>
+      <div class="proc-icon">💬</div>
+      <div class="proc-title">Discovery Call</div>
+      <p class="proc-desc">15 minutes. We understand your current process, identify the biggest time wasters, and define exactly what we'll automate and why.</p>
+    </div>
+    <div class="proc-step rev d1">
+      <div class="proc-bg-num">02</div>
+      <div class="proc-icon">📐</div>
+      <div class="proc-title">Workflow Mapping</div>
+      <p class="proc-desc">We map every step, tool, trigger, and outcome — then show you what the automated version looks like before we touch a single node.</p>
+    </div>
+    <div class="proc-step rev d2">
+      <div class="proc-bg-num">03</div>
+      <div class="proc-icon">⚙️</div>
+      <div class="proc-title">Build & Test</div>
+      <p class="proc-desc">We build the workflow, run it with real data, eliminate edge cases, and confirm it works perfectly before handing anything over.</p>
+    </div>
+    <div class="proc-step rev d3">
+      <div class="proc-bg-num">04</div>
+      <div class="proc-icon">🚀</div>
+      <div class="proc-title">Handover & Support</div>
+      <p class="proc-desc">Full walkthrough, documentation, and 7 days of post-delivery support. You own it completely — we just make sure you understand it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<div class="proof-band">
+  <div class="proof-inner">
+    <div>
+      <div class="proof-q">"Most businesses aren't losing leads because of bad marketing — they're losing them because <em>nobody followed up fast enough.</em>"</div>
+      <div class="proof-rule"></div>
+      <div class="proof-attr">The Automation Advantage</div>
+    </div>
+    <div>
+      <div class="proof-checks">
+        <div class="proof-check"><div class="proof-check-icon">✓</div>Businesses that respond within 5 minutes are 100x more likely to connect than those that respond in an hour</div>
+        <div class="proof-check"><div class="proof-check-icon">✓</div>Most small businesses are responding in hours or days — if at all</div>
+        <div class="proof-check"><div class="proof-check-icon">✓</div>Automated follow-up works while you sleep, travel, and close other deals</div>
+        <div class="proof-check"><div class="proof-check-icon">✓</div>Your team focuses on conversations — not chasing cold leads manually</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="s-label rev">Pricing</div>
+  <h2 class="s-title rev">Transparent,<br><em>project-based pricing.</em></h2>
+  <p class="s-sub rev">Priced in USD. No retainers required to start. No surprise costs.</p>
+
+  <div class="price-grid">
+    <div class="price-card rev">
+      <div class="price-plan">Starter</div>
+      <div class="price-amt"><sup>$</sup>300</div>
+      <div class="price-period">per workflow build</div>
+      <div class="price-line"></div>
+      <ul class="price-features">
+        <li>One automation workflow built & delivered</li>
+        <li>Lead capture or follow-up sequence</li>
+        <li>Full documentation included</li>
+        <li>One revision round</li>
+        <li>7 days post-delivery support</li>
+      </ul>
+      <a href="mailto:hello@getignaite.com" class="price-btn">Get Started</a>
+    </div>
+
+    <div class="price-card featured rev d1">
+      <div class="price-badge">Most Popular</div>
+      <div class="price-plan">Growth</div>
+      <div class="price-amt"><sup>$</sup>800</div>
+      <div class="price-period">system build — 2 to 3 workflows</div>
+      <div class="price-line"></div>
+      <ul class="price-features">
+        <li>2–3 connected workflows built together</li>
+        <li>Lead capture + onboarding + CRM logging</li>
+        <li>Full walkthrough call on delivery</li>
+        <li>Two revision rounds</li>
+        <li>14 days post-delivery support</li>
+      </ul>
+      <a href="mailto:hello@getignaite.com" class="price-btn">Get Started</a>
+    </div>
+
+    <div class="price-card rev d2">
+      <div class="price-plan">Retainer</div>
+      <div class="price-amt"><sup>$</sup>500</div>
+      <div class="price-period">per month — ongoing</div>
+      <div class="price-line"></div>
+      <ul class="price-features">
+        <li>Monthly automation builds & improvements</li>
+        <li>Maintain & update existing workflows</li>
+        <li>Priority 24-hour response time</li>
+        <li>Monthly strategy call included</li>
+        <li>Unlimited revisions within scope</li>
+      </ul>
+      <a href="mailto:hello@getignaite.com" class="price-btn">Get Started</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sect">
+  <div class="cta-ornament">Ready to automate?</div>
+  <h2 class="cta-title">LET'S BUILD</h2>
+  <p class="cta-subtitle">your first automation.</p>
+  <div class="cta-rule"></div>
+  <p class="cta-desc">Book a free 15-minute discovery call. We'll identify your biggest automation opportunity and show you what's possible.</p>
+  <div class="cta-actions">
+    <a href="mailto:hello@getignaite.com" class="btn-gold">Book a Free Call</a>
+    <a href="mailto:hello@getignaite.com" class="btn-outline">hello@getignaite.com</a>
+  </div>
+  <p class="cta-fine">No obligation · No pitch deck · Just a direct conversation</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-top">
+    <div>
+      <div class="ft-brand-name">IgnAIte</div>
+      <div class="ft-brand-sub">AI Automation for Small Businesses & Agencies</div>
+    </div>
+    <div class="ft-cols">
+      <div class="ft-col">
+        <div class="ft-col-h">Services</div>
+        <a href="#services">Lead Capture & Follow-Up</a>
+        <a href="#services">Client Onboarding</a>
+        <a href="#services">CRM Automation</a>
+        <a href="#services">Outreach Systems</a>
+        <a href="#services">Operations Audit</a>
+      </div>
+      <div class="ft-col">
+        <div class="ft-col-h">Company</div>
+        <a href="#work">Our Work</a>
+        <a href="#process">How It Works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="mailto:hello@getignaite.com">Contact</a>
+      </div>
+      <div class="ft-col">
+        <div class="ft-col-h">Get In Touch</div>
+        <a href="mailto:hello@getignaite.com">hello@getignaite.com</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Twitter / X</a>
+      </div>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <div class="ft-copy">© 2025 IgnAIte. All rights reserved.</div>
+    <div class="ft-parent">Part of <span>ZeroOrigins</span></div>
+  </div>
+</footer>
+
+<script>
+  // Cursor
+  const cur = document.getElementById('cur');
+  const ring = document.getElementById('ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+  });
+  (function anim() {
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(anim);
+  })();
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => { ring.style.width = '52px'; ring.style.height = '52px'; ring.style.borderColor = 'rgba(201,151,58,0.7)'; });
+    el.addEventListener('mouseleave', () => { ring.style.width = '36px'; ring.style.height = '36px'; ring.style.borderColor = 'rgba(201,151,58,0.4)'; });
+  });
+
+  // Nav
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', scrollY > 60);
+  });
+
+  // Reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.rev').forEach(el => obs.observe(el));
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+</script>
+</body>
+</html>

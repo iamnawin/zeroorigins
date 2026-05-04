@@ -1,0 +1,48 @@
+==============================================================
+  QUICK START — ZEROORIGINS WORKFLOW STARTER KIT
+  Read this if you want to be live in under 60 minutes.
+==============================================================
+
+You need 3 accounts before you begin:
+  - n8n (free at n8n.io — cloud or self-hosted)
+  - Google account (for Sheets + Gmail)
+  - A form tool (Tally, Typeform, or any form with webhook support)
+
+--------------------------------------------------------------
+THE 5-STEP SETUP
+--------------------------------------------------------------
+
+  1. CREATE YOUR GOOGLE SHEET
+     Make a new Google Sheet with these columns in row 1:
+       Timestamp | Name | Email | Business | Message | Source | Status | Followup Sent | Followup Date
+
+  2. IMPORT BOTH WORKFLOWS INTO N8N
+     In n8n: click "+" → Import from file
+     Import lead_capture.json first, then followup_flow.json
+
+  3. CONNECT YOUR ACCOUNTS IN N8N
+     In each workflow, click the Google Sheets node and Gmail node.
+     Connect your Google account when prompted.
+     Paste your Sheet ID into the Google Sheets node.
+     (Your Sheet ID is the long string in the Sheet URL)
+
+  4. ACTIVATE THE WEBHOOK
+     Open lead_capture workflow → click "Activate"
+     Copy the webhook URL shown at the top of the Webhook node.
+     Paste it as the submission URL in your form tool.
+
+  5. SEND A TEST LEAD
+     Fill out your form once with your own details.
+     Check your Google Sheet — a new row should appear.
+     Check your email — you should receive a confirmation.
+
+--------------------------------------------------------------
+THAT'S IT. YOUR SYSTEM IS LIVE.
+--------------------------------------------------------------
+
+If any step above doesn't work:
+  - Read the full setup_guide.md for detailed troubleshooting
+  - Email hello@zeroorigins.in
+  - Book a setup call: https://calendly.com/zeroorigins
+
+==============================================================

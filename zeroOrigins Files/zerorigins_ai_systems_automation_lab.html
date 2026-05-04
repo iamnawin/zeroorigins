@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zerorigins — AI Systems & Automation Lab</title>
+  <meta name="description"
+    content="Zerorigins is an AI systems & automation lab building intelligent platforms, agentic workflows, and AI-native products." />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700&display=swap');
+
+    :root {
+      --bg: #05060b;
+      --bg2: #090b15;
+      --glass: rgba(255, 255, 255, 0.06);
+      --border: rgba(255, 255, 255, 0.10);
+      --text: rgba(255, 255, 255, 0.92);
+      --muted: rgba(255, 255, 255, 0.60);
+      --soft: rgba(255, 255, 255, 0.16);
+      --gold: #fdb93d;
+      --gold2: #ffcf6b;
+      --cyan: #00d4ff;
+      --shadow: 0 28px 90px rgba(0, 0, 0, 0.65);
+      --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --smooth: cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: radial-gradient(1200px 700px at 65% 10%, rgba(0, 212, 255, 0.09), transparent 55%),
+        radial-gradient(900px 650px at 20% 55%, rgba(253, 185, 61, 0.10), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1160px, 92vw);
+      margin: 0 auto;
+    }
+
+    /* ===== background ===== */
+    .space {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(circle at 15% 35%, rgba(255, 255, 255, 0.14) 0 1px, transparent 2px) 0 0/280px 260px,
+        radial-gradient(circle at 55% 65%, rgba(255, 255, 255, 0.12) 0 1px, transparent 2px) 0 0/340px 300px,
+        radial-gradient(circle at 75% 25%, rgba(255, 255, 255, 0.12) 0 1px, transparent 2px) 0 0/360px 330px,
+        radial-gradient(circle at 30% 85%, rgba(255, 255, 255, 0.10) 0 1px, transparent 2px) 0 0/420px 380px;
+      opacity: 0.26;
+      filter: blur(0.2px);
+    }
+
+    .vignette {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(1200px 700px at 50% 40%, transparent 40%, rgba(0, 0, 0, 0.7));
+      opacity: 0.75;
+    }
+
+    /* ===== header ===== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px) saturate(170%);
+      background: rgba(4, 5, 10, 0.55);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 220px;
+    }
+
+    .brand img {
+      height: 30px;
+      width: auto;
+      display: block;
+      filter: drop-shadow(0 0 16px rgba(0, 0, 0, 0.55));
+    }
+
+    nav ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    nav a {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.70);
+      transition: color 220ms ease;
+    }
+
+    nav a:hover {
+      color: rgba(255, 255, 255, 0.96);
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(253, 185, 61, 0.35);
+      background: linear-gradient(135deg, rgba(253, 185, 61, 0.16), rgba(0, 212, 255, 0.08));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.92);
+      transition: transform 220ms var(--spring), border-color 220ms ease;
+      white-space: nowrap;
+    }
+
+    .cta:hover {
+      transform: translateY(-1px);
+      border-color: rgba(253, 185, 61, 0.55);
+    }
+
+    /* ===== hero ===== */
+    .hero {
+      position: relative;
+      z-index: 1;
+      padding: 74px 0 46px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      align-items: center;
+      gap: 28px;
+      min-height: 560px;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fff, var(--gold));
+      box-shadow: 0 0 12px rgba(253, 185, 61, 0.55);
+    }
+
+    h1 {
+      margin: 14px 0 12px;
+      font-family: Orbitron, Inter, system-ui, sans-serif;
+      font-size: clamp(38px, 5.4vw, 62px);
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 54ch;
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    .accent {
+      background: linear-gradient(135deg, var(--gold2), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      background: rgba(255, 255, 255, 0.06);
+      font-size: 13px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.88);
+      transition: transform 220ms var(--spring), background 220ms ease, border-color 220ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, rgba(253, 185, 61, 0.22), rgba(0, 212, 255, 0.10));
+      border-color: rgba(253, 185, 61, 0.30);
+    }
+
+    .btn.primary:hover {
+      border-color: rgba(253, 185, 61, 0.52);
+    }
+
+    .hero-subline {
+      margin-top: 12px;
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      color: rgba(255, 255, 255, 0.56);
+      font-size: 12.5px;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-subline span {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-subline i {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(253, 185, 61, 0.85);
+      box-shadow: 0 0 12px rgba(253, 185, 61, 0.32);
+      display: inline-block;
+    }
+
+    /* ===== infinity centerpiece ===== */
+    .infinity-wrap {
+      position: relative;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+    }
+
+    .infinity-glow {
+      position: absolute;
+      inset: -80px;
+      background: radial-gradient(circle at 50% 50%, rgba(253, 185, 61, 0.25), transparent 58%),
+        radial-gradient(circle at 35% 45%, rgba(0, 212, 255, 0.18), transparent 55%);
+      filter: blur(18px);
+      opacity: 0.9;
+      z-index: 0;
+    }
+
+    .infinity {
+      width: min(520px, 86vw);
+      height: auto;
+      z-index: 1;
+      filter: drop-shadow(0 22px 70px rgba(0, 0, 0, 0.75));
+    }
+
+    .infinity path.base {
+      stroke: rgba(255, 255, 255, 0.18);
+      stroke-width: 12;
+      fill: none;
+    }
+
+    .infinity path.energy {
+      stroke: url(#infGrad);
+      stroke-width: 8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-dasharray: 14 18;
+      animation: flow 3.2s linear infinite;
+      filter: drop-shadow(0 0 16px rgba(253, 185, 61, 0.28));
+    }
+
+    .infinity circle.core {
+      fill: rgba(253, 185, 61, 0.92);
+      opacity: 0.55;
+      filter: blur(0.2px);
+    }
+
+    @keyframes flow {
+      to {
+        stroke-dashoffset: -128;
+      }
+    }
+
+    /* ===== sections ===== */
+    section.block {
+      position: relative;
+      z-index: 1;
+      padding: 34px 0;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 22px;
+      margin-bottom: 16px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-family: Orbitron, Inter, system-ui, sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.02em;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.60);
+      font-size: 13.5px;
+      max-width: 52ch;
+      line-height: 1.7;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      grid-column: span 4;
+      padding: 18px 16px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
+      transition: transform 240ms var(--spring), border-color 240ms ease;
+      min-height: 150px;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(253, 185, 61, 0.22);
+    }
+
+    .card .label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.56);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .card h3 {
+      margin: 10px 0 8px;
+      font-size: 16px;
+      letter-spacing: -0.01em;
+    }
+
+    .card p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.62);
+      line-height: 1.7;
+      font-size: 13px;
+    }
+
+    .wide {
+      grid-column: span 6;
+    }
+
+    /* ===== footer ===== */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 28px 0 36px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.50);
+      font-size: 12.5px;
+    }
+
+    .foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .foot img {
+      height: 22px;
+      width: auto;
+      display: block;
+      opacity: 0.85;
+    }
+
+    .foot a {
+      color: rgba(255, 255, 255, 0.68);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .foot a:hover {
+      color: rgba(255, 255, 255, 0.88);
+      border-bottom-color: rgba(253, 185, 61, 0.48);
+    }
+
+    /* ===== responsive ===== */
+    @media (max-width: 900px) {
+      nav ul {
+        display: none;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+        min-height: unset;
+        padding-top: 18px;
+      }
+
+      .infinity-wrap {
+        margin-top: 18px;
+      }
+
+      .card {
+        grid-column: span 12;
+      }
+
+      .wide {
+        grid-column: span 12;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="space"></div>
+  <div class="vignette"></div>
+
+  <header>
+    <div class="container">
+      <div class="topbar">
+        <a class="brand" href="#home" aria-label="Zerorigins">
+          <img src="https://zeroorigins.in/wp-content/uploads/2026/05/ZerorOrigins-loho-1.png" alt="Zerorigins"
+            onerror="this.onerror=null;this.src='./zeroOrigins logo.png';" />
+        </a>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="#solutions">Solutions</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#lab">Lab</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+        <a class="cta" href="mailto:hello@zeroorigins.in">Start a build →</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="home" class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="kicker"><span class="dot"></span> AI Systems • Automation • Intelligent Platforms</div>
+          <h1>
+            Build <span class="accent">systems</span><br />
+            that think, learn, and scale.
+          </h1>
+          <p class="lead">
+            Zerorigins is an AI Systems & Automation Lab: we ship agentic workflows, AI-native products, and intelligent
+            platforms that remove busywork and unlock new operating leverage.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#contact">Talk to the Lab →</a>
+            <a class="btn" href="#solutions">Explore capabilities</a>
+          </div>
+          <div class="hero-subline" aria-label="Capabilities">
+            <span><i></i> Agentic automation</span>
+            <span><i></i> Workflow orchestration</span>
+            <span><i></i> AI product engineering</span>
+          </div>
+        </div>
+
+        <div class="infinity-wrap" aria-hidden="true">
+          <div class="infinity-glow"></div>
+          <svg class="infinity" viewBox="0 0 820 420" xmlns="http://www.w3.org/2000/svg" role="img"
+            aria-label="Infinity mark">
+            <defs>
+              <linearGradient id="infGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.85" />
+                <stop offset="55%" stop-color="#fdb93d" stop-opacity="0.95" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0.55" />
+              </linearGradient>
+              <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="6" result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <path class="base"
+              d="M 225 210 C 265 120 350 120 410 210 C 470 300 555 300 595 210 C 635 120 720 120 780 210 C 840 300 750 360 660 330 C 600 310 520 260 410 210 C 300 160 220 110 160 90 C 70 60 -20 120 40 210 C 100 300 185 300 225 210 Z" />
+            <path class="energy"
+              d="M 225 210 C 265 120 350 120 410 210 C 470 300 555 300 595 210 C 635 120 720 120 780 210 C 840 300 750 360 660 330 C 600 310 520 260 410 210 C 300 160 220 110 160 90 C 70 60 -20 120 40 210 C 100 300 185 300 225 210 Z"
+              filter="url(#softGlow)" />
+            <circle class="core" cx="410" cy="210" r="24" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section id="solutions" class="block">
+    <div class="container">
+      <div class="section-head">
+        <h2>Solutions</h2>
+        <p>Pick a problem space. We design the system, wire the automation, ship the interface, and measure outcomes.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div class="label">Automation</div>
+          <h3>Agentic workflows</h3>
+          <p>Assistants that triage, route, draft, and execute across tools with guardrails and human-in-the-loop control.</p>
+        </article>
+        <article class="card">
+          <div class="label">Platforms</div>
+          <h3>AI-native products</h3>
+          <p>From prototype to production: retrieval, evals, monitoring, and reliable UX for real users.</p>
+        </article>
+        <article class="card">
+          <div class="label">Systems</div>
+          <h3>Operations intelligence</h3>
+          <p>Dashboards, alerts, and decision loops that translate messy data into clear action.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="block">
+    <div class="container">
+      <div class="section-head">
+        <h2>Services</h2>
+        <p>Fast, focused engagements that turn a vague idea into a working system you can operate.</p>
+      </div>
+      <div class="grid">
+        <article class="card wide">
+          <div class="label">Build Sprint</div>
+          <h3>Design → Automate → Ship</h3>
+          <p>We map your workflow, define inputs/outputs, build the automation, and deliver an operator-friendly UI.</p>
+        </article>
+        <article class="card wide">
+          <div class="label">System Audit</div>
+          <h3>Stability, speed, correctness</h3>
+          <p>We review your current stack and recommend fixes: failure modes, handoffs, data quality, and observability.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="lab" class="block">
+    <div class="container">
+      <div class="section-head">
+        <h2>Lab</h2>
+        <p>Where we experiment: agent patterns, automation templates, and repeatable building blocks.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div class="label">Template</div>
+          <h3>Inbox-to-action</h3>
+          <p>Turn inbound messages into structured tasks, replies, and CRM updates with review gates.</p>
+        </article>
+        <article class="card">
+          <div class="label">Template</div>
+          <h3>Docs-to-decisions</h3>
+          <p>Ingest PDFs and notes, extract signals, then generate decisions with citations and traceability.</p>
+        </article>
+        <article class="card">
+          <div class="label">Template</div>
+          <h3>Ops heartbeat</h3>
+          <p>Daily metrics, anomalies, and a short action list — so you always know what matters today.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="block">
+    <div class="container">
+      <div class="section-head">
+        <h2>Contact</h2>
+        <p>Tell us what you want to automate. We’ll reply with a clear plan and build options.</p>
+      </div>
+      <div class="grid">
+        <article class="card wide">
+          <div class="label">Email</div>
+          <h3>hello@zeroorigins.in</h3>
+          <p>Share your workflow, tools, and what “done” looks like. We’ll propose the shortest path to impact.</p>
+          <div style="margin-top:12px">
+            <a class="btn primary" href="mailto:hello@zeroorigins.in?subject=Zerorigins%20-%20Build%20request">Email the lab →</a>
+          </div>
+        </article>
+        <article class="card wide">
+          <div class="label">Quick start</div>
+          <h3>What to send</h3>
+          <p>1) Your current process 2) Inputs/outputs 3) Tools you use 4) Volume per week 5) Any constraints or compliance needs.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="foot">
+        <img src="https://zeroorigins.in/wp-content/uploads/2026/05/ZerorOrigins-loho-1.png" alt="Zerorigins"
+          onerror="this.onerror=null;this.src='./zeroOrigins logo.png';" />
+        <div>© 2026 Zerorigins. AI Systems & Automation Lab.</div>
+        <div><a href="mailto:hello@zeroorigins.in">hello@zeroorigins.in</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

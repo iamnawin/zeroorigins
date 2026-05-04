@@ -1,0 +1,156 @@
+{
+  "name": "ZeroOrigins — Daily Report Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            { "field": "cronExpression", "expression": "0 8 * * 1-5" }
+          ]
+        }
+      },
+      "id": "drg-001",
+      "name": "8AM Weekdays",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "drg-002",
+      "name": "Read All Leads",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [420, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const allLeads = $input.all();\nconst now = new Date();\nconst yesterday = new Date(now.getTime() - 86400000);\nconst last7days = new Date(now.getTime() - 7 * 86400000);\n\n// Filter leads from last 24 hours\nconst todayLeads = allLeads.filter(item => {\n  const ts = new Date(item.json.Timestamp);\n  return ts >= yesterday;\n});\n\n// All leads for 7-day trend\nconst weekLeads = allLeads.filter(item => {\n  const ts = new Date(item.json.Timestamp);\n  return ts >= last7days;\n});\n\n// Score breakdown today\nconst hot  = todayLeads.filter(l => parseInt(l.json.Score) >= 8).length;\nconst warm = todayLeads.filter(l => parseInt(l.json.Score) >= 5 && parseInt(l.json.Score) < 8).length;\nconst cold = todayLeads.filter(l => parseInt(l.json.Score) < 5).length;\n\n// Source breakdown today\nconst sourceCounts = {};\ntodayLeads.forEach(l => {\n  const src = l.json.Source || 'Unknown';\n  sourceCounts[src] = (sourceCounts[src] || 0) + 1;\n});\nconst sourceBreakdown = Object.entries(sourceCounts)\n  .sort((a,b) => b[1]-a[1])\n  .map(([s,c]) => `${s}: ${c}`).join(', ');\n\n// Follow-up pending (all time, not sent)\nconst followupPending = allLeads.filter(l => l.json['Followup Sent'] === 'FALSE').length;\n\n// 7-day average\nconst dailyAvg = (weekLeads.length / 7).toFixed(1);\n\n// Top industries today\nconst industryCounts = {};\ntodayLeads.forEach(l => {\n  const ind = l.json.Industry || 'Unknown';\n  industryCounts[ind] = (industryCounts[ind] || 0) + 1;\n});\nconst topIndustries = Object.entries(industryCounts)\n  .sort((a,b) => b[1]-a[1]).slice(0,3)\n  .map(([i,c]) => `${i} (${c})`).join(', ');\n\n// Average score today\nconst avgScore = todayLeads.length > 0\n  ? (todayLeads.reduce((sum, l) => sum + (parseInt(l.json.Score) || 0), 0) / todayLeads.length).toFixed(1)\n  : 0;\n\nconst todaySummary = todayLeads.map(l =>\n  `• ${l.json.Name} (${l.json.Business}) — Score: ${l.json.Score}/10 — ${l.json.Intent} — ${l.json.Message?.substring(0, 80)}...`\n).join('\\n');\n\nreturn [{\n  json: {\n    totalToday: todayLeads.length,\n    hot, warm, cold,\n    avgScore,\n    sourceBreakdown: sourceBreakdown || 'No leads today',\n    topIndustries: topIndustries || 'N/A',\n    followupPending,\n    weekTotal: weekLeads.length,\n    dailyAvg,\n    totalAllTime: allLeads.length,\n    todaySummary: todaySummary || 'No leads in the last 24 hours.',\n    reportDate: now.toDateString()\n  }\n}];"
+      },
+      "id": "drg-003",
+      "name": "Calculate Stats",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [640, 300]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "complete",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a business analyst assistant for ZeroOrigins AI, an automation agency. Based on the daily lead report data provided, write a concise 3-paragraph business narrative:\n1. What happened yesterday (key numbers in plain language)\n2. Patterns or signals worth noting (industry trends, score quality, source performance)\n3. Recommended focus for today (specific actions, who to follow up with priority-wise)\n\nTone: direct, actionable, like a sharp morning briefing from a COO. No fluff. Maximum 200 words total."
+            },
+            {
+              "role": "user",
+              "content": "=Daily report for {{ $json.reportDate }}:\n\nLeads today: {{ $json.totalToday }}\nHot (8+): {{ $json.hot }} | Warm (5-7): {{ $json.warm }} | Cold (1-4): {{ $json.cold }}\nAverage score: {{ $json.avgScore }}/10\nSources: {{ $json.sourceBreakdown }}\nTop industries: {{ $json.topIndustries }}\nFollow-ups still pending: {{ $json.followupPending }}\n7-day total: {{ $json.weekTotal }} (daily avg: {{ $json.dailyAvg }})\nAll-time total: {{ $json.totalAllTime }}\n\nLead details:\n{{ $json.todaySummary }}"
+            }
+          ]
+        },
+        "simplifyOutput": true,
+        "options": { "temperature": 0.4, "maxTokens": 350 }
+      },
+      "id": "drg-004",
+      "name": "AI Generate Narrative",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.7,
+      "position": [860, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "hello@zeroorigins.in",
+        "subject": "={{ '📊 Daily Lead Report — ' + $('Calculate Stats').item.json.reportDate + ' (' + $('Calculate Stats').item.json.totalToday + ' leads)' }}",
+        "message": "=<div style=\"font-family:sans-serif;max-width:620px;margin:0 auto\">\n  <h2 style=\"color:#111;border-bottom:2px solid #f0f0f0;padding-bottom:12px\">ZeroOrigins — Daily Lead Report<br><span style=\"font-size:14px;color:#666;font-weight:400\">{{ $('Calculate Stats').item.json.reportDate }}</span></h2>\n\n  <div style=\"display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0\">\n    <div style=\"background:#111;color:#fff;border-radius:8px;padding:16px;text-align:center\">\n      <div style=\"font-size:28px;font-weight:700\">{{ $('Calculate Stats').item.json.totalToday }}</div>\n      <div style=\"font-size:12px;opacity:0.7;margin-top:4px\">Total Leads</div>\n    </div>\n    <div style=\"background:#c0392b;color:#fff;border-radius:8px;padding:16px;text-align:center\">\n      <div style=\"font-size:28px;font-weight:700\">{{ $('Calculate Stats').item.json.hot }}</div>\n      <div style=\"font-size:12px;opacity:0.9;margin-top:4px\">🔥 HOT</div>\n    </div>\n    <div style=\"background:#e67e22;color:#fff;border-radius:8px;padding:16px;text-align:center\">\n      <div style=\"font-size:28px;font-weight:700\">{{ $('Calculate Stats').item.json.warm }}</div>\n      <div style=\"font-size:12px;opacity:0.9;margin-top:4px\">🟡 WARM</div>\n    </div>\n    <div style=\"background:#7f8c8d;color:#fff;border-radius:8px;padding:16px;text-align:center\">\n      <div style=\"font-size:28px;font-weight:700\">{{ $('Calculate Stats').item.json.cold }}</div>\n      <div style=\"font-size:12px;opacity:0.9;margin-top:4px\">❄️ COLD</div>\n    </div>\n  </div>\n\n  <table style=\"width:100%;border-collapse:collapse;margin:20px 0;font-size:14px\">\n    <tr style=\"background:#f5f5f5\"><td style=\"padding:8px 12px;font-weight:600\">Avg Score Today</td><td style=\"padding:8px 12px\">{{ $('Calculate Stats').item.json.avgScore }}/10</td></tr>\n    <tr><td style=\"padding:8px 12px;font-weight:600\">Follow-ups Pending</td><td style=\"padding:8px 12px\">{{ $('Calculate Stats').item.json.followupPending }}</td></tr>\n    <tr style=\"background:#f5f5f5\"><td style=\"padding:8px 12px;font-weight:600\">Top Sources</td><td style=\"padding:8px 12px\">{{ $('Calculate Stats').item.json.sourceBreakdown }}</td></tr>\n    <tr><td style=\"padding:8px 12px;font-weight:600\">Top Industries</td><td style=\"padding:8px 12px\">{{ $('Calculate Stats').item.json.topIndustries }}</td></tr>\n    <tr style=\"background:#f5f5f5\"><td style=\"padding:8px 12px;font-weight:600\">7-Day Total</td><td style=\"padding:8px 12px\">{{ $('Calculate Stats').item.json.weekTotal }} (avg {{ $('Calculate Stats').item.json.dailyAvg }}/day)</td></tr>\n    <tr><td style=\"padding:8px 12px;font-weight:600\">All-Time Total</td><td style=\"padding:8px 12px\">{{ $('Calculate Stats').item.json.totalAllTime }}</td></tr>\n  </table>\n\n  <h3 style=\"color:#111\">AI Analysis</h3>\n  <div style=\"background:#f9f9f9;border-left:4px solid #111;padding:16px;font-size:14px;line-height:1.6\">{{ $json.content }}</div>\n\n  <h3 style=\"color:#111\">Leads From Yesterday</h3>\n  <pre style=\"background:#f5f5f5;padding:16px;font-size:12px;border-radius:6px;white-space:pre-wrap;line-height:1.5\">{{ $('Calculate Stats').item.json.todaySummary }}</pre>\n\n  <hr style=\"border:none;border-top:1px solid #eee;margin:24px 0\">\n  <p style=\"font-size:12px;color:#999\">ZeroOrigins AI — Automated Daily Report | hello@zeroorigins.in</p>\n</div>",
+        "options": { "appendAttribution": false, "senderName": "ZeroOrigins Reports" }
+      },
+      "id": "drg-005",
+      "name": "Send Daily Report Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1080, 220],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_GMAIL_CREDENTIAL_ID",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": { "__rl": true, "value": "YOUR_SLACK_CHANNEL_ID", "mode": "id" },
+        "text": "=:bar_chart: *Daily Report — {{ $('Calculate Stats').item.json.reportDate }}*\n\n:fire: Hot: *{{ $('Calculate Stats').item.json.hot }}*  |  :large_yellow_circle: Warm: *{{ $('Calculate Stats').item.json.warm }}*  |  :snowflake: Cold: *{{ $('Calculate Stats').item.json.cold }}*\nTotal today: *{{ $('Calculate Stats').item.json.totalToday }}*  |  Avg score: *{{ $('Calculate Stats').item.json.avgScore }}/10*\nPending follow-ups: *{{ $('Calculate Stats').item.json.followupPending }}*\n\n:bulb: _{{ $json.content.split('\\n')[0] }}_\n\n:email: Full report sent to hello@zeroorigins.in",
+        "otherOptions": { "mrkdwn": true }
+      },
+      "id": "drg-006",
+      "name": "Slack Daily Summary",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [1080, 420],
+      "credentials": {
+        "slackApi": {
+          "id": "YOUR_SLACK_CREDENTIAL_ID",
+          "name": "Slack account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "8AM Weekdays": {
+      "main": [[{ "node": "Read All Leads", "type": "main", "index": 0 }]]
+    },
+    "Read All Leads": {
+      "main": [[{ "node": "Calculate Stats", "type": "main", "index": 0 }]]
+    },
+    "Calculate Stats": {
+      "main": [[{ "node": "AI Generate Narrative", "type": "main", "index": 0 }]]
+    },
+    "AI Generate Narrative": {
+      "main": [
+        [
+          { "node": "Send Daily Report Email", "type": "main", "index": 0 },
+          { "node": "Slack Daily Summary",     "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1", "saveManualExecutions": true },
+  "versionId": "zo-drg-v1-2026",
+  "meta": { "templateCredsSetupCompleted": false },
+  "id": "zeroorigins-daily-report-v1",
+  "tags": [{ "name": "ZeroOrigins" }, { "name": "Reporting" }, { "name": "AI" }]
+}

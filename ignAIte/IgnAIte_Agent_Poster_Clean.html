@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IgnAIte — AI Agent</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:#0A0A0A;
+  display:flex; align-items:center; justify-content:center;
+  min-height:100vh; font-family:'DM Sans',sans-serif;
+}
+
+.poster {
+  width:420px; height:748px;
+  background:#060608;
+  position:relative; overflow:hidden;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+}
+
+/* GRID */
+.poster::before {
+  content:''; position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(139,92,246,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,92,246,0.05) 1px, transparent 1px);
+  background-size:30px 30px; z-index:0;
+}
+
+/* BIG GLOW CENTER */
+.glow {
+  position:absolute;
+  width:380px; height:380px;
+  background:radial-gradient(ellipse, rgba(139,92,246,0.22) 0%, transparent 65%);
+  top:50%; left:50%; transform:translate(-50%,-60%);
+  z-index:0; pointer-events:none;
+}
+
+/* ORBIT RINGS */
+.rings {
+  position:absolute;
+  top:50%; left:50%; transform:translate(-50%,-62%);
+  z-index:0; pointer-events:none;
+}
+.ring {
+  position:absolute; border-radius:50%;
+  border:1px solid rgba(139,92,246,0.18);
+  top:50%; left:50%; transform:translate(-50%,-50%);
+}
+
+/* CONTENT */
+.content {
+  position:relative; z-index:2;
+  display:flex; flex-direction:column;
+  align-items:center; text-align:center;
+  padding:0 36px;
+  gap:0;
+  margin-top:-60px;
+}
+
+/* TOP BADGE */
+.badge {
+  display:inline-flex; align-items:center; gap:7px;
+  border:1px solid rgba(139,92,246,0.3);
+  border-radius:100px; padding:6px 16px;
+  font-size:10px; font-weight:700; color:#A78BFA;
+  letter-spacing:0.12em; text-transform:uppercase;
+  margin-bottom:32px;
+}
+.dot {
+  width:6px; height:6px; border-radius:50%;
+  background:#8B5CF6; box-shadow:0 0 8px #8B5CF6;
+  animation:blink 1.5s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+/* HEADLINE */
+.hl {
+  font-weight:900;
+  line-height:0.95;
+  letter-spacing:-0.04em;
+  margin-bottom:24px;
+}
+.hl-top { font-size:38px; color:rgba(255,255,255,0.5); display:block; }
+.hl-mid { font-size:82px; color:#fff; display:block; }
+.hl-bot { font-size:64px; color:#8B5CF6; display:block; }
+
+/* DECO LINES */
+.deco {
+  display:flex; align-items:center; gap:12px;
+  width:100%; margin-bottom:28px;
+}
+.deco-l { flex:1; height:1px; background:linear-gradient(90deg,transparent,#2A2A2A); }
+.deco-l.r { background:linear-gradient(90deg,#2A2A2A,transparent); }
+.deco-d {
+  width:7px; height:7px; background:#8B5CF6;
+  transform:rotate(45deg);
+  box-shadow:0 0 12px rgba(139,92,246,0.7);
+  flex-shrink:0;
+}
+
+/* TAGLINE */
+.tagline {
+  font-size:15px; font-weight:400;
+  color:rgba(255,255,255,0.35);
+  letter-spacing:0.01em;
+  margin-bottom:36px;
+  line-height:1.5;
+}
+.tagline strong { color:rgba(255,255,255,0.75); font-weight:700; }
+
+/* CTA */
+.cta {
+  background:#8B5CF6; color:#fff;
+  font-weight:800; font-size:16px;
+  padding:15px 52px; border-radius:8px;
+  border:none; cursor:pointer;
+  box-shadow:0 8px 32px rgba(139,92,246,0.45);
+  text-decoration:none; display:inline-block;
+  letter-spacing:0.01em;
+  position:relative; overflow:hidden;
+  margin-bottom:14px;
+}
+.cta::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.12),transparent 50%);
+}
+
+/* FREE STAMP */
+.stamp {
+  position:absolute; top:24px; right:22px; z-index:10;
+  width:70px; height:70px;
+  border:2px solid rgba(255,255,255,0.35);
+  border-radius:50%;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  transform:rotate(14deg);
+}
+.st { font-size:19px; font-weight:900; color:#fff; line-height:1; }
+.st2 { font-size:7.5px; font-weight:700; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:0.08em; }
+
+/* META */
+.meta {
+  display:flex; align-items:center; gap:14px;
+  font-size:11px; color:rgba(255,255,255,0.25);
+  font-weight:600; letter-spacing:0.06em; text-transform:uppercase;
+}
+.msep { width:1px; height:12px; background:rgba(255,255,255,0.1); }
+
+/* BOTTOM STRIP */
+.strip {
+  position:absolute; bottom:0; left:0; right:0;
+  background:#8B5CF6; padding:13px 24px;
+  display:flex; align-items:center; justify-content:space-between;
+  z-index:10;
+}
+.st-name { font-weight:800; font-size:14px; color:#fff; }
+.st-url  { font-size:10px; color:rgba(255,255,255,0.7); margin-top:1px; letter-spacing:0.04em; }
+.st-arr  {
+  width:32px; height:32px; border-radius:50%;
+  background:rgba(255,255,255,0.2);
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px; color:#fff;
+}
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <div class="glow"></div>
+
+  <!-- RINGS -->
+  <div class="rings">
+    <div class="ring" style="width:320px;height:320px"></div>
+    <div class="ring" style="width:240px;height:240px"></div>
+    <div class="ring" style="width:164px;height:164px"></div>
+    <div class="ring" style="width:100px;height:100px"></div>
+  </div>
+
+  <!-- FREE STAMP -->
+  <div class="stamp">
+    <div class="st">FREE</div>
+    <div class="st2">Event</div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <div class="badge">
+      <span class="dot"></span>
+      1 Day Live · IgnAIte
+    </div>
+
+    <div class="hl">
+      <span class="hl-top">Build an</span>
+      <span class="hl-mid">AI</span>
+      <span class="hl-bot">AGENT</span>
+    </div>
+
+    <div class="deco">
+      <div class="deco-l"></div>
+      <div class="deco-d"></div>
+      <div class="deco-l r"></div>
+    </div>
+
+    <div class="tagline">
+      <strong>Zero to deployed.</strong><br>
+      One day. Hands-on. Real.
+    </div>
+
+    <a href="https://ignaite.in" class="cta">Register Free →</a>
+
+    <div class="meta">
+      <span>1 Day</span>
+      <span class="msep"></span>
+      <span>Live</span>
+      <span class="msep"></span>
+      <span>Hands-On</span>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM -->
+  <div class="strip">
+    <div>
+      <div class="st-name">IgnAIte AI Agent Workshop</div>
+      <div class="st-url">ignaite.in · Register Now · Free</div>
+    </div>
+    <div class="st-arr">→</div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,306 @@
+{
+  "name": "ZeroOrigins — Client Onboarding Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "events": ["checkout.session.completed"]
+      },
+      "id": "cop-001",
+      "name": "Stripe Payment Received",
+      "type": "n8n-nodes-base.stripeTrigger",
+      "typeVersion": 1,
+      "position": [200, 300],
+      "credentials": {
+        "stripeApi": {
+          "id": "YOUR_STRIPE_CREDENTIAL_ID",
+          "name": "Stripe account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.stripe.com/v1/customers/{{ $json.data.object.customer }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "cop-002",
+      "name": "Get Stripe Customer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [420, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "YOUR_STRIPE_API_KEY_CREDENTIAL",
+          "name": "Stripe API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "c1",  "name": "customerName",     "value": "={{ $json.name || $json.email.split('@')[0] }}", "type": "string" },
+            { "id": "c2",  "name": "customerEmail",    "value": "={{ $json.email }}", "type": "string" },
+            { "id": "c3",  "name": "customerId",       "value": "={{ $json.id }}", "type": "string" },
+            { "id": "c4",  "name": "phone",            "value": "={{ $json.phone || '' }}", "type": "string" },
+            { "id": "c5",  "name": "productName",      "value": "={{ $('Stripe Payment Received').item.json.data.object.metadata?.product_name || 'ZeroOrigins Service' }}", "type": "string" },
+            { "id": "c6",  "name": "amountPaid",       "value": "={{ ($('Stripe Payment Received').item.json.data.object.amount_total / 100).toFixed(2) }}", "type": "string" },
+            { "id": "c7",  "name": "currency",         "value": "={{ ($('Stripe Payment Received').item.json.data.object.currency || 'usd').toUpperCase() }}", "type": "string" },
+            { "id": "c8",  "name": "sessionId",        "value": "={{ $('Stripe Payment Received').item.json.data.object.id }}", "type": "string" },
+            { "id": "c9",  "name": "timestamp",        "value": "={{ new Date().toISOString() }}", "type": "string" },
+            { "id": "c10", "name": "clientCode",       "value": "={{ 'ZO-' + Date.now().toString(36).toUpperCase() }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cop-003",
+      "name": "Extract Client Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [640, 300]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "complete",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are an onboarding specialist at ZeroOrigins AI, an automation agency. Write a personalized onboarding package for a new client. Output a JSON object with these keys:\n1. \"welcome_message\" — warm, professional, 2 paragraphs. Acknowledge their specific purchase, set expectations for the next 48 hours.\n2. \"what_happens_next\" — bulleted list (as a string, one item per line with •) of 5 concrete steps that will happen in the first week.\n3. \"what_we_need\" — bulleted list of 3-4 things to collect from the client (access, info, preferences).\n4. \"success_criteria\" — one sentence: what success looks like at the end of this engagement.\n\nOutput ONLY valid JSON, no extra text."
+            },
+            {
+              "role": "user",
+              "content": "=Create onboarding content for:\n\nClient name: {{ $json.customerName }}\nEmail: {{ $json.customerEmail }}\nProduct purchased: {{ $json.productName }}\nAmount paid: {{ $json.currency }} {{ $json.amountPaid }}\nClient code: {{ $json.clientCode }}"
+            }
+          ]
+        },
+        "simplifyOutput": true,
+        "options": { "temperature": 0.5, "maxTokens": 600 }
+      },
+      "id": "cop-004",
+      "name": "AI Generate Onboarding Kit",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.7,
+      "position": [860, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const client = $('Extract Client Data').item.json;\nlet onboarding;\ntry {\n  onboarding = JSON.parse($input.item.json.content);\n} catch (e) {\n  onboarding = {\n    welcome_message: `Welcome to ZeroOrigins, ${client.customerName}. We're excited to work with you on ${client.productName}. Our team will be in touch within 24 hours to kick things off.`,\n    what_happens_next: '• We review your requirements\\n• Setup call scheduled within 24h\\n• Workflow build begins\\n• Review and testing\\n• Handoff and documentation',\n    what_we_need: '• Access to your existing tools\\n• Workflow goals and requirements\\n• Brand assets if needed',\n    success_criteria: 'Your automation is live, tested, and saving you measurable time every week.'\n  };\n}\n\nreturn [{\n  json: {\n    ...client,\n    welcomeMessage:     onboarding.welcome_message,\n    whatHappensNext:    onboarding.what_happens_next,\n    whatWeNeed:         onboarding.what_we_need,\n    successCriteria:    onboarding.success_criteria\n  }\n}];"
+      },
+      "id": "cop-005",
+      "name": "Parse Onboarding Content",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1080, 300]
+    },
+    {
+      "parameters": {
+        "resource": "page",
+        "operation": "create",
+        "pageId": {
+          "__rl": true,
+          "value": "YOUR_NOTION_CLIENTS_PAGE_ID",
+          "mode": "id"
+        },
+        "title": "={{ $json.clientCode }} — ' + $json.customerName + ' | ' + $json.productName }}",
+        "blockUi": {
+          "blockValues": [
+            { "type": "heading_2", "textContent": "Client Details" },
+            { "type": "paragraph", "textContent": "={{ 'Name: ' + $json.customerName + '\\nEmail: ' + $json.customerEmail + '\\nPhone: ' + ($json.phone || 'N/A') + '\\nClient Code: ' + $json.clientCode + '\\nAmount Paid: ' + $json.currency + ' ' + $json.amountPaid + '\\nStripe Customer: ' + $json.customerId + '\\nSession ID: ' + $json.sessionId }}" },
+            { "type": "heading_2", "textContent": "Product" },
+            { "type": "paragraph", "textContent": "={{ $json.productName }}" },
+            { "type": "heading_2", "textContent": "Welcome Message" },
+            { "type": "paragraph", "textContent": "={{ $json.welcomeMessage }}" },
+            { "type": "heading_2", "textContent": "What Happens Next" },
+            { "type": "paragraph", "textContent": "={{ $json.whatHappensNext }}" },
+            { "type": "heading_2", "textContent": "What We Need From Client" },
+            { "type": "paragraph", "textContent": "={{ $json.whatWeNeed }}" },
+            { "type": "heading_2", "textContent": "Success Criteria" },
+            { "type": "paragraph", "textContent": "={{ $json.successCriteria }}" },
+            { "type": "heading_2", "textContent": "Notes & Communication Log" },
+            { "type": "paragraph", "textContent": "(Add call notes, decisions, and updates here)" }
+          ]
+        }
+      },
+      "id": "cop-006",
+      "name": "Create Notion Client Page",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [1300, 200],
+      "credentials": {
+        "notionApi": {
+          "id": "YOUR_NOTION_CREDENTIAL_ID",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": { "__rl": true, "value": "YOUR_SLACK_CHANNEL_ID", "mode": "id" },
+        "text": "=:moneybag: *NEW CLIENT — {{ $json.productName }}*\n\n*Client:* {{ $json.customerName }}\n*Email:* {{ $json.customerEmail }}\n*Code:* `{{ $json.clientCode }}`\n*Paid:* {{ $json.currency }} {{ $json.amountPaid }}\n*Stripe:* `{{ $json.customerId }}`\n\nWelcome email sent. Notion page created. Onboarding clock started. :rocket:",
+        "otherOptions": { "mrkdwn": true }
+      },
+      "id": "cop-007",
+      "name": "Slack New Client Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [1300, 380],
+      "credentials": {
+        "slackApi": {
+          "id": "YOUR_SLACK_CREDENTIAL_ID",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.customerEmail }}",
+        "subject": "=You're in — welcome to ZeroOrigins ({{ $json.clientCode }})",
+        "message": "=<div style=\"font-family:sans-serif;max-width:600px\">\n  <h2 style=\"color:#111\">Welcome to ZeroOrigins, {{ $json.customerName }}</h2>\n  \n  <p style=\"color:#444;line-height:1.7\">{{ $json.welcomeMessage.replace(/\\n/g, '</p><p style=\\\"color:#444;line-height:1.7\\\">') }}</p>\n\n  <div style=\"background:#f5f5f5;border-radius:8px;padding:20px;margin:20px 0\">\n    <h3 style=\"margin:0 0 12px;color:#111\">What happens next</h3>\n    <p style=\"font-size:14px;color:#444;line-height:1.9;white-space:pre-line\">{{ $json.whatHappensNext }}</p>\n  </div>\n\n  <div style=\"background:#fff3e0;border-radius:8px;padding:20px;margin:20px 0\">\n    <h3 style=\"margin:0 0 12px;color:#111\">What we'll need from you</h3>\n    <p style=\"font-size:14px;color:#444;line-height:1.9;white-space:pre-line\">{{ $json.whatWeNeed }}</p>\n  </div>\n\n  <p style=\"font-size:14px;color:#666;border-left:3px solid #111;padding-left:12px\"><strong>Goal:</strong> {{ $json.successCriteria }}</p>\n\n  <p>To schedule our kickoff call or ask any questions before then:</p>\n  <a href=\"https://calendly.com/zeroorigins\" style=\"background:#111;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block;font-family:sans-serif\">Book Kickoff Call</a>\n\n  <hr style=\"border:none;border-top:1px solid #eee;margin:32px 0\">\n  <p style=\"font-size:12px;color:#999\">Reference: {{ $json.clientCode }} | Purchased: {{ $json.productName }} | {{ $json.timestamp.split('T')[0] }}<br>hello@zeroorigins.in | www.zeroorigins.in</p>\n</div>",
+        "options": { "appendAttribution": false, "senderName": "Naveen at ZeroOrigins" }
+      },
+      "id": "cop-008",
+      "name": "Send Welcome Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1520, 300],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_GMAIL_CREDENTIAL_ID",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "unit": "hours",
+        "amount": 48
+      },
+      "id": "cop-009",
+      "name": "Wait 48 Hours",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1740, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.customerEmail }}",
+        "subject": "=Quick check-in — how's the start going? ({{ $json.clientCode }})",
+        "message": "=<p style=\"font-family:sans-serif\">Hi {{ $json.customerName }},</p>\n\n<p style=\"font-family:sans-serif;color:#444;line-height:1.7\">It's been 48 hours since you joined ZeroOrigins. I wanted to check in and make sure you have everything you need to get started.</p>\n\n<p style=\"font-family:sans-serif;color:#444;line-height:1.7\">If you haven't already, this is a good time to:</p>\n<ul style=\"font-family:sans-serif;color:#444;font-size:14px;line-height:2\">\n  <li>Book our kickoff call if you haven't yet</li>\n  <li>Reply to this email with access details or questions</li>\n  <li>Share any additional context about your setup</li>\n</ul>\n\n<p style=\"font-family:sans-serif\"><a href=\"https://calendly.com/zeroorigins\" style=\"background:#111;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block\">Book Kickoff Call</a></p>\n\n<p style=\"font-family:sans-serif;color:#444\">Reply to this email anytime — I read everything.<br><br>Naveen<br>ZeroOrigins AI<br>hello@zeroorigins.in</p>",
+        "options": { "appendAttribution": false, "senderName": "Naveen at ZeroOrigins" }
+      },
+      "id": "cop-010",
+      "name": "48h Check-In Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1960, 300],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_GMAIL_CREDENTIAL_ID",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "baseId": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "ZeroOrigins CRM"
+        },
+        "tableId": {
+          "__rl": true,
+          "value": "tblClients",
+          "mode": "list",
+          "cachedResultName": "Clients"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Client Code":   "={{ $json.clientCode }}",
+            "Name":          "={{ $json.customerName }}",
+            "Email":         "={{ $json.customerEmail }}",
+            "Phone":         "={{ $json.phone || '' }}",
+            "Product":       "={{ $json.productName }}",
+            "Amount Paid":   "={{ $json.amountPaid }}",
+            "Currency":      "={{ $json.currency }}",
+            "Stripe ID":     "={{ $json.customerId }}",
+            "Session ID":    "={{ $json.sessionId }}",
+            "Status":        "Onboarding",
+            "Joined At":     "={{ $json.timestamp }}",
+            "Success Criteria": "={{ $json.successCriteria }}"
+          },
+          "schema": [],
+          "matchingColumns": []
+        }
+      },
+      "id": "cop-011",
+      "name": "Airtable Log Client",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [2180, 300],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "YOUR_AIRTABLE_CREDENTIAL_ID",
+          "name": "Airtable account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Stripe Payment Received": {
+      "main": [[{ "node": "Get Stripe Customer", "type": "main", "index": 0 }]]
+    },
+    "Get Stripe Customer": {
+      "main": [[{ "node": "Extract Client Data", "type": "main", "index": 0 }]]
+    },
+    "Extract Client Data": {
+      "main": [[{ "node": "AI Generate Onboarding Kit", "type": "main", "index": 0 }]]
+    },
+    "AI Generate Onboarding Kit": {
+      "main": [[{ "node": "Parse Onboarding Content", "type": "main", "index": 0 }]]
+    },
+    "Parse Onboarding Content": {
+      "main": [
+        [
+          { "node": "Create Notion Client Page", "type": "main", "index": 0 },
+          { "node": "Slack New Client Alert",   "type": "main", "index": 0 },
+          { "node": "Send Welcome Email",        "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Send Welcome Email": {
+      "main": [[{ "node": "Wait 48 Hours", "type": "main", "index": 0 }]]
+    },
+    "Wait 48 Hours": {
+      "main": [[{ "node": "48h Check-In Email", "type": "main", "index": 0 }]]
+    },
+    "48h Check-In Email": {
+      "main": [[{ "node": "Airtable Log Client", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1", "saveManualExecutions": true },
+  "versionId": "zo-cop-v1-2026",
+  "meta": { "templateCredsSetupCompleted": false },
+  "id": "zeroorigins-client-onboarding-v1",
+  "tags": [{ "name": "ZeroOrigins" }, { "name": "Onboarding" }, { "name": "Stripe" }]
+}

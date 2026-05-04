@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(start \"C:\\\\Users\\\\Naveen\\\\.claude\\\\usage-data\\\\report.html\")",
+      "mcp__claude_ai_Notion__notion-search",
+      "mcp__claude_ai_Notion__notion-create-pages",
+      "mcp__claude_ai_Notion__notion-update-page",
+      "Bash(New-Item -ItemType Directory -Path \"D:\\\\Downloads\\\\zeroOrigins\\\\ZeroOrigins_Company_OS\\\\06_Digital_Products\" -Force)",
+      "Bash(Out-Null)",
+      "Bash(New-Item -ItemType Directory -Path \"D:\\\\Downloads\\\\zeroOrigins\\\\ZeroOrigins_Company_OS\\\\07_Marketing_and_Content\" -Force)",
+      "Bash(New-Item -ItemType Directory -Path \"D:\\\\Downloads\\\\zeroOrigins\\\\ZeroOrigins_Company_OS\\\\08_Security_and_Access\" -Force)",
+      "Bash(New-Item -ItemType Directory -Path \"D:\\\\Downloads\\\\zeroOrigins\\\\ZeroOrigins_Company_OS\\\\09_Templates\" -Force)",
+      "Bash(New-Item -ItemType Directory -Path \"D:\\\\Downloads\\\\zeroOrigins\\\\ZeroOrigins_Company_OS\\\\10_Trackers\" -Force)",
+      "Bash(New-Item -ItemType Directory -Path \"D:\\\\Downloads\\\\zeroOrigins\\\\ZeroOrigins_Company_OS\\\\11_Policies\" -Force)",
+      "Bash(Write-Output \"All folders created\")",
+      "PowerShell(New-Item *)"
+    ]
+  }
+}
