@@ -1,0 +1,106 @@
+================================================================================
+  START HERE — YOUR 5-STEP LAUNCH FLOW
+  ZeroOrigins Pitch & Strategy Pack
+================================================================================
+
+You've got the pack. Now let's get it working for you.
+
+Follow this flow in order. Each step builds on the last.
+Don't skip ahead — the sequence matters.
+
+--------------------------------------------------------------------------------
+
+  STEP 1 — UNDERSTAND YOUR OFFER CLEARLY
+  ────────────────────────────────────────────────────────────────────────────
+
+  Before you write a single proposal, you need clarity on what you're selling.
+
+  Open: Templates/one_page_offer_template.md
+
+  Fill it in. This forces you to define:
+    → Who you serve
+    → What outcome you deliver
+    → How you deliver it
+    → What it costs
+    → Why you and not someone else
+
+  Time required: 30–60 minutes
+  Output: A clear one-page offer you can reference in every conversation
+
+  ────────────────────────────────────────────────────────────────────────────
+
+  STEP 2 — RUN A DISCOVERY CALL (OR REVIEW A PAST CONVERSATION)
+  ────────────────────────────────────────────────────────────────────────────
+
+  Open: Templates/client_discovery_questions.md
+
+  Use these questions in your next client call, or work through them
+  retrospectively if you already have a lead.
+
+  The goal: understand the client's situation well enough to write a
+  proposal that solves a real problem — not just lists your services.
+
+  Time required: 45–90 minute call, or 20 minutes reviewing existing info
+  Output: Clear notes you'll use to write your proposal
+
+  ────────────────────────────────────────────────────────────────────────────
+
+  STEP 3 — WRITE YOUR PROPOSAL
+  ────────────────────────────────────────────────────────────────────────────
+
+  Open: Templates/proposal_template.md
+
+  Before writing, also read:
+    → Guide/example_completed_proposal.md  (see what a finished one looks like)
+    → Resources/proposal_copy_examples.md  (strong vs weak writing examples)
+
+  Customize every section for your specific client.
+  Do not send a generic proposal. Personalization wins deals.
+
+  Time required: 1–3 hours per proposal
+  Output: A professional proposal ready to send
+
+  ────────────────────────────────────────────────────────────────────────────
+
+  STEP 4 — ATTACH YOUR SCOPE DOCUMENT AND PRICING
+  ────────────────────────────────────────────────────────────────────────────
+
+  Open: Templates/scope_document_template.md
+  Open: Templates/service_pricing_structure.md
+
+  The scope document protects you legally and sets expectations.
+  The pricing structure helps you think through your numbers properly.
+
+  Send these alongside your proposal or as a second follow-up document.
+
+  Time required: 30–60 minutes
+  Output: Scope doc + clear pricing document
+
+  ────────────────────────────────────────────────────────────────────────────
+
+  STEP 5 — CLOSE THE DEAL AND KICK OFF PROPERLY
+  ────────────────────────────────────────────────────────────────────────────
+
+  Once the client says yes:
+
+  Open: Templates/project_kickoff_template.md
+  Open: Guide/onboarding_checklist.md
+
+  Use these to start every project professionally.
+  This is what separates one-off gigs from long-term client relationships.
+
+  Time required: 1 hour to prepare
+  Output: Smooth project start, no confusion, happy client from day one
+
+================================================================================
+
+  AFTER YOU COMPLETE THESE 5 STEPS:
+
+  → Review Resources/client_red_flags.md before taking on new clients
+  → Use Resources/positioning_frameworks.md to sharpen how you talk about your work
+  → Check Consultation/next_steps.md if you want hands-on support
+
+================================================================================
+  You're not just getting templates. You're building a system.
+  Run it once and you'll know exactly how to run it again — every time.
+================================================================================

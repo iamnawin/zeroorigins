@@ -1,0 +1,2343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZeroOrigins — AI Systems & Automation Lab</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://zeroorigins.in" crossorigin>
+  <link rel="dns-prefetch" href="//zeroorigins.in">
+  <link rel="preload" as="image" href="https://zeroorigins.in/wp-content/uploads/2026/05/ZerorOrigins-loho-1.png" fetchpriority="high">
+  <link rel="preload" as="video" href="https://zeroorigins.in/wp-content/uploads/2026/05/infinity-loop3.mp4" type="video/mp4" crossorigin>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #030408;
+      --bg-elevated: #0a0c12;
+      --surface: #0f1218;
+      --border: rgba(255, 255, 255, 0.06);
+      --border-strong: rgba(255, 255, 255, 0.12);
+      --text: #f4f4f5;
+      --text-muted: rgba(244, 244, 245, 0.6);
+      --text-subtle: rgba(244, 244, 245, 0.4);
+      --accent: #22d3ee;
+      --accent-glow: rgba(34, 211, 238, 0.3);
+      --gold: #fbbf24;
+      --gold-glow: rgba(251, 191, 36, 0.25);
+      --purple: #a78bfa;
+      --purple-glow: rgba(167, 139, 250, 0.25);
+      --rose: #fb7185;
+      --rose-glow: rgba(251, 113, 133, 0.25);
+      --radius: 16px;
+      --radius-lg: 24px;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-strong);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .display-xl {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .display-lg {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.75rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    .text-lg {
+      font-size: 1.125rem;
+      line-height: 1.7;
+    }
+
+    .text-base {
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+    }
+
+    .section {
+      padding: clamp(5rem, 12vh, 8rem) 0;
+      position: relative;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1.75rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif;
+      border-radius: 999px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.4s var(--ease-out);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold), #f59e0b);
+      color: var(--bg);
+      box-shadow: 0 0 40px var(--gold-glow), 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #fcd34d, var(--gold));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 60px var(--gold-glow), 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .btn-primary:hover::before {
+      opacity: 1;
+    }
+
+    .btn-primary span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      border: 1px solid var(--border-strong);
+      backdrop-filter: blur(12px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 1rem 0;
+      background: rgba(3, 4, 8, 0.8);
+      backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo img {
+      height: 36px;
+      width: auto;
+    }
+
+    .logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.125rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s var(--ease-out);
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-cta .btn {
+      padding: 0.625rem 1.25rem;
+      font-size: 0.8125rem;
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .menu-toggle:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .mobile-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      padding: 6rem 2rem 2rem;
+      transform: translateY(-100%);
+      opacity: 0;
+      transition: all 0.4s var(--ease-out);
+      pointer-events: none;
+    }
+
+    .mobile-nav.active {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .mobile-nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      list-style: none;
+    }
+
+    .mobile-nav-links a {
+      display: block;
+      padding: 1rem;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1.25rem;
+      font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif;
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
+
+    .mobile-nav-links a:hover {
+      background: rgba(255, 255, 255, 0.03);
+      padding-left: 1.5rem;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 5rem;
+    }
+
+    .hero-video-container {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.6;
+      filter: saturate(1.2) contrast(1.1);
+    }
+
+    .hero-video-overlay {
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse 80% 60% at 20% 50%, rgba(3, 4, 8, 0.9) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 50% at 80% 30%, rgba(251, 191, 36, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 40% at 70% 70%, rgba(34, 211, 238, 0.06) 0%, transparent 50%),
+        linear-gradient(180deg, rgba(3, 4, 8, 0.4) 0%, transparent 30%, transparent 70%, rgba(3, 4, 8, 0.8) 100%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(34, 211, 238, 0.08);
+      border: 1px solid rgba(34, 211, 238, 0.2);
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      animation: fadeInUp 0.8s var(--ease-out) 0.2s both;
+    }
+
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    .hero-title {
+      margin-bottom: 1.5rem;
+      animation: fadeInUp 0.8s var(--ease-out) 0.3s both;
+    }
+
+    .hero-title .line {
+      display: block;
+    }
+
+    .hero-title .accent {
+      background: linear-gradient(135deg, var(--gold), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-description {
+      max-width: 540px;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+      animation: fadeInUp 0.8s var(--ease-out) 0.4s both;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 4rem;
+      animation: fadeInUp 0.8s var(--ease-out) 0.5s both;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      animation: fadeInUp 0.8s var(--ease-out) 0.6s both;
+    }
+
+    .stat-card {
+      padding: 1.25rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(12px);
+      transition: all 0.3s var(--ease-out);
+    }
+
+    .stat-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--border-strong);
+      transform: translateY(-4px);
+    }
+
+    .stat-icon {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+      margin-bottom: 0.75rem;
+      color: var(--accent);
+    }
+
+    .stat-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .stat-label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-desc {
+      font-size: 0.8125rem;
+      color: var(--text-subtle);
+      line-height: 1.4;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Section Headers */
+    .section-header {
+      margin-bottom: 3rem;
+    }
+
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .section-eyebrow::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      border-radius: 2px;
+    }
+
+    .section-title {
+      margin-bottom: 0.75rem;
+    }
+
+    .section-subtitle {
+      color: var(--text-muted);
+      max-width: 600px;
+    }
+
+    /* ========================================
+       UNIVERSAL POKEMON CARD STYLES
+       ======================================== */
+    
+    /* Card perspective container */
+    .card-perspective {
+      perspective: 2000px;
+    }
+
+    /* Base reactive card */
+    .reactive-card {
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+      will-change: transform;
+      cursor: default;
+    }
+
+    /* Holographic shine layer */
+    .card-holo {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(
+        125deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0) 40%,
+        rgba(255, 255, 255, 0.12) 45%,
+        rgba(34, 211, 238, 0.2) 50%,
+        rgba(167, 139, 250, 0.2) 55%,
+        rgba(251, 191, 36, 0.15) 60%,
+        transparent 100%
+      );
+      background-size: 200% 200%;
+      background-position: 100% 100%;
+      opacity: 0;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 5;
+    }
+
+    /* Rainbow glint overlay */
+    .card-glint {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(
+        calc(var(--glint-angle, 135deg)),
+        transparent 0%,
+        transparent 30%,
+        rgba(34, 211, 238, 0.06) 35%,
+        rgba(167, 139, 250, 0.06) 40%,
+        rgba(251, 113, 133, 0.06) 45%,
+        rgba(251, 191, 36, 0.06) 50%,
+        rgba(34, 211, 238, 0.06) 55%,
+        transparent 60%,
+        transparent 100%
+      );
+      background-size: 300% 300%;
+      background-position: var(--glint-x, 0%) var(--glint-y, 0%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 6;
+    }
+
+    /* Spotlight effect */
+    .card-spotlight {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(
+        500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(255, 255, 255, 0.05),
+        transparent 40%
+      );
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 7;
+    }
+
+    /* Border glow effect */
+    .card-border-glow {
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.08) 0%, 
+        rgba(255, 255, 255, 0.02) 50%,
+        var(--card-accent, rgba(34, 211, 238, 0.1)) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+      z-index: 8;
+    }
+
+    /* Floating particles */
+    .card-particles {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      overflow: hidden;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 4;
+    }
+
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: var(--card-accent, var(--accent));
+      border-radius: 50%;
+      opacity: 0;
+      animation: particleFloat 2.5s ease-in-out infinite;
+    }
+
+    @keyframes particleFloat {
+      0%, 100% {
+        opacity: 0;
+        transform: translateY(0) scale(0);
+      }
+      50% {
+        opacity: 0.7;
+        transform: translateY(-25px) scale(1);
+      }
+    }
+
+    /* Card content wrapper */
+    .card-content {
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Hover states for reactive cards */
+    .reactive-card:hover {
+      transform: perspective(1000px) rotateX(var(--rotateX, 0deg)) rotateY(var(--rotateY, 0deg)) scale(1.02) translateZ(8px);
+    }
+
+    .reactive-card:hover .card-holo {
+      opacity: 0.8;
+      animation: holoShift 3s linear infinite;
+    }
+
+    .reactive-card:hover .card-glint {
+      opacity: 1;
+    }
+
+    .reactive-card:hover .card-spotlight {
+      opacity: 1;
+    }
+
+    .reactive-card:hover .card-border-glow {
+      opacity: 1;
+    }
+
+    .reactive-card:hover .card-particles {
+      opacity: 1;
+    }
+
+    @keyframes holoShift {
+      0% { background-position: 0% 0%; }
+      50% { background-position: 100% 100%; }
+      100% { background-position: 0% 0%; }
+    }
+
+    /* Card color variants */
+    .card-cyan {
+      --card-accent: var(--accent);
+      --card-accent-glow: var(--accent-glow);
+    }
+
+    .card-cyan:hover {
+      box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(34, 211, 238, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .card-purple {
+      --card-accent: var(--purple);
+      --card-accent-glow: var(--purple-glow);
+    }
+
+    .card-purple:hover {
+      box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(167, 139, 250, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .card-gold {
+      --card-accent: var(--gold);
+      --card-accent-glow: var(--gold-glow);
+    }
+
+    .card-gold:hover {
+      box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(251, 191, 36, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .card-rose {
+      --card-accent: var(--rose);
+      --card-accent-glow: var(--rose-glow);
+    }
+
+    .card-rose:hover {
+      box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(251, 113, 133, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    /* ========================================
+       BUILD SECTION - REACTIVE CARDS
+       ======================================== */
+    .build-section {
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-elevated) 100%);
+    }
+
+    .build-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .build-card {
+      padding: 2rem;
+      background: linear-gradient(165deg, 
+        rgba(15, 18, 25, 0.9) 0%, 
+        rgba(10, 12, 18, 0.95) 50%,
+        rgba(8, 10, 15, 0.9) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .build-icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      margin-bottom: 1.25rem;
+      transition: transform 0.3s var(--ease-out);
+    }
+
+    .build-card:hover .build-icon {
+      transform: translateZ(15px) scale(1.05);
+    }
+
+    .build-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      transition: transform 0.3s var(--ease-out);
+    }
+
+    .build-card:hover h3 {
+      transform: translateZ(10px);
+    }
+
+    .build-card p {
+      font-size: 0.875rem;
+      color: var(--text-subtle);
+      line-height: 1.6;
+    }
+
+    /* ========================================
+       PRODUCTS SECTION - REACTIVE CARDS
+       ======================================== */
+    .products-section {
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .products-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 600px;
+      background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(34, 211, 238, 0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .products-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      perspective: 2000px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .product-card {
+      padding: 1.75rem;
+      background: linear-gradient(165deg, 
+        rgba(15, 18, 25, 0.95) 0%, 
+        rgba(10, 12, 18, 0.98) 50%,
+        rgba(8, 10, 15, 0.95) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .product-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .product-category {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--card-accent, var(--accent));
+    }
+
+    .product-status {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(34, 211, 238, 0.08);
+      color: var(--accent);
+      border: 1px solid rgba(34, 211, 238, 0.15);
+    }
+
+    .product-status.dev {
+      background: rgba(167, 139, 250, 0.08);
+      color: var(--purple);
+      border-color: rgba(167, 139, 250, 0.15);
+    }
+
+    .product-status.solution {
+      background: rgba(251, 191, 36, 0.08);
+      color: var(--gold);
+      border-color: rgba(251, 191, 36, 0.15);
+    }
+
+    .product-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+      transition: transform 0.3s var(--ease-out);
+    }
+
+    .product-card:hover h3 {
+      transform: translateZ(15px);
+    }
+
+    .product-summary {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .product-outcome {
+      font-size: 0.8125rem;
+      color: var(--card-accent, var(--accent));
+      padding-left: 0.875rem;
+      border-left: 2px solid rgba(34, 211, 238, 0.2);
+      margin-bottom: 1rem;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .product-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.375rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .tag {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      padding: 0.25rem 0.625rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text-subtle);
+      transition: all 0.2s ease;
+    }
+
+    .product-card:hover .tag {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .product-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .product-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--card-accent, var(--accent));
+      transition: width 0.3s var(--ease-out);
+    }
+
+    .product-link:hover {
+      color: var(--card-accent, var(--accent));
+      gap: 0.625rem;
+    }
+
+    .product-link:hover::after {
+      width: calc(100% - 1rem);
+    }
+
+    /* ========================================
+       SERVICES SECTION
+       ======================================== */
+    .services-section {
+      background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--surface) 100%);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .services-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .service-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      transition: all 0.3s var(--ease-out);
+      cursor: default;
+    }
+
+    .service-item:hover {
+      background: rgba(34, 211, 238, 0.03);
+      border-color: rgba(34, 211, 238, 0.15);
+      transform: translateX(8px);
+    }
+
+    .service-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .services-cta {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .services-cta::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(34, 211, 238, 0.05), transparent 70%);
+      pointer-events: none;
+    }
+
+    .services-cta h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .services-cta p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      font-size: 0.9375rem;
+    }
+
+    .services-cta .btn {
+      width: 100%;
+      margin-bottom: 0.75rem;
+    }
+
+    .services-cta .btn:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ========================================
+       TEMPLATES SECTION - REACTIVE CARDS
+       ======================================== */
+    .templates-section {
+      background: var(--bg);
+    }
+
+    .templates-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      perspective: 2000px;
+    }
+
+    .template-card {
+      position: relative;
+      padding: 2rem;
+      background: linear-gradient(165deg, 
+        rgba(15, 18, 25, 0.9) 0%, 
+        rgba(10, 12, 18, 0.95) 50%,
+        rgba(8, 10, 15, 0.9) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-lg);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .template-card-link {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+    }
+
+    .template-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+      transition: transform 0.3s var(--ease-out);
+    }
+
+    .template-card:hover .template-icon {
+      transform: translateZ(15px) scale(1.1);
+    }
+
+    .template-card h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.375rem;
+      transition: transform 0.3s var(--ease-out);
+    }
+
+    .template-card:hover h4 {
+      transform: translateZ(10px);
+    }
+
+    .template-card p {
+      font-size: 0.8125rem;
+      color: var(--text-subtle);
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .template-price {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--gold), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transition: transform 0.3s var(--ease-out);
+    }
+
+    .template-card:hover .template-price {
+      transform: translateZ(12px);
+    }
+
+    /* ========================================
+       MEDIA SECTION - REACTIVE CARDS
+       ======================================== */
+    .media-section {
+      background: var(--bg-elevated);
+    }
+
+    .media-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      perspective: 2000px;
+    }
+
+    .media-card {
+      position: relative;
+      padding: 2.5rem;
+      border-radius: var(--radius-lg);
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+    }
+
+    .media-card.music {
+      background: linear-gradient(145deg, #0f0a1a, #1a0a2e);
+      border: 1px solid rgba(167, 139, 250, 0.12);
+    }
+
+    .media-card.video {
+      background: linear-gradient(145deg, #0a1a1f, #0a2e2e);
+      border: 1px solid rgba(34, 211, 238, 0.12);
+    }
+
+    .media-bg-icon {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      font-size: 5rem;
+      opacity: 0.04;
+      pointer-events: none;
+      transition: all 0.3s var(--ease-out);
+    }
+
+    .media-card:hover .media-bg-icon {
+      opacity: 0.08;
+      transform: translateZ(20px) scale(1.05);
+    }
+
+    .media-label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      transition: transform 0.3s var(--ease-out);
+    }
+
+    .media-card:hover .media-label {
+      transform: translateZ(8px);
+    }
+
+    .media-card.music .media-label {
+      color: var(--purple);
+    }
+
+    .media-card.video .media-label {
+      color: var(--accent);
+    }
+
+    .media-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      transition: transform 0.3s var(--ease-out);
+    }
+
+    .media-card:hover h3 {
+      transform: translateZ(12px);
+    }
+
+    .media-card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+    }
+
+    .media-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: gap 0.3s var(--ease-out);
+    }
+
+    .media-link:hover {
+      gap: 0.75rem;
+    }
+
+    .media-card.music .media-link {
+      color: var(--purple);
+    }
+
+    .media-card.video .media-link {
+      color: var(--accent);
+    }
+
+    /* CTA Section */
+    .cta-section {
+      background: var(--bg);
+    }
+
+    .cta-box {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(251, 191, 36, 0.04), transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-box h2 {
+      margin-bottom: 1rem;
+    }
+
+    .cta-box > p {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-email {
+      font-size: 0.875rem;
+      color: var(--text-subtle);
+    }
+
+    .cta-email a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .cta-email a:hover {
+      color: var(--text);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .footer-logo img {
+      height: 24px;
+      width: auto;
+      opacity: 0.7;
+    }
+
+    .footer-copyright {
+      font-size: 0.8125rem;
+      color: var(--text-subtle);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.8125rem;
+      color: var(--text-subtle);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .build-grid,
+      .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .templates-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .nav-links,
+      .nav-cta .btn-secondary {
+        display: none;
+      }
+
+      .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .media-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .build-grid,
+      .products-grid,
+      .templates-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .products-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .cta-box {
+        padding: 2.5rem 1.5rem;
+      }
+
+      .cta-actions {
+        flex-direction: column;
+      }
+
+      .cta-actions .btn {
+        width: 100%;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    /* Scroll animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="#home" class="logo">
+        <img src="https://zeroorigins.in/wp-content/uploads/2026/05/ZerorOrigins-loho-1.png" alt="ZeroOrigins" loading="eager" fetchpriority="high" onerror="this.style.display='none'">
+        <span class="logo-text">ZeroOrigins</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#products">Products</a></li>
+        <li><a href="#templates">Templates</a></li>
+        <li><a href="#media">Media</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+      <div class="nav-cta">
+        <a href="https://calendly.com/zerooriginsai/30min" target="_blank" rel="noopener" class="btn btn-primary"><span>Book a Call</span></a>
+        <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Navigation -->
+  <div class="mobile-nav">
+    <ul class="mobile-nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#products">Products</a></li>
+      <li><a href="#templates">Templates</a></li>
+      <li><a href="#media">Media</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div style="margin-top: 2rem;">
+      <a href="https://calendly.com/zerooriginsai/30min" target="_blank" rel="noopener" class="btn btn-primary" style="width: 100%;"><span>Book a Call</span></a>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-video-container">
+      <video class="hero-video" autoplay muted loop playsinline preload="auto">
+        <source src="https://zeroorigins.in/wp-content/uploads/2026/05/infinity-loop2.mp4" type="video/mp4">
+      </video>
+      <div class="hero-video-overlay"></div>
+    </div>
+
+    <div class="container hero-content">
+      <div style="max-width: 720px;">
+        <div class="hero-eyebrow">
+          <span class="pulse-dot"></span>
+          Intelligence Without Limits
+        </div>
+
+        <h1 class="display-xl hero-title">
+          <span class="line">We build <span class="accent">AI</span> Systems</span>
+          <span class="line">that think, learn and</span>
+          <span class="line">create impact.</span>
+        </h1>
+
+        <p class="text-lg hero-description">
+          We create intelligent systems and automation platforms that accelerate innovation and transform businesses for the future.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#services" class="btn btn-primary"><span>Explore Solutions</span></a>
+          <a href="#about" class="btn btn-secondary">About Us</a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M12 2v4m0 12v4M2 12h4m12 0h4"></path>
+              </svg>
+            </div>
+            <div class="stat-label">Gravity</div>
+            <div class="stat-desc">Systems that hold attention and reduce operational drift</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+              </svg>
+            </div>
+            <div class="stat-label">Precision</div>
+            <div class="stat-desc">Every asset has a reason, route, and measurable purpose</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </div>
+            <div class="stat-label">Inevitability</div>
+            <div class="stat-desc">Build the path so execution becomes the default</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+            </div>
+            <div class="stat-label">Systems</div>
+            <div class="stat-desc">Reusable infrastructure beneath the visible business</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Build Section - Reactive Cards -->
+  <section class="section build-section" id="about">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-eyebrow">What We Build</div>
+        <h2 class="display-lg section-title">One Company. Many Capabilities.</h2>
+        <p class="text-base section-subtitle">We operate across product development, automation systems, industry solutions, and creative AI.</p>
+      </div>
+
+      <div class="build-grid">
+        <div class="build-card reactive-card card-cyan reveal reveal-delay-1" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 15%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 35%; animation-delay: 0.4s;"></div>
+            <div class="particle" style="left: 55%; animation-delay: 0.8s;"></div>
+            <div class="particle" style="left: 75%; animation-delay: 1.2s;"></div>
+          </div>
+          <div class="card-content">
+            <div class="build-icon" style="background: rgba(34, 211, 238, 0.1);">⚙️</div>
+            <h3>AI Systems & Automation</h3>
+            <p>n8n-powered workflows, AI agent systems, lead capture automation, CRM routing, and operational backends built to run without manual intervention.</p>
+          </div>
+        </div>
+
+        <div class="build-card reactive-card card-purple reveal reveal-delay-2" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 15%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 35%; animation-delay: 0.4s;"></div>
+            <div class="particle" style="left: 55%; animation-delay: 0.8s;"></div>
+            <div class="particle" style="left: 75%; animation-delay: 1.2s;"></div>
+          </div>
+          <div class="card-content">
+            <div class="build-icon" style="background: rgba(167, 139, 250, 0.1);">🚀</div>
+            <h3>SaaS & Product Platforms</h3>
+            <p>Productized software platforms across real estate intelligence, talent matching, performance tracking, and architecture design tooling.</p>
+          </div>
+        </div>
+
+        <div class="build-card reactive-card card-rose reveal reveal-delay-3" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 15%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 35%; animation-delay: 0.4s;"></div>
+            <div class="particle" style="left: 55%; animation-delay: 0.8s;"></div>
+            <div class="particle" style="left: 75%; animation-delay: 1.2s;"></div>
+          </div>
+          <div class="card-content">
+            <div class="build-icon" style="background: rgba(251, 113, 133, 0.1);">🏭</div>
+            <h3>Industry Solutions</h3>
+            <p>Domain-specific platforms for retail execution intelligence, field scoring, and operational visibility built around real business workflows.</p>
+          </div>
+        </div>
+
+        <div class="build-card reactive-card card-cyan reveal reveal-delay-1" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 15%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 35%; animation-delay: 0.4s;"></div>
+            <div class="particle" style="left: 55%; animation-delay: 0.8s;"></div>
+            <div class="particle" style="left: 75%; animation-delay: 1.2s;"></div>
+          </div>
+          <div class="card-content">
+            <div class="build-icon" style="background: rgba(34, 211, 238, 0.08);">🛠️</div>
+            <h3>Digital Tools & Apps</h3>
+            <p>Utilities, MVPs, and internal tools that solve specific problems fast from smart digital identity to workflow starter kits.</p>
+          </div>
+        </div>
+
+        <div class="build-card reactive-card card-purple reveal reveal-delay-2" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 15%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 35%; animation-delay: 0.4s;"></div>
+            <div class="particle" style="left: 55%; animation-delay: 0.8s;"></div>
+            <div class="particle" style="left: 75%; animation-delay: 1.2s;"></div>
+          </div>
+          <div class="card-content">
+            <div class="build-icon" style="background: rgba(167, 139, 250, 0.08);">🎵</div>
+            <h3>Media & Creative AI</h3>
+            <p>AI-generated music, cinematic storytelling, and experimental creative content through AIwithNoBrain and EpicsToYou verticals.</p>
+          </div>
+        </div>
+
+        <div class="build-card reactive-card card-gold reveal reveal-delay-3" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 15%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 35%; animation-delay: 0.4s;"></div>
+            <div class="particle" style="left: 55%; animation-delay: 0.8s;"></div>
+            <div class="particle" style="left: 75%; animation-delay: 1.2s;"></div>
+          </div>
+          <div class="card-content">
+            <div class="build-icon" style="background: rgba(251, 191, 36, 0.08);">📦</div>
+            <h3>Templates & Digital Products</h3>
+            <p>Purchasable digital assets including smart identity packs, workflow starter kits, and presentation templates for founders.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Section - Reactive Cards -->
+  <section class="section products-section" id="products">
+    <div class="container">
+      <div class="products-header reveal">
+        <div class="section-header" style="margin-bottom: 0;">
+          <div class="section-eyebrow">Selected Work</div>
+          <h2 class="display-lg section-title">Products, Solutions & Active Builds</h2>
+        </div>
+        <a href="#" class="btn btn-secondary">Explore All</a>
+      </div>
+
+      <div class="products-grid">
+
+        <!-- PlotDNA Card -->
+        <div class="product-card reactive-card card-cyan reveal reveal-delay-1" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 30%; animation-delay: 0.3s;"></div>
+            <div class="particle" style="left: 50%; animation-delay: 0.6s;"></div>
+            <div class="particle" style="left: 70%; animation-delay: 0.9s;"></div>
+            <div class="particle" style="left: 90%; animation-delay: 1.2s;"></div>
+          </div>
+          <div class="card-content">
+            <div class="product-meta">
+              <span class="product-category">Product Platform</span>
+              <span class="product-status">Active</span>
+            </div>
+            <h3>PlotDNA</h3>
+            <p class="product-summary">AI-powered real estate intelligence platform for data-backed plot buying decisions.</p>
+            <p class="product-outcome">Evaluate land using infrastructure signals, satellite growth, activity maps, and market intelligence.</p>
+            <div class="product-tags">
+              <span class="tag">Real Estate</span>
+              <span class="tag">AI</span>
+              <span class="tag">Maps</span>
+              <span class="tag">Analytics</span>
+            </div>
+            <a href="#" class="product-link">View Product →</a>
+          </div>
+        </div>
+
+        <!-- Structra AI Card -->
+        <div class="product-card reactive-card card-purple reveal reveal-delay-2" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 30%; animation-delay: 0.3s;"></div>
+            <div class="particle" style="left: 50%; animation-delay: 0.6s;"></div>
+            <div class="particle" style="left: 70%; animation-delay: 0.9s;"></div>
+            <div class="particle" style="left: 90%; animation-delay: 1.2s;"></div>
+          </div>
+          <div class="card-content">
+            <div class="product-meta">
+              <span class="product-category">Design Platform</span>
+              <span class="product-status">Active</span>
+            </div>
+            <h3>Structra AI</h3>
+            <p class="product-summary">AI-powered architectural design studio for blueprint analysis, 3D modeling, and immersive walkthroughs.</p>
+            <p class="product-outcome">Streamlines architectural ideation, visualization, and AI-assisted design iteration.</p>
+            <div class="product-tags">
+              <span class="tag">Architecture</span>
+              <span class="tag">AI Agents</span>
+              <span class="tag">3D</span>
+              <span class="tag">Design</span>
+            </div>
+            <a href="#" class="product-link">View Product →</a>
+          </div>
+        </div>
+
+        <!-- Applyyo Card -->
+        <div class="product-card reactive-card card-cyan reveal reveal-delay-3" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 30%; animation-delay: 0.3s;"></div>
+            <div class="particle" style="left: 50%; animation-delay: 0.6s;"></div>
+            <div class="particle" style="left: 70%; animation-delay: 0.9s;"></div>
+            <div class="particle" style="left: 90%; animation-delay: 1.2s;"></div>
+          </div>
+          <div class="card-content">
+            <div class="product-meta">
+              <span class="product-category">Talent Platform</span>
+              <span class="product-status">Active</span>
+            </div>
+            <h3>Applyyo</h3>
+            <p class="product-summary">AI-powered job application distribution and candidate matching platform.</p>
+            <p class="product-outcome">Automates structured application workflows and improves candidate-job matching accuracy.</p>
+            <div class="product-tags">
+              <span class="tag">Hiring</span>
+              <span class="tag">Talent Tech</span>
+              <span class="tag">Workflow</span>
+              <span class="tag">AI</span>
+            </div>
+            <a href="#" class="product-link">View Product →</a>
+          </div>
+        </div>
+
+        <!-- ProofPath Card -->
+        <div class="product-card reactive-card card-purple reveal reveal-delay-1" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 30%; animation-delay: 0.3s;"></div>
+            <div class="particle" style="left: 50%; animation-delay: 0.6s;"></div>
+            <div class="particle" style="left: 70%; animation-delay: 0.9s;"></div>
+            <div class="particle" style="left: 90%; animation-delay: 1.2s;"></div>
+          </div>
+          <div class="card-content">
+            <div class="product-meta">
+              <span class="product-category">Performance Intelligence</span>
+              <span class="product-status dev">In Development</span>
+            </div>
+            <h3>ProofPath</h3>
+            <p class="product-summary">A trusted performance and contribution proof layer built on goals, KPIs, outcomes, and evidence.</p>
+            <p class="product-outcome">Turns tasks and KPIs into structured contribution intelligence and portable proof of work.</p>
+            <div class="product-tags">
+              <span class="tag">KPI Intelligence</span>
+              <span class="tag">Performance</span>
+              <span class="tag">B2B SaaS</span>
+            </div>
+            <a href="#" class="product-link">View Product →</a>
+          </div>
+        </div>
+
+        <!-- Retail Execution Card -->
+        <div class="product-card reactive-card card-gold reveal reveal-delay-2" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 30%; animation-delay: 0.3s;"></div>
+            <div class="particle" style="left: 50%; animation-delay: 0.6s;"></div>
+            <div class="particle" style="left: 70%; animation-delay: 0.9s;"></div>
+            <div class="particle" style="left: 90%; animation-delay: 1.2s;"></div>
+          </div>
+          <div class="card-content">
+            <div class="product-meta">
+              <span class="product-category">Industry Solution</span>
+              <span class="product-status solution">Solution</span>
+            </div>
+            <h3>Retail Execution Intelligence</h3>
+            <p class="product-summary">Retail field intelligence and store scoring system for execution visibility.</p>
+            <p class="product-outcome">Helps retail teams score execution, evaluate store conditions, and improve field performance visibility.</p>
+            <div class="product-tags">
+              <span class="tag">Retail</span>
+              <span class="tag">Field Execution</span>
+              <span class="tag">Scorecards</span>
+            </div>
+            <a href="#" class="product-link">View Solution →</a>
+          </div>
+        </div>
+
+        <!-- LeadFlow Card -->
+        <div class="product-card reactive-card card-cyan reveal reveal-delay-3" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 30%; animation-delay: 0.3s;"></div>
+            <div class="particle" style="left: 50%; animation-delay: 0.6s;"></div>
+            <div class="particle" style="left: 70%; animation-delay: 0.9s;"></div>
+            <div class="particle" style="left: 90%; animation-delay: 1.2s;"></div>
+          </div>
+          <div class="card-content">
+            <div class="product-meta">
+              <span class="product-category">Automation Service</span>
+              <span class="product-status">Available Now</span>
+            </div>
+            <h3>LeadFlow Setup</h3>
+            <p class="product-summary">Done-for-you lead capture, follow-up automation, and CRM routing built in n8n.</p>
+            <p class="product-outcome">Businesses respond faster, miss fewer leads, and stop doing manual follow-up work.</p>
+            <div class="product-tags">
+              <span class="tag">n8n</span>
+              <span class="tag">Lead Automation</span>
+              <span class="tag">CRM</span>
+            </div>
+            <a href="https://calendly.com/zerooriginsai/30min" target="_blank" rel="noopener" class="product-link">Get Started →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="section services-section" id="services">
+    <div class="container">
+      <div class="services-grid">
+        <div class="reveal">
+          <div class="section-eyebrow">ZeroOrigins Studio</div>
+          <h2 class="display-lg section-title">We Design & Build for Founders</h2>
+          <p class="text-base section-subtitle">AI-powered systems, automation workflows, operational tools, and product experiences built clean, delivered fast.</p>
+
+          <div class="services-list">
+            <div class="service-item">
+              <div class="service-dot"></div>
+              Workflow automation & n8n systems
+            </div>
+            <div class="service-item">
+              <div class="service-dot"></div>
+              AI agent design & implementation
+            </div>
+            <div class="service-item">
+              <div class="service-dot"></div>
+              SaaS MVP design and build
+            </div>
+            <div class="service-item">
+              <div class="service-dot"></div>
+              Lead capture and follow-up automation
+            </div>
+            <div class="service-item">
+              <div class="service-dot"></div>
+              Internal tools and ops systems
+            </div>
+            <div class="service-item">
+              <div class="service-dot"></div>
+              Industry solution design
+            </div>
+          </div>
+        </div>
+
+        <div class="services-cta reveal">
+          <h3>Start with a Discovery Call</h3>
+          <p>Tell us your process bottleneck. We'll show you what a working system looks like before you pay anything.</p>
+          <a href="https://calendly.com/zerooriginsai/30min" target="_blank" rel="noopener" class="btn btn-primary"><span>Book a Free Discovery Call</span></a>
+          <a href="mailto:hello@zeroorigins.in" class="btn btn-secondary">Request a Workflow Demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Templates Section - Reactive Cards -->
+  <section class="section templates-section" id="templates">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-eyebrow">Digital Products</div>
+        <h2 class="display-lg section-title">Templates & Starter Assets</h2>
+        <p class="text-base section-subtitle">Purchasable digital assets for founders, professionals, and businesses who want to look sharper and move faster.</p>
+      </div>
+
+      <div class="templates-grid">
+        <div class="template-card reactive-card card-gold reveal reveal-delay-1" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 20%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 50%; animation-delay: 0.5s;"></div>
+            <div class="particle" style="left: 80%; animation-delay: 1s;"></div>
+          </div>
+          <a class="template-card-link" href="https://zeroorigins.gumroad.com/l/DigitalIdentity?want=true" target="_blank" rel="noopener noreferrer" aria-label="Digital Identity Pack"></a>
+          <div class="card-content">
+            <span class="template-icon">🪪</span>
+            <h4>Digital Identity Pack</h4>
+            <p>Smart digital profile card, bio page, and social link system for founders.</p>
+            <div class="template-price">$99</div>
+          </div>
+        </div>
+
+        <div class="template-card reactive-card card-cyan reveal reveal-delay-2" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 20%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 50%; animation-delay: 0.5s;"></div>
+            <div class="particle" style="left: 80%; animation-delay: 1s;"></div>
+          </div>
+          <a class="template-card-link" href="https://zeroorigins.gumroad.com/l/WorkflowKit?want=true" target="_blank" rel="noopener noreferrer" aria-label="Workflow Starter Kit"></a>
+          <div class="card-content">
+            <span class="template-icon">⚡</span>
+            <h4>Workflow Starter Kit</h4>
+            <p>Ready-to-deploy n8n workflow templates for lead capture and follow-up.</p>
+            <div class="template-price">$99</div>
+          </div>
+        </div>
+
+        <div class="template-card reactive-card card-purple reveal reveal-delay-3" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 20%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 50%; animation-delay: 0.5s;"></div>
+            <div class="particle" style="left: 80%; animation-delay: 1s;"></div>
+          </div>
+          <div class="card-content">
+            <span class="template-icon">📋</span>
+            <h4>Pitch & Strategy Pack</h4>
+            <p>Proposal templates, scope docs, and one-pager frameworks for service businesses.</p>
+            <div class="template-price">$99</div>
+          </div>
+        </div>
+
+        <div class="template-card reactive-card card-rose reveal reveal-delay-4" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 20%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 50%; animation-delay: 0.5s;"></div>
+            <div class="particle" style="left: 80%; animation-delay: 1s;"></div>
+          </div>
+          <div class="card-content">
+            <span class="template-icon">🎴</span>
+            <h4>Business Card System</h4>
+            <p>AI-designed smart digital business card with NFC-ready link page.</p>
+            <div class="template-price">$99</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 2.5rem;" class="reveal">
+        <a href="#" class="btn btn-secondary">Browse All Templates</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Media Section - Reactive Cards -->
+  <section class="section media-section" id="media">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-eyebrow">Creative Verticals</div>
+        <h2 class="display-lg section-title">Not Just Systems. Creative-Native Too.</h2>
+        <p class="text-base section-subtitle">ZeroOrigins runs two independent creative verticals pushing the edge of AI-generated media.</p>
+      </div>
+
+      <div class="media-grid">
+        <div class="media-card music reactive-card card-purple reveal reveal-delay-1" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 15%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 40%; animation-delay: 0.6s;"></div>
+            <div class="particle" style="left: 65%; animation-delay: 1.2s;"></div>
+            <div class="particle" style="left: 85%; animation-delay: 1.8s;"></div>
+          </div>
+          <div class="media-bg-icon">🎵</div>
+          <div class="card-content">
+            <div class="media-label">AIwithNoBrain</div>
+            <h3>AI Music & Creative Experiments</h3>
+            <p>AI-generated music, experimental audio/visual work, viral creative content, and entertainment-first AI experiences.</p>
+            <a href="#" class="media-link">Explore the Vertical →</a>
+          </div>
+        </div>
+
+        <div class="media-card video reactive-card card-cyan reveal reveal-delay-2" data-reactive-card>
+          <div class="card-holo"></div>
+          <div class="card-glint"></div>
+          <div class="card-spotlight"></div>
+          <div class="card-border-glow"></div>
+          <div class="card-particles">
+            <div class="particle" style="left: 15%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 40%; animation-delay: 0.6s;"></div>
+            <div class="particle" style="left: 65%; animation-delay: 1.2s;"></div>
+            <div class="particle" style="left: 85%; animation-delay: 1.8s;"></div>
+          </div>
+          <div class="media-bg-icon">🎬</div>
+          <div class="card-content">
+            <div class="media-label">EpicsToYou</div>
+            <h3>AI Video & Cinematic Storytelling</h3>
+            <p>AI-generated videos, mythological and cinematic content, YouTube and reels systems, and visual storytelling IP.</p>
+            <a href="#" class="media-link">Explore the Vertical →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section cta-section" id="contact">
+    <div class="container">
+      <div class="cta-box reveal">
+        <h2 class="display-lg">Need a system, product, or automation built?</h2>
+        <p>Tell us what you're working on. We'll show you what's possible clearly, quickly, without the fluff.</p>
+        <div class="cta-actions">
+          <a href="https://calendly.com/zerooriginsai/30min" target="_blank" rel="noopener" class="btn btn-primary"><span>Schedule a Discovery Call</span></a>
+          <a href="mailto:hello@zeroorigins.in" class="btn btn-secondary">Email Us</a>
+        </div>
+        <p class="cta-email">or reach us at <a href="mailto:hello@zeroorigins.in">hello@zeroorigins.in</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-logo">
+        <img src="https://zeroorigins.in/wp-content/uploads/2026/05/ZerorOrigins-loho-1.png" alt="ZeroOrigins" loading="lazy" onerror="this.style.display='none'">
+      </div>
+      <p class="footer-copyright">© 2026 ZeroOrigins. AI-Native Products, Systems & Creative Technology.</p>
+      <ul class="footer-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#products">Products</a></li>
+        <li><a href="#templates">Templates</a></li>
+        <li><a href="#media">Media</a></li>
+        <li><a href="mailto:hello@zeroorigins.in">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile Navigation Toggle
+    (function() {
+      var toggle = document.querySelector('.menu-toggle');
+      var mobileNav = document.querySelector('.mobile-nav');
+      var mobileLinks = document.querySelectorAll('.mobile-nav a');
+      
+      if (!toggle || !mobileNav) return;
+
+      function toggleMenu(open) {
+        mobileNav.classList.toggle('active', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        document.body.style.overflow = open ? 'hidden' : '';
+      }
+
+      toggle.addEventListener('click', function() {
+        var isOpen = mobileNav.classList.contains('active');
+        toggleMenu(!isOpen);
+      });
+
+      mobileLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+          toggleMenu(false);
+        });
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') toggleMenu(false);
+      });
+    })();
+
+    // Scroll Reveal Animation
+    (function() {
+      var reveals = document.querySelectorAll('.reveal');
+      
+      if (!reveals.length) return;
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      reveals.forEach(function(el) {
+        observer.observe(el);
+      });
+    })();
+
+    // Universal Reactive Card Effect (Pokemon-style)
+    (function() {
+      var cards = document.querySelectorAll('[data-reactive-card]');
+      
+      cards.forEach(function(card) {
+        var spotlight = card.querySelector('.card-spotlight');
+        var glint = card.querySelector('.card-glint');
+        
+        var bounds = null;
+        var isHovering = false;
+        
+        function rotateCard(e) {
+          if (!bounds) return;
+          
+          var mouseX = e.clientX;
+          var mouseY = e.clientY;
+          
+          // Calculate position relative to card center
+          var centerX = bounds.left + bounds.width / 2;
+          var centerY = bounds.top + bounds.height / 2;
+          
+          // Calculate rotation (max 10 degrees)
+          var rotateX = ((mouseY - centerY) / (bounds.height / 2)) * -10;
+          var rotateY = ((mouseX - centerX) / (bounds.width / 2)) * 10;
+          
+          // Calculate spotlight position
+          var spotlightX = ((mouseX - bounds.left) / bounds.width) * 100;
+          var spotlightY = ((mouseY - bounds.top) / bounds.height) * 100;
+          
+          // Calculate glint angle based on mouse position
+          var angle = Math.atan2(mouseY - centerY, mouseX - centerX) * (180 / Math.PI) + 90;
+          
+          // Apply transforms
+          card.style.setProperty('--rotateX', rotateX + 'deg');
+          card.style.setProperty('--rotateY', rotateY + 'deg');
+          
+          if (spotlight) {
+            spotlight.style.setProperty('--mouse-x', spotlightX + '%');
+            spotlight.style.setProperty('--mouse-y', spotlightY + '%');
+          }
+          
+          if (glint) {
+            glint.style.setProperty('--glint-angle', angle + 'deg');
+            glint.style.setProperty('--glint-x', spotlightX + '%');
+            glint.style.setProperty('--glint-y', spotlightY + '%');
+          }
+        }
+        
+        function resetCard() {
+          card.style.setProperty('--rotateX', '0deg');
+          card.style.setProperty('--rotateY', '0deg');
+          bounds = null;
+          isHovering = false;
+        }
+        
+        card.addEventListener('mouseenter', function(e) {
+          bounds = card.getBoundingClientRect();
+          isHovering = true;
+        });
+        
+        card.addEventListener('mousemove', function(e) {
+          if (isHovering) {
+            requestAnimationFrame(function() {
+              rotateCard(e);
+            });
+          }
+        });
+        
+        card.addEventListener('mouseleave', function() {
+          resetCard();
+        });
+        
+        // Touch support
+        card.addEventListener('touchstart', function(e) {
+          bounds = card.getBoundingClientRect();
+          isHovering = true;
+        });
+        
+        card.addEventListener('touchmove', function(e) {
+          if (isHovering && e.touches.length > 0) {
+            var touch = e.touches[0];
+            rotateCard({
+              clientX: touch.clientX,
+              clientY: touch.clientY
+            });
+          }
+        });
+        
+        card.addEventListener('touchend', function() {
+          resetCard();
+        });
+      });
+    })();
+
+    // Hero Video Handling
+    (function() {
+      var video = document.querySelector('.hero-video');
+      if (!video) return;
+
+      video.playbackRate = 0.85;
+      
+      video.addEventListener('loadeddata', function() {
+        video.playbackRate = 0.85;
+      });
+
+      if (video.paused) {
+        video.play().catch(function() {});
+      }
+    })();
+
+    // Smooth Scroll for Anchor Links
+    (function() {
+      document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+          var href = this.getAttribute('href');
+          if (href === '#') return;
+          
+          var target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            var navHeight = document.querySelector('nav').offsetHeight;
+            var targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+            
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

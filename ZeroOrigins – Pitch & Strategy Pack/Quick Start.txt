@@ -1,0 +1,86 @@
+================================================================================
+  QUICK START — ACTION IN THE NEXT 2 HOURS
+  ZeroOrigins Pitch & Strategy Pack
+================================================================================
+
+Already have a client in mind? A proposal to write? A pitch to send this week?
+
+Skip the full onboarding. Here's your fast-track path.
+
+--------------------------------------------------------------------------------
+
+  SCENARIO A: "I need to send a proposal TODAY."
+  ────────────────────────────────────────────────────────────────────────────
+
+    1. Open Guide/example_completed_proposal.md
+       Read the whole thing. (10 minutes)
+
+    2. Open Templates/proposal_template.md
+       Fill in every [BRACKET] with your real information. (60–90 minutes)
+
+    3. Open Resources/proposal_copy_examples.md
+       Check your language against the strong/weak examples. (15 minutes)
+
+    4. Send it.
+
+  ────────────────────────────────────────────────────────────────────────────
+
+  SCENARIO B: "I have a discovery call tomorrow."
+  ────────────────────────────────────────────────────────────────────────────
+
+    1. Open Templates/client_discovery_questions.md
+       Print or copy the questions you need. (10 minutes)
+
+    2. Open Resources/client_red_flags.md
+       Know what to watch for on the call. (10 minutes)
+
+    3. Run the call. Take notes.
+
+    4. Come back and write the proposal using Templates/proposal_template.md.
+
+  ────────────────────────────────────────────────────────────────────────────
+
+  SCENARIO C: "I'm pitching a new service I've never sold before."
+  ────────────────────────────────────────────────────────────────────────────
+
+    1. Open Templates/one_page_offer_template.md
+       Define your offer in one page before anything else. (45 minutes)
+
+    2. Open Resources/positioning_frameworks.md
+       Choose a framework that matches your service type. (20 minutes)
+
+    3. Open Templates/service_pricing_structure.md
+       Decide your pricing model and set your numbers. (30 minutes)
+
+    4. Now write your proposal or pitch deck.
+
+  ────────────────────────────────────────────────────────────────────────────
+
+  SCENARIO D: "I just closed a deal. Now what?"
+  ────────────────────────────────────────────────────────────────────────────
+
+    1. Open Templates/project_kickoff_template.md
+       Customize and send to client within 24 hours of signing. (30 minutes)
+
+    2. Open Guide/onboarding_checklist.md
+       Work through the checklist before the first working session. (20 minutes)
+
+    3. Open Templates/scope_document_template.md
+       If you haven't sent a scope doc yet — send one now before work begins.
+
+--------------------------------------------------------------------------------
+
+  THE FASTEST WIN IN THIS PACK:
+  ────────────────────────────────────────────────────────────────────────────
+
+  Read the Example Completed Proposal first.
+  Then open the Proposal Template.
+  You'll immediately see how to fill it in.
+
+  Location: Guide/example_completed_proposal.md
+
+--------------------------------------------------------------------------------
+
+  NEED HELP? → Consultation/next_steps.md
+
+================================================================================
