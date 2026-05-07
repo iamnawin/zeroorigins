@@ -8,7 +8,7 @@
   <link rel="dns-prefetch" href="//zeroorigins.in">
   <link rel="preload" as="image" href="https://zeroorigins.in/wp-content/uploads/2026/05/ZerorOrigins-loho-1.png"
     fetchpriority="high">
-  <link rel="preload" as="video" href="https://zeroorigins.in/wp-content/uploads/2026/05/Infinity-loop.mp4"
+  <link rel="preload" as="video" href="https://zeroorigins.in/wp-content/uploads/2026/05/infinity-loop3.mp4"
     type="video/mp4" crossorigin>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,15 +47,12 @@
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background:
-        radial-gradient(1200px 760px at 70% 12%, rgba(170, 190, 210, 0.07), transparent 60%),
-        radial-gradient(980px 760px at 18% 70%, rgba(210, 200, 185, 0.06), transparent 60%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
-      color: var(--white);
-      overflow-x: hidden;
-      line-height: 1.6;
-    }
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg); /* Simplified to dark black */
+  color: var(--white);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
 
 
 
@@ -329,10 +326,17 @@
 
     /* ── SHARED ── */
     section {
-      padding: 100px 5%;
-      position: relative;
-      z-index: 1;
-    }
+  padding: 100px 5%;
+  position: relative;
+  z-index: 1;
+}
+
+section:not(.hero) {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
 
     .section-label {
       display: inline-flex;
@@ -590,7 +594,7 @@
 
       /* override: keep 2-col layout but blend video */
       .hero-content {
-        grid-template-columns: 1.1fr 0.9fr;
+        grid-template-columns: 1fr 1.5fr;
         gap: 34px;
         align-items: center;
       }
@@ -609,7 +613,7 @@
         position: relative;
         top: auto;
         right: auto;
-        width: min(760px, 40vw);
+        width: min(1000px, 60vw);
         border-radius: 28px;
         border: 0;
         background: transparent;
@@ -717,11 +721,11 @@
     }
 
     .hero-actions {
-      display: flex;
-      gap: 16px;
-      justify-content: flex-start;
-      flex-wrap: wrap;
-    }
+  display: flex;
+  gap: 16px;
+  justify-content: center; /* Center the buttons */
+  flex-wrap: wrap;
+}
 
     .hero-stats {
       margin-top: 48px;
@@ -1192,6 +1196,7 @@
       background: linear-gradient(135deg, var(--gold2), var(--cyan));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     /* ── MEDIA VERTICALS ── */
@@ -1308,7 +1313,7 @@
       border-radius: 40px;
       padding: 80px 56px;
       box-shadow: var(--clay-purple);
-      backdrop-filter: blur(24px);
+      backdrop-filter: blur(20px);
       position: relative;
       overflow: hidden;
     }
@@ -1316,11 +1321,11 @@
     .cta-box::before {
       content: '';
       position: absolute;
-      top: -80px;
+      top: -70px;
       left: 50%;
       transform: translateX(-50%);
-      width: 420px;
-      height: 420px;
+      width: 300px;
+      height: 300px;
       border-radius: 50%;
       background: radial-gradient(circle, rgba(0, 212, 255, 0.1), transparent 70%);
       pointer-events: none;
@@ -1465,7 +1470,6 @@
       }
 
       .hero-stats {
-        gap: 10px;
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
@@ -1532,6 +1536,353 @@
         min-height: unset;
       }
     }
+    /* HERO OVERRIDE: void -> running infinity video -> readable copy */
+    .hero {
+      background: #000;
+      padding-left: clamp(24px, 5vw, 72px);
+      padding-right: clamp(24px, 5vw, 72px);
+    }
+
+    .hero-bg {
+      background: #000;
+    }
+
+    .hero-grid {
+      display: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      grid-template-columns: 1fr;
+      gap: 0;
+      align-items: start;
+      width: 100%;
+      max-width: none;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .hero-left {
+  position: relative;
+  z-index: 4;
+  max-width: 100% !important; /* Allow it to take full width */
+  margin: 0 auto !important; /* Center it */
+  text-align: center !important; /* Center text inside */
+  isolation: isolate;
+}
+
+    .hero-left::before {
+      content: '';
+      position: absolute;
+      inset: -28px -36px -34px -36px;
+      z-index: -1;
+      background:
+        linear-gradient(90deg, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.66) 55%, rgba(0, 0, 0, 0.16) 100%),
+        radial-gradient(ellipse 70% 64% at 32% 46%, rgba(0, 0, 0, 0.78), transparent 78%);
+      pointer-events: none;
+    }
+
+    .hero-visual {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      margin-top: 0;
+      pointer-events: none;
+      display: block;
+    }
+
+    .hero-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background:
+        linear-gradient(90deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.38) 42%, rgba(0, 0, 0, 0.26) 100%),
+        radial-gradient(ellipse 58% 50% at 62% 48%, transparent 0%, rgba(0, 0, 0, 0.18) 62%, rgba(0, 0, 0, 0.72) 100%);
+      pointer-events: none;
+    }
+
+    .infinity-frame {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      aspect-ratio: auto;
+      border-radius: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      opacity: 1;
+    }
+
+    .infinity-frame::after {
+      display: none;
+    }
+
+    .infinity-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 62% 50%;
+      opacity: 0.84;
+      filter: saturate(1.1) contrast(1.14) brightness(0.9);
+      transform: scale(1.08);
+    }
+
+    .hero h1 {
+      text-shadow: 0 3px 28px rgba(0, 0, 0, 0.9), 0 1px 5px rgba(0, 0, 0, 0.86);
+    }
+
+    .hero-desc {
+      color: rgba(255, 255, 255, 0.84);
+      text-shadow: 0 2px 18px rgba(0, 0, 0, 0.92), 0 1px 3px rgba(0, 0, 0, 0.86);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, rgba(253, 185, 61, 0.44) 0%, rgba(9, 14, 14, 0.90) 100%);
+      text-shadow: 0 1px 12px rgba(0, 0, 0, 0.75);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.65), 0 3px 10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+
+    .btn-outline {
+      background: rgba(0, 0, 0, 0.52);
+      color: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      text-shadow: 0 1px 12px rgba(0, 0, 0, 0.75);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.56), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-stats {
+  margin-top: 42px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  width: min(760px, 100%);
+  margin-left: auto !important; /* Center the stats block */
+  margin-right: auto !important; /* Center the stats block */
+}
+
+    .stat-pill {
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 14px;
+      min-height: 96px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025)), rgba(4, 5, 7, 0.84);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.72), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+    }
+
+    .stat-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+    }
+
+    .stat-number svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .stat-label {
+      font-size: 11.5px;
+      line-height: 1.38;
+      color: rgba(255, 255, 255, 0.80);
+    }
+
+    .stat-label b {
+      font-size: 11px;
+      letter-spacing: 0.11em;
+      margin-bottom: 5px;
+    }
+
+    .hero .hero-visual {
+      display: block !important;
+      position: absolute !important;
+      top: 112px !important;
+      right: max(48px, calc((100vw - 1320px) / 2)) !important;
+      bottom: auto !important;
+      left: auto !important;
+      z-index: 1 !important;
+      width: min(700px, 46vw) !important;
+      height: min(480px, 56vh) !important;
+      margin: 0 !important;
+      pointer-events: none !important;
+      overflow: hidden !important;
+    }
+
+    .hero .infinity-frame {
+      display: block !important;
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      opacity: 1 !important;
+      overflow: hidden !important;
+      -webkit-mask-image:
+        linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.18) 13%, #000 28%, #000 72%, rgba(0, 0, 0, 0.42) 86%, transparent 100%),
+        radial-gradient(ellipse 70% 60% at 56% 50%, #000 0%, #000 50%, rgba(0, 0, 0, 0.64) 66%, transparent 86%);
+      mask-image:
+        linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.18) 13%, #000 28%, #000 72%, rgba(0, 0, 0, 0.42) 86%, transparent 100%),
+        radial-gradient(ellipse 70% 60% at 56% 50%, #000 0%, #000 50%, rgba(0, 0, 0, 0.64) 66%, transparent 86%);
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+    }
+
+    .hero .infinity-video {
+      display: block !important;
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      min-width: 100% !important;
+      min-height: 100% !important;
+      object-fit: cover !important;
+      object-position: 68% 50% !important;
+      opacity: 0 !important;
+      visibility: visible !important;
+      filter: saturate(1.12) contrast(1.14) brightness(1.02) !important;
+      transform: scale(1.34) translateX(4%) !important;
+      transition: opacity 0.45s ease !important;
+      mix-blend-mode: screen !important;
+    }
+
+    .hero .infinity-video.is-ready {
+      opacity: 0.96 !important;
+    }
+
+    .hero .hero-visual::before {
+      background:
+        linear-gradient(90deg, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.72) 18%, transparent 38%, transparent 74%, rgba(0, 0, 0, 0.70) 100%),
+        radial-gradient(ellipse 44% 38% at 54% 50%, transparent 0%, rgba(0, 0, 0, 0.18) 56%, rgba(0, 0, 0, 0.92) 100%) !important;
+    }
+
+    @media (max-width: 900px) {
+      .hero .hero-visual {
+        top: 120px !important;
+        right: -34vw !important;
+        width: 112vw !important;
+        height: 58vh !important;
+        opacity: 0.72 !important;
+      }
+
+      .hero-left {
+        max-width: 100%;
+      }
+
+      .hero-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-visual {
+        display: block !important;
+        position: absolute !important;
+        top: 122px !important;
+        right: -52vw !important;
+        bottom: auto !important;
+        left: auto !important;
+        z-index: 1 !important;
+        width: 146vw !important;
+        height: 52vh !important;
+        margin-top: 0 !important;
+      }
+
+      .infinity-frame {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+      }
+
+      .infinity-video {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        object-position: 58% 50% !important;
+        opacity: 0.78 !important;
+        filter: saturate(1.05) contrast(1.12) brightness(0.86) !important;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Final video cleanup: keep the full infinity visible without a rectangular canvas edge. */
+    .hero .hero-visual {
+  left: 0 !important;
+  right: 0 !important;
+  width: auto !important;
+  height: 100% !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  overflow: visible !important;
+}
+
+    .hero .hero-visual::before {
+      display: none !important;
+    }
+
+    .hero .infinity-frame {
+  background: transparent !important;
+  overflow: hidden !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+
+    .hero .infinity-video {
+      object-fit: cover !important;
+      object-position: 50% 50% !important;
+      transform: scale(1.8) !important;
+      filter: saturate(1.2) contrast(1.38) brightness(0.86) !important;
+      mix-blend-mode: screen !important;
+    }
+
+    .hero .hero-visual::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      z-index: 3;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, #000 0%, transparent 22%, transparent 76%, #000 100%),
+        linear-gradient(180deg, #000 0%, transparent 22%, transparent 78%, #000 100%);
+    }
+
+    @media (max-width: 900px) {
+      .hero .hero-visual {
+        right: -30vw !important;
+        width: 142vw !important;
+        height: 56vh !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero .hero-visual {
+        right: -62vw !important;
+        width: 180vw !important;
+        height: 52vh !important;
+      }
+    }
+
   </style>
 </head>
 
@@ -1585,6 +1936,13 @@
   <section class="hero" id="home">
     <div class="hero-bg"></div>
     <div class="hero-grid"></div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="infinity-frame">
+        <video class="infinity-video" id="infinityVideo" autoplay muted loop playsinline preload="auto">
+          <source src="https://zeroorigins.in/wp-content/uploads/2026/05/infinity-loop3.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
     <div class="hero-content">
       <div class="hero-left">
         <div class="hero-brand">ZeroOrigins</div>
@@ -1598,7 +1956,7 @@
           <span class="hline">create <span class="gradient-text">impact.</span></span>
         </h1>
         <p class="hero-desc">
-          ZeroOrigins creates intelligent systems and automation platforms that accelerate innovation and transform
+          We creates intelligent systems and automation platforms that accelerate innovation and transform
           businesses for the future.
         </p>
         <div class="hero-actions">
@@ -1617,8 +1975,7 @@
                 <path d="M10 13h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
               </svg>
             </span>
-            <span class="stat-label"><b>AI &amp; Machine Learning</b>Building intelligent models that adapt and
-              evolve.</span>
+            <span class="stat-label"><b>Gravity</b>Systems that hold attention and reduce operational drift.</span>
           </div>
           <div class="stat-pill">
             <span class="stat-number" aria-hidden="true">
@@ -1634,7 +1991,7 @@
                 <path d="M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6Z" stroke="currentColor" stroke-width="1.7" />
               </svg>
             </span>
-            <span class="stat-label"><b>Automation Systems</b>End‑to‑end automation that boosts efficiency.</span>
+            <span class="stat-label"><b>Precision</b>Every asset has a reason, route, and measurable purpose.</span>
           </div>
           <div class="stat-pill">
             <span class="stat-number" aria-hidden="true">
@@ -1645,456 +2002,3 @@
                 <path d="m4 7 8 4 8-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
               </svg>
             </span>
-            <span class="stat-label"><b>Scalable Platforms</b>Robust, secure solutions built to grow.</span>
-          </div>
-          <div class="stat-pill">
-            <span class="stat-number" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path d="M4 19V5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
-                <path d="M4 19h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
-                <path d="M7 15l3-3 3 2 5-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
-                  stroke-linejoin="round" />
-              </svg>
-            </span>
-            <span class="stat-label"><b>Data Intelligence</b>Turning data into actionable insights.</span>
-          </div>
-        </div>
-      </div>
-      <div class="hero-visual" aria-hidden="true">
-        <div class="infinity-frame">
-          <video class="infinity-video" id="infinityVideo" autoplay muted loop playsinline preload="auto">
-            <source src="https://zeroorigins.in/wp-content/uploads/2026/05/infinity-loop3.mp4" type="video/mp4">
-          </video>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ WHAT WE BUILD ═══ -->
-  <section class="what-we-build" id="about">
-    <div class="section-label">What We Build</div>
-    <h2 class="section-title">One Company.<br>Many Capabilities.</h2>
-    <p class="section-sub">We operate across product development, automation systems, industry solutions, and creative
-      AI — all under one roof.</p>
-    <div class="build-grid">
-      <div class="build-card">
-        <div class="build-icon" style="background:linear-gradient(135deg,rgba(0,212,255,0.15),rgba(0,212,255,0.04))">⚙️
-        </div>
-        <h3>AI Systems & Automation</h3>
-        <p>n8n-powered workflows, AI agent systems, lead capture automation, CRM routing, and operational backends built
-          to run without manual intervention.</p>
-      </div>
-      <div class="build-card">
-        <div class="build-icon" style="background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(124,58,237,0.04))">
-          🚀</div>
-        <h3>SaaS & Product Platforms</h3>
-        <p>Productized software platforms across real estate intelligence, talent matching, performance tracking, and
-          architecture design tooling.</p>
-      </div>
-      <div class="build-card">
-        <div class="build-icon" style="background:linear-gradient(135deg,rgba(236,72,153,0.15),rgba(236,72,153,0.04))">
-          🏭</div>
-        <h3>Industry Solutions</h3>
-        <p>Domain-specific platforms for retail execution intelligence, field scoring, and operational visibility —
-          built around real business workflows.</p>
-      </div>
-      <div class="build-card">
-        <div class="build-icon" style="background:linear-gradient(135deg,rgba(0,212,255,0.12),rgba(124,58,237,0.08))">
-          🛠️</div>
-        <h3>Digital Tools & Apps</h3>
-        <p>Utilities, MVPs, and internal tools that solve specific problems fast — from smart digital identity to
-          workflow starter kits.</p>
-      </div>
-      <div class="build-card">
-        <div class="build-icon" style="background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(236,72,153,0.06))">
-          🎵</div>
-        <h3>Media & Creative AI</h3>
-        <p>AI-generated music, cinematic storytelling, and experimental creative content produced through the
-          AIwithNoBrain and EpicsToYou verticals.</p>
-      </div>
-      <div class="build-card">
-        <div class="build-icon" style="background:linear-gradient(135deg,rgba(236,72,153,0.14),rgba(0,212,255,0.06))">📦
-        </div>
-        <h3>Templates & Digital Products</h3>
-        <p>Purchasable digital assets — smart identity packs, workflow starter kits, and presentation templates for
-          founders and professionals.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ PRODUCTS — POKEMON CARD EFFECT ═══ -->
-  <section class="featured-work" id="products">
-    <div class="work-header">
-      <div>
-        <div class="section-label">Selected Work</div>
-        <h2 class="section-title">Products, Solutions &<br>Active Builds</h2>
-      </div>
-      <a href="#" class="btn btn-outline">Explore All →</a>
-    </div>
-
-    <div class="products-grid">
-
-      <div class="product-card card-cyan">
-        <div class="card-shine"></div>
-        <div class="product-meta">
-          <span class="product-category">Product Platform</span>
-          <span class="product-status status-active">Active</span>
-        </div>
-        <h3>PlotDNA</h3>
-        <p class="product-summary">AI-powered real estate intelligence platform for data-backed plot buying decisions.
-        </p>
-        <p class="product-outcome">Evaluate land using infrastructure signals, satellite growth, activity maps, and
-          market intelligence.</p>
-        <div class="product-tags">
-          <span class="tag">Real Estate</span><span class="tag">AI</span>
-          <span class="tag">Maps</span><span class="tag">Analytics</span>
-        </div>
-        <a href="#" class="product-cta">View Product →</a>
-      </div>
-
-      <div class="product-card card-purple">
-        <div class="card-shine"></div>
-        <div class="product-meta">
-          <span class="product-category">Design Platform</span>
-          <span class="product-status status-active">Active</span>
-        </div>
-        <h3>Structra AI</h3>
-        <p class="product-summary">AI-powered architectural design studio for blueprint analysis, 3D modeling, and
-          immersive walkthroughs.</p>
-        <p class="product-outcome">Streamlines architectural ideation, visualization, and AI-assisted design iteration.
-        </p>
-        <div class="product-tags">
-          <span class="tag">Architecture</span><span class="tag">AI Agents</span>
-          <span class="tag">3D</span><span class="tag">Design</span>
-        </div>
-        <a href="#" class="product-cta">View Product →</a>
-      </div>
-
-      <div class="product-card card-cyan">
-        <div class="card-shine"></div>
-        <div class="product-meta">
-          <span class="product-category">Talent Platform</span>
-          <span class="product-status status-active">Working Build</span>
-        </div>
-        <h3>Applyyo</h3>
-        <p class="product-summary">AI-powered job application distribution and candidate matching platform.</p>
-        <p class="product-outcome">Automates structured application workflows and improves candidate–job matching
-          accuracy.</p>
-        <div class="product-tags">
-          <span class="tag">Hiring</span><span class="tag">Talent Tech</span>
-          <span class="tag">Workflow</span><span class="tag">AI</span>
-        </div>
-        <a href="#" class="product-cta">View Product →</a>
-      </div>
-
-      <div class="product-card card-purple">
-        <div class="card-shine"></div>
-        <div class="product-meta">
-          <span class="product-category">Performance Intelligence</span>
-          <span class="product-status status-dev">In Development</span>
-        </div>
-        <h3>ProofPath</h3>
-        <p class="product-summary">A trusted performance and contribution proof layer built on goals, KPIs, outcomes,
-          and evidence.</p>
-        <p class="product-outcome">Turns tasks and KPIs into structured contribution intelligence and portable proof of
-          work.</p>
-        <div class="product-tags">
-          <span class="tag">KPI Intelligence</span><span class="tag">Performance</span>
-          <span class="tag">B2B SaaS</span><span class="tag">AI</span>
-        </div>
-        <a href="#" class="product-cta">View Product →</a>
-      </div>
-
-      <div class="product-card card-pink">
-        <div class="card-shine"></div>
-        <div class="product-meta">
-          <span class="product-category">Industry Solution</span>
-          <span class="product-status status-solution">Solution</span>
-        </div>
-        <h3>Retail Execution Intelligence</h3>
-        <p class="product-summary">Retail field intelligence and store scoring system for execution visibility and
-          decision-making.</p>
-        <p class="product-outcome">Helps retail teams score execution, evaluate store conditions, and improve field
-          performance visibility.</p>
-        <div class="product-tags">
-          <span class="tag">Retail</span><span class="tag">Field Execution</span>
-          <span class="tag">Scorecards</span><span class="tag">Intelligence</span>
-        </div>
-        <a href="#" class="product-cta">View Solution →</a>
-      </div>
-
-      <div class="product-card card-cyan">
-        <div class="card-shine"></div>
-        <div class="product-meta">
-          <span class="product-category">Automation Service</span>
-          <span class="product-status status-active">Available Now</span>
-        </div>
-        <h3>LeadFlow Setup</h3>
-        <p class="product-summary">Done-for-you lead capture, follow-up automation, and CRM routing built in n8n — live
-          in 3–7 days.</p>
-        <p class="product-outcome">Businesses respond faster, miss fewer leads, and stop doing manual follow-up work.
-        </p>
-        <div class="product-tags">
-          <span class="tag">n8n</span><span class="tag">Lead Automation</span>
-          <span class="tag">CRM</span><span class="tag">Workflow</span>
-        </div>
-        <a href="https://calendly.com/zerooriginsai/30min" target="_blank" rel="noopener" class="product-cta">Get Started →</a>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ═══ STUDIO ═══ -->
-  <section class="studio" id="services">
-    <div class="studio-inner">
-      <div>
-        <div class="section-label">ZeroOrigins Studio</div>
-        <h2 class="section-title">We Design &<br>Build for Founders</h2>
-        <p class="section-sub" style="margin-bottom:0">
-          AI-powered systems, automation workflows, operational tools, and product experiences — built clean, delivered
-          fast.
-        </p>
-        <div class="studio-services">
-          <div class="service-line">
-            <div class="service-dot"></div> Workflow automation & n8n systems
-          </div>
-          <div class="service-line">
-            <div class="service-dot"></div> AI agent design & implementation
-          </div>
-          <div class="service-line">
-            <div class="service-dot"></div> SaaS MVP design and build
-          </div>
-          <div class="service-line">
-            <div class="service-dot"></div> Lead capture and follow-up automation
-          </div>
-          <div class="service-line">
-            <div class="service-dot"></div> Internal tools and ops systems
-          </div>
-          <div class="service-line">
-            <div class="service-dot"></div> Industry solution design
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="studio-cta-box">
-          <h3>Start with a<br>Discovery Call</h3>
-          <p>Tell us your process bottleneck. We'll show you what a working system looks like — before you pay anything.
-          </p>
-          <a href="https://calendly.com/zerooriginsai/30min" target="_blank" rel="noopener" class="btn btn-primary">📅 Book a
-            Free Discovery Call</a>
-          <a href="mailto:hello@zeroorigins.in" class="btn btn-outline">✉️ Request a Workflow Demo</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ TEMPLATES ═══ -->
-  <section class="templates" id="templates">
-    <div class="section-label">Digital Products</div>
-    <h2 class="section-title">Templates &<br>Starter Assets</h2>
-    <p class="section-sub">Purchasable digital assets for founders, professionals, and businesses who want to look
-      sharper and move faster.</p>
-    <div class="templates-grid">
-      <div class="template-card">
-        <span class="template-icon">🪪</span>
-        <h4>Digital Identity Pack</h4>
-        <p>Smart digital profile card, bio page, and social link system for founders and professionals.</p>
-        <div class="template-price">$99</div>
-        <a class="template-card-link" href="https://zeroorigins.gumroad.com/l/DigitalIdentity?want=true" target="_blank"
-          rel="noopener noreferrer" aria-label="Digital Identity Kit (opens in a new tab)"></a>
-      </div>
-      <div class="template-card">
-        <span class="template-icon">⚡</span>
-        <h4>Workflow Starter Kit</h4>
-        <p>Ready-to-deploy n8n workflow templates for lead capture, follow-up, and internal alerts.</p>
-        <div class="template-price">$99</div>
-        <a class="template-card-link" href="https://zeroorigins.gumroad.com/l/WorkflowKit?want=true" target="_blank"
-          rel="noopener noreferrer" aria-label="Workflow Starter Kit (opens in a new tab)"></a>
-      </div>
-      <div class="template-card">
-        <span class="template-icon">📋</span>
-        <h4>Pitch & Strategy Pack</h4>
-        <p>Proposal templates, scope docs, and one-pager frameworks for service businesses and consultants.</p>
-        <div class="template-price">$99</div>
-      </div>
-      <div class="template-card">
-        <span class="template-icon">🎴</span>
-        <h4>Business Card System</h4>
-        <p>AI-designed smart digital business card with NFC-ready link page and contact capture.</p>
-        <div class="template-price">$99</div>
-      </div>
-    </div>
-    <div style="text-align:center;margin-top:48px">
-      <a href="#" class="btn btn-outline">Browse All Templates →</a>
-    </div>
-  </section>
-
-  <!-- ═══ MEDIA VERTICALS ═══ -->
-  <section class="media-verticals" id="media">
-    <div class="section-label">Creative Verticals</div>
-    <h2 class="section-title">Not Just Systems.<br>Creative-Native Too.</h2>
-    <p class="section-sub">ZeroOrigins runs two independent creative verticals pushing the edge of AI-generated media.
-    </p>
-    <div class="verticals-grid">
-      <div class="vertical-card vertical-card-aiwnb">
-        <div class="vertical-bg-icon">🎵</div>
-        <div class="vertical-label aiwnb-label">AIwithNoBrain</div>
-        <h3>AI Music &<br>Creative Experiments</h3>
-        <p>AI-generated music, experimental audio/visual work, viral creative content, and entertainment-first AI
-          experiences.</p>
-        <a href="#" class="vertical-link aiwnb-link">Explore the Vertical →</a>
-      </div>
-      <div class="vertical-card vertical-card-ety">
-        <div class="vertical-bg-icon">🎬</div>
-        <div class="vertical-label ety-label">EpicsToYou</div>
-        <h3>AI Video &<br>Cinematic Storytelling</h3>
-        <p>AI-generated videos, mythological and cinematic content, YouTube and reels systems, and visual storytelling
-          IP.</p>
-        <a href="#" class="vertical-link ety-link">Explore the Vertical →</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ CLOSING CTA ═══ -->
-  <section class="closing-cta" id="contact">
-    <div class="cta-box">
-      <h2>Need a system, product,<br>or automation built?</h2>
-      <p>Tell us what you're working on. We'll show you what's possible — clearly, quickly, without the fluff.</p>
-      <div class="cta-actions">
-        <a href="https://calendly.com/zerooriginsai/30min" target="_blank" rel="noopener" class="btn btn-primary">📅 Schedule a
-          Discovery Call</a>
-        <a href="mailto:hello@zeroorigins.in" class="btn btn-outline">✉️ Email Us</a>
-      </div>
-      <a href="mailto:hello@zeroorigins.in" class="cta-email">or reach us at <span>hello@zeroorigins.in</span></a>
-    </div>
-  </section>
-
-  <!-- ═══ FOOTER ═══ -->
-  <footer>
-    <div class="footer-logo">
-      <img src="https://zeroorigins.in/wp-content/uploads/2026/05/ZerorOrigins-loho-1.png" alt="ZeroOrigins"
-        loading="lazy" onerror="this.onerror=null;this.src='./zeroOrigins logo.png';" />
-    </div>
-    <p>© 2026 ZeroOrigins. AI-Native Products, Systems & Creative Technology.</p>
-    <ul class="footer-links">
-      <li><a href="#services">Services</a></li>
-      <li><a href="#products">Products</a></li>
-      <li><a href="#templates">Templates</a></li>
-      <li><a href="#media">Media</a></li>
-      <li><a href="mailto:hello@zeroorigins.in">hello@zeroorigins.in</a></li>
-    </ul>
-  </footer>
-
-  <script>
-    (function () {
-      const toggle = document.querySelector('.nav-toggle');
-      const backdrop = document.querySelector('.mobile-nav-backdrop');
-      const menu = document.getElementById('mobileNav');
-      if (!toggle || !backdrop || !menu) return;
-
-      function setOpen(open) {
-        document.body.classList.toggle('menu-open', open);
-        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      }
-
-      toggle.addEventListener('click', () => setOpen(!document.body.classList.contains('menu-open')));
-      backdrop.addEventListener('click', () => setOpen(false));
-      menu.addEventListener('click', (e) => {
-        const target = e.target;
-        if (!(target instanceof Element)) return;
-        if (target.matches('[data-mobile-nav-close]')) setOpen(false);
-      });
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') setOpen(false);
-      });
-    })();
-
-    /* ── POKEMON CARD 3D TILT + HOLOGRAPHIC SHINE ── */
-    document.querySelectorAll('.product-card').forEach(card => {
-      const shine = card.querySelector('.card-shine');
-
-      card.addEventListener('mouseenter', () => {
-        card.style.transition = 'box-shadow 0.1s';
-      });
-
-      card.addEventListener('mousemove', e => {
-        const r = card.getBoundingClientRect();
-        const x = e.clientX - r.left;
-        const y = e.clientY - r.top;
-        const cx = r.width / 2;
-        const cy = r.height / 2;
-        const rotX = ((y - cy) / cy) * -14;
-        const rotY = ((x - cx) / cx) * 14;
-        const px = (x / r.width) * 100;
-        const py = (y / r.height) * 100;
-        const dist = Math.hypot(x - cx, y - cy);
-        const maxD = Math.hypot(cx, cy);
-        const i = dist / maxD;
-
-        card.style.transform =
-          `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.045) translateZ(8px)`;
-
-        shine.style.opacity = '1';
-        shine.style.background = [
-          `radial-gradient(circle at ${px}% ${py}%, rgba(255,255,255,0.18) 0%, transparent 52%)`,
-          `linear-gradient(${135 + rotY * 2}deg,
-        transparent 20%,
-        rgba(0,212,255,${(0.1 * i).toFixed(3)}) 45%,
-        rgba(124,58,237,${(0.12 * i).toFixed(3)}) 65%,
-        transparent 85%)`
-        ].join(', ');
-      });
-
-      card.addEventListener('mouseleave', () => {
-        card.style.transition =
-          'transform 0.65s cubic-bezier(0.23,1,0.32,1), box-shadow 0.5s ease';
-        card.style.transform =
-          'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1) translateZ(0)';
-        shine.style.opacity = '0';
-      });
-    });
-
-    /* ── INFINITY VIDEO: LOOP 1s → 4s ── */
-    (function () {
-      const video = document.getElementById('infinityVideo');
-      if (!video) return;
-
-      const loopStart = 2.0;
-      const loopEnd = 9.0;
-      const epsilon = 0.03;
-
-      function clampToStart() {
-        if (!Number.isFinite(video.duration)) return;
-        if (video.currentTime < loopStart - 0.25 || video.currentTime > loopEnd + 0.25) {
-          video.currentTime = loopStart + epsilon;
-        }
-      }
-
-      function handleLoop() {
-        if (video.currentTime >= loopEnd - epsilon) {
-          video.currentTime = loopStart + epsilon;
-          if (video.paused) video.play().catch(() => { });
-        }
-      }
-
-      video.addEventListener('loadedmetadata', () => {
-        clampToStart();
-        video.play().catch(() => { });
-      });
-
-      video.addEventListener('seeking', clampToStart);
-      video.addEventListener('timeupdate', handleLoop);
-
-      if (typeof video.requestVideoFrameCallback === 'function') {
-        const tick = () => {
-          handleLoop();
-          video.requestVideoFrameCallback(tick);
-        };
-        video.requestVideoFrameCallback(tick);
-      }
-    })();
-  </script>
-
-</body>
-
-</html>

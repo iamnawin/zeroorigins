@@ -49,7 +49,7 @@ Book a call if:
 
 ## Book Here
 
-https://calendly.com/zeroorigins
+https://calendly.com/zerooriginsai/30min
 
 Pick any available slot. Bring your n8n login and this kit open.
 
@@ -58,7 +58,7 @@ Pick any available slot. Bring your n8n login and this kit open.
 ## Contact
 
 **Email:** hello@zeroorigins.in  
-**Book a call:** https://calendly.com/zeroorigins  
+**Book a call:** https://calendly.com/zerooriginsai/30min  
 **Response time:** Within 24 hours on business days
 
 ---

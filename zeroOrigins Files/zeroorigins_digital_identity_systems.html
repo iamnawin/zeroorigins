@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://zeroorigins.in" crossorigin>
+  <link rel="dns-prefetch" href="//zeroorigins.in">
+  <link rel="preload" as="image" href="https://zeroorigins.in/wp-content/uploads/2026/05/ZerorOrigins-loho-1.png" fetchpriority="high">
+  <link rel="preload" as="video" href="https://zeroorigins.in/wp-content/uploads/2026/05/Infinity-loop.mp4" type="video/mp4" crossorigin>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ZeroOrigins Digital Identity Systems and Template Packages for professionals, founders, creators, consultants, and operators.">
+  <title>ZeroOrigins - Digital Identity Systems</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap');
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --zero: #0B0D12;
+      --deep: #1C1F29;
+      --graphite: #2A2F3B;
+      --chrome: #A6ABB5;
+      --amber: #FDBA3D;
+      --gold: #E8A020;
+      --white: #FFFFFF;
+      --off: #F5F5F5;
+      --line: rgba(166, 171, 181, 0.18);
+      --line-strong: rgba(253, 186, 61, 0.36);
+      --panel: rgba(28, 31, 41, 0.72);
+      --panel-dark: rgba(11, 13, 18, 0.86);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 88px;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background:
+        radial-gradient(circle at 50% 8%, rgba(255, 255, 255, 0.06), transparent 9%),
+        radial-gradient(circle at 78% 18%, rgba(253, 186, 61, 0.08), transparent 20%),
+        linear-gradient(180deg, var(--zero) 0%, #08090d 48%, var(--zero) 100%);
+      color: var(--chrome);
+      overflow-x: hidden;
+      line-height: 1.55;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(166, 171, 181, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(166, 171, 181, 0.035) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.82), transparent 72%);
+      z-index: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img,
+    video {
+      max-width: 100%;
+      display: block;
+    }
+
+    .page-shell {
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      min-height: 78px;
+      padding: 14px clamp(18px, 5vw, 72px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      background: rgba(11, 13, 18, 0.92);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      min-width: 150px;
+    }
+
+    .brand img {
+      height: 42px;
+      width: auto;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(16px, 2.4vw, 34px);
+      list-style: none;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .nav-links a {
+      color: rgba(166, 171, 181, 0.78);
+      transition: color 160ms ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--white);
+    }
+
+    .nav-cta,
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 0 22px;
+      border: 1px solid var(--line-strong);
+      background: rgba(253, 186, 61, 0.08);
+      color: var(--off);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .nav-cta:hover,
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--amber);
+      background: rgba(253, 186, 61, 0.14);
+    }
+
+    .btn.secondary {
+      border-color: var(--line);
+      background: rgba(166, 171, 181, 0.04);
+      color: var(--chrome);
+    }
+
+    .btn.secondary:hover {
+      color: var(--white);
+      border-color: rgba(166, 171, 181, 0.42);
+      background: rgba(166, 171, 181, 0.08);
+    }
+
+    main {
+      padding-top: 78px;
+    }
+
+    section {
+      padding: clamp(76px, 10vw, 128px) clamp(18px, 5vw, 72px);
+      position: relative;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      color: var(--amber);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: var(--amber);
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: "Space Grotesk", "Inter", sans-serif;
+      color: var(--off);
+      letter-spacing: -0.03em;
+      line-height: 0.98;
+    }
+
+    h1 {
+      max-width: 880px;
+      font-size: clamp(54px, 9vw, 108px);
+      font-weight: 700;
+    }
+
+    h2 {
+      max-width: 760px;
+      font-size: clamp(38px, 5vw, 64px);
+      font-weight: 700;
+    }
+
+    h3 {
+      font-size: clamp(26px, 3vw, 38px);
+      font-weight: 700;
+    }
+
+    p {
+      color: rgba(166, 171, 181, 0.86);
+    }
+
+    .lead {
+      max-width: 680px;
+      margin-top: 26px;
+      font-size: clamp(17px, 2vw, 21px);
+      color: rgba(245, 245, 245, 0.76);
+    }
+
+    .hero {
+      min-height: calc(100vh - 78px);
+      display: grid;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(330px, 0.75fr);
+      gap: clamp(34px, 6vw, 82px);
+      align-items: center;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand-word {
+      display: block;
+      margin-bottom: 18px;
+      color: var(--white);
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 700;
+      letter-spacing: -0.12em;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 36px;
+    }
+
+    .signal-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      max-width: 690px;
+      margin-top: 48px;
+      border: 1px solid var(--line);
+      background: var(--line);
+    }
+
+    .signal {
+      padding: 18px;
+      background: rgba(11, 13, 18, 0.82);
+    }
+
+    .signal strong {
+      display: block;
+      color: var(--amber);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .signal span {
+      display: block;
+      margin-top: 6px;
+      font-size: 13px;
+      color: rgba(166, 171, 181, 0.74);
+    }
+
+    .infinity-frame {
+      position: relative;
+      min-height: 520px;
+      border: 1px solid rgba(166, 171, 181, 0.2);
+      background:
+        linear-gradient(180deg, rgba(42, 47, 59, 0.35), rgba(11, 13, 18, 0.92)),
+        var(--zero);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .infinity-frame::before {
+      content: "";
+      position: absolute;
+      inset: 22px;
+      border: 1px solid rgba(166, 171, 181, 0.14);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .infinity-frame::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 120px;
+      height: 120px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.62), rgba(253, 186, 61, 0.16) 28%, transparent 66%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .infinity-frame video {
+      width: 100%;
+      height: 100%;
+      min-height: 520px;
+      object-fit: cover;
+      opacity: 0.62;
+      filter: grayscale(1) contrast(1.1) brightness(0.72);
+    }
+
+    .frame-meta {
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      bottom: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      z-index: 3;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(245, 245, 245, 0.78);
+    }
+
+    .frame-meta span:last-child {
+      color: var(--amber);
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 42px;
+      align-items: end;
+      margin-bottom: 48px;
+    }
+
+    .section-head p {
+      max-width: 420px;
+      font-size: 16px;
+    }
+
+    .offer-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .offer-card {
+      position: relative;
+      min-height: 460px;
+      padding: clamp(28px, 4vw, 44px);
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(28, 31, 41, 0.78), rgba(11, 13, 18, 0.92)),
+        var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .offer-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, transparent, rgba(253, 186, 61, 0.12), transparent);
+      transform: translateX(-100%);
+      transition: transform 600ms ease;
+    }
+
+    .offer-card:hover::before {
+      transform: translateX(100%);
+    }
+
+    .offer-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .offer-kicker {
+      color: var(--amber);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .offer-card h3 {
+      margin-top: 74px;
+      max-width: 520px;
+    }
+
+    .offer-card p {
+      max-width: 530px;
+      margin-top: 22px;
+      font-size: 16px;
+    }
+
+    .offer-list {
+      display: grid;
+      gap: 10px;
+      margin: 30px 0 34px;
+      list-style: none;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .offer-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(245, 245, 245, 0.76);
+    }
+
+    .offer-list li::before {
+      content: "";
+      width: 18px;
+      height: 1px;
+      background: var(--amber);
+      flex: 0 0 auto;
+    }
+
+    .systems {
+      background:
+        linear-gradient(180deg, rgba(11, 13, 18, 0), rgba(28, 31, 41, 0.4) 45%, rgba(11, 13, 18, 0));
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      gap: 1px;
+      border: 1px solid var(--line);
+      background: var(--line);
+    }
+
+    .matrix-title,
+    .matrix-list {
+      background: rgba(11, 13, 18, 0.84);
+      padding: clamp(26px, 4vw, 42px);
+    }
+
+    .matrix-title h2 {
+      font-size: clamp(34px, 4.4vw, 58px);
+    }
+
+    .matrix-title p {
+      margin-top: 22px;
+      max-width: 380px;
+    }
+
+    .matrix-list {
+      display: grid;
+      gap: 1px;
+      padding: 0;
+      background: var(--line);
+    }
+
+    .matrix-item {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 28px;
+      padding: 26px;
+      background: rgba(28, 31, 41, 0.58);
+    }
+
+    .matrix-item code {
+      color: var(--amber);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      letter-spacing: 0.13em;
+    }
+
+    .matrix-item strong {
+      display: block;
+      color: var(--off);
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+
+    .closing {
+      padding-bottom: 80px;
+    }
+
+    .closing-panel {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line-strong);
+      background:
+        radial-gradient(circle at 74% 22%, rgba(253, 186, 61, 0.12), transparent 30%),
+        rgba(11, 13, 18, 0.92);
+      padding: clamp(34px, 6vw, 70px);
+      box-shadow: var(--shadow);
+    }
+
+    .closing-panel h2 {
+      max-width: 820px;
+    }
+
+    .closing-panel p {
+      max-width: 620px;
+      margin-top: 24px;
+      font-size: 18px;
+    }
+
+    .closing-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    footer {
+      padding: 30px clamp(18px, 5vw, 72px) 42px;
+      border-top: 1px solid var(--line);
+      color: rgba(166, 171, 181, 0.66);
+    }
+
+    .footer-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .footer-inner img {
+      height: 34px;
+      width: auto;
+    }
+
+    @media (max-width: 980px) {
+      .nav {
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .brand {
+        flex: 1 1 auto;
+      }
+
+      .nav-links {
+        order: 3;
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding: 6px 0 2px;
+      }
+
+      main {
+        padding-top: 126px;
+      }
+
+      html {
+        scroll-padding-top: 136px;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .hero-grid,
+      .offer-grid,
+      .matrix {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .section-head p {
+        margin-top: 20px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav {
+        padding: 12px 16px;
+      }
+
+      .nav-cta {
+        width: 100%;
+      }
+
+      main {
+        padding-top: 178px;
+      }
+
+      html {
+        scroll-padding-top: 188px;
+      }
+
+      section {
+        padding-inline: 16px;
+      }
+
+      .hero-actions,
+      .closing-actions {
+        display: grid;
+      }
+
+      .signal-row {
+        grid-template-columns: 1fr;
+      }
+
+      .infinity-frame,
+      .infinity-frame video {
+        min-height: 360px;
+      }
+
+      .frame-meta {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .offer-card {
+        min-height: auto;
+      }
+
+      .offer-card h3 {
+        margin-top: 52px;
+      }
+
+      .matrix-item {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-shell">
+    <header class="nav">
+      <a class="brand" href="#home" aria-label="ZeroOrigins home">
+        <img src="https://zeroorigins.in/wp-content/uploads/2026/05/ZerorOrigins-loho-1.png" alt="ZeroOrigins" loading="eager" fetchpriority="high" decoding="async" onerror="this.onerror=null;this.src='./zeroOrigins logo.png';">
+      </a>
+      <nav aria-label="Primary navigation">
+        <ul class="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#digital-identity">Identity</a></li>
+          <li><a href="#templates">Templates</a></li>
+          <li><a href="#systems">Systems</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <a class="nav-cta" href="https://calendly.com/zerooriginsai/30min" target="_blank" rel="noopener noreferrer">Start a build</a>
+    </header>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <span class="brand-word">ZeroOrigins</span>
+            <div class="eyebrow">Automate. Systemize. Scale.</div>
+            <h1>Digital presence, built like infrastructure.</h1>
+            <p class="lead">Identity pages. Template systems. Operating documents. Compact digital layers that make trust easier to verify and action easier to take.</p>
+            <div class="hero-actions">
+              <a class="btn" href="#digital-identity">Build My Digital Identity</a>
+              <a class="btn secondary gumroad-template-link" href="https://zeroorigins.gumroad.com/l/WorkflowKit?want=true" target="_blank" rel="noopener noreferrer" data-product="workflow-starter-kit">View Template Pack</a>
+            </div>
+            <div class="signal-row" aria-label="ZeroOrigins signals">
+              <div class="signal">
+                <strong>Gravity</strong>
+                <span>Clear presence that holds attention.</span>
+              </div>
+              <div class="signal">
+                <strong>Precision</strong>
+                <span>Every section has a job.</span>
+              </div>
+              <div class="signal">
+                <strong>Systems</strong>
+                <span>Assets designed for repeat use.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="infinity-frame" aria-label="ZeroOrigins infinity system visual">
+            <video autoplay muted loop playsinline preload="metadata" poster="https://zeroorigins.in/wp-content/uploads/2026/05/ZerorOrigins-loho-1.png">
+              <source src="https://zeroorigins.in/wp-content/uploads/2026/05/Infinity-loop.mp4" type="video/mp4">
+            </video>
+            <div class="frame-meta">
+              <span>Zero Black / Chrome / Origin Amber</span>
+              <span>Identity Layer Active</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="digital-identity">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Digital Identity Systems</div>
+              <h2>Your online identity should not look like a forgotten PDF.</h2>
+            </div>
+            <p>A packaged digital presence system for professionals, founders, creators, consultants, and students.</p>
+          </div>
+
+          <div class="offer-grid">
+            <article class="offer-card">
+              <div class="offer-kicker">Trust System</div>
+              <h3>Skills, proof, story, links, and contact path in one controlled surface.</h3>
+              <p>We design compact digital identity systems that turn your skills, story, proof, links, and contact path into a clean, credible online presence.</p>
+              <ul class="offer-list">
+                <li>Conversion-ready profile</li>
+                <li>Professional signal engine</li>
+                <li>Link and contact architecture</li>
+                <li>Proof and credibility layer</li>
+              </ul>
+              <a class="btn" href="https://calendly.com/zerooriginsai/30min" target="_blank" rel="noopener noreferrer">Build My Digital Identity</a>
+            </article>
+
+            <article class="offer-card">
+              <div class="offer-kicker">Built For</div>
+              <h3>Professionals who need signal without noise.</h3>
+              <p>Not a resume. Not a course page. Not another generic portfolio. A tighter operating layer for how people understand who you are, what you can do, and how to reach you.</p>
+              <ul class="offer-list">
+                <li>Founders</li>
+                <li>Creators</li>
+                <li>Consultants</li>
+                <li>Students entering the market</li>
+              </ul>
+              <a class="btn secondary" href="mailto:hello@zeroorigins.in?subject=Digital%20Identity%20System">Request the scope</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="templates">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Template Packages</div>
+              <h2>Start with systems, not blank pages.</h2>
+            </div>
+            <p>Ready-to-use ZeroOrigins systems, templates, workflow kits, and operating documents.</p>
+          </div>
+
+          <div class="offer-grid">
+            <article class="offer-card">
+              <div class="offer-kicker">Workflow Starter Kit</div>
+              <h3>Practical operating assets from the ZeroOrigins lab.</h3>
+              <p>Download practical workflow kits, SOP systems, automation templates, and AI-ready business assets built from the ZeroOrigins lab.</p>
+              <ul class="offer-list">
+                <li>SOP systems</li>
+                <li>Automation templates</li>
+                <li>Workflow starter assets</li>
+                <li>AI-ready business documents</li>
+              </ul>
+              <a class="btn gumroad-template-link" href="https://zeroorigins.gumroad.com/l/WorkflowKit?want=true" target="_blank" rel="noopener noreferrer" data-product="workflow-starter-kit">View Template Pack</a>
+            </article>
+
+            <article class="offer-card">
+              <div class="offer-kicker">Deployment Logic</div>
+              <h3>Documents that already know the next step.</h3>
+              <p>Each package is built to reduce setup drag. The goal is not more material. The goal is a cleaner path from intent to execution.</p>
+              <ul class="offer-list">
+                <li>Lead capture flow</li>
+                <li>Client onboarding logic</li>
+                <li>Follow-up systems</li>
+                <li>Reusable operating documents</li>
+              </ul>
+              <a class="btn secondary" href="mailto:hello@zeroorigins.in?subject=Template%20Package%20Question">Ask before buying</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="systems" id="systems">
+        <div class="container">
+          <div class="matrix">
+            <div class="matrix-title">
+              <div class="eyebrow">System Contents</div>
+              <h2>Every layer has a purpose.</h2>
+              <p>ZeroOrigins assets are not decorative. Each part exists to clarify, route, prove, or convert.</p>
+            </div>
+            <div class="matrix-list">
+              <div class="matrix-item">
+                <code>01 / Signal</code>
+                <div>
+                  <strong>Positioning and proof</strong>
+                  <p>Show what matters first. Remove the noise around it.</p>
+                </div>
+              </div>
+              <div class="matrix-item">
+                <code>02 / Route</code>
+                <div>
+                  <strong>Links and contact path</strong>
+                  <p>Make the next action obvious without making the page loud.</p>
+                </div>
+              </div>
+              <div class="matrix-item">
+                <code>03 / Operate</code>
+                <div>
+                  <strong>Reusable systems</strong>
+                  <p>Templates and documents that can be used, copied, and deployed.</p>
+                </div>
+              </div>
+              <div class="matrix-item">
+                <code>04 / Scale</code>
+                <div>
+                  <strong>Clean handoff</strong>
+                  <p>Assets structured so your next client, recruiter, partner, or buyer can understand the value quickly.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="closing" id="contact">
+        <div class="container">
+          <div class="closing-panel">
+            <div class="eyebrow">ZeroOrigins</div>
+            <h2>Build the layer people see before they trust you.</h2>
+            <p>Start with identity. Add systems. Replace scattered links and blank pages with a controlled digital surface.</p>
+            <div class="closing-actions">
+              <a class="btn" href="https://calendly.com/zerooriginsai/30min" target="_blank" rel="noopener noreferrer">Book a Call</a>
+              <a class="btn secondary" href="mailto:hello@zeroorigins.in">hello@zeroorigins.in</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <img src="https://zeroorigins.in/wp-content/uploads/2026/05/ZerorOrigins-loho-1.png" alt="ZeroOrigins" loading="lazy" onerror="this.onerror=null;this.src='./zeroOrigins logo.png';">
+        <span>ZeroOrigins - Automate. Systemize. Scale.</span>
+        <a href="mailto:hello@zeroorigins.in">hello@zeroorigins.in</a>
+      </div>
+    </footer>
+  </div>
+</body>
+
+</html>

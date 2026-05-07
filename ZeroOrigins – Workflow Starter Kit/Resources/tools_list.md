@@ -49,7 +49,7 @@ Everything listed here has a free tier. You do not need to pay for any tool to r
 | HubSpot (free) | Full CRM integration |
 
 Any of these can be added to the existing workflows. Book a call if you want help connecting them:  
-https://calendly.com/zeroorigins
+https://calendly.com/zerooriginsai/30min
 
 ---
 

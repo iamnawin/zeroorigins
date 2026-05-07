@@ -43,6 +43,6 @@ THAT'S IT. YOUR SYSTEM IS LIVE.
 If any step above doesn't work:
   - Read the full setup_guide.md for detailed troubleshooting
   - Email hello@zeroorigins.in
-  - Book a setup call: https://calendly.com/zeroorigins
+  - Book a setup call: https://calendly.com/zerooriginsai/30min
 
 ==============================================================

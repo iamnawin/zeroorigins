@@ -1,0 +1,81 @@
+================================================================
+  START HERE — YOUR FIRST 5 STEPS
+  ZeroOrigins – Digital Identity Setup
+================================================================
+
+Read this before opening anything else.
+This is your map. Follow it in order.
+
+----------------------------------------------------------------
+STEP 1 — FILL THE CONTENT FORM
+----------------------------------------------------------------
+
+Open:  Templates/content_collection_form.md
+
+Fill it out completely. Every section has clear instructions.
+This form collects everything needed to build your profile.
+
+Do not skip fields. The more specific you are, the better
+your digital identity will look.
+
+Time required: 20–40 minutes
+
+----------------------------------------------------------------
+STEP 2 — REVIEW YOUR PROFILE CARD TEMPLATE
+----------------------------------------------------------------
+
+Open:  Templates/profile_card_template.md
+
+This is the core asset — your professional summary card.
+Use your answers from the content form to fill it in.
+
+This card is what you will use on:
+  - LinkedIn About section
+  - Email signatures
+  - Pitch decks and proposals
+  - Bio link pages
+
+----------------------------------------------------------------
+STEP 3 — CHOOSE YOUR STYLE DIRECTION
+----------------------------------------------------------------
+
+Open:  Resources/copy_examples.md
+
+Read through the example tones and styles.
+Decide which one feels closest to you:
+  → Authoritative / Expert
+  → Warm / Relatable
+  → Bold / Direct
+  → Clean / Minimal
+
+Note your choice. It will shape your bio and copy.
+
+----------------------------------------------------------------
+STEP 4 — SEND YOUR DETAILS FOR GUIDANCE
+----------------------------------------------------------------
+
+Once your content form is filled, send it to us.
+We will review it and guide you through the next steps.
+
+This is where the guided setup begins.
+
+See:  Consultation/next_steps.md
+
+----------------------------------------------------------------
+STEP 5 — BOOK SUPPORT (OPTIONAL BUT RECOMMENDED)
+----------------------------------------------------------------
+
+If you want to move faster or need help with the setup,
+book a support session. Details are in Consultation/next_steps.md
+
+You can also reference:
+  Guide/example_profile.md   ← see a completed example
+  Guide/setup_guide.md       ← full walkthrough
+
+----------------------------------------------------------------
+
+You are 5 steps away from a clean, professional digital presence.
+
+Start with the form. Everything else follows.
+
+================================================================

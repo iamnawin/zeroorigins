@@ -63,7 +63,7 @@ GET HELP
 --------------------------------------------------------------
 
   Email:    hello@zeroorigins.in
-  Book a call: https://calendly.com/zeroorigins
+  Book a call: https://calendly.com/zerooriginsai/30min
 
   Response time: within 24 hours on business days.
   Consultation calls: 30 minutes, included with this purchase.

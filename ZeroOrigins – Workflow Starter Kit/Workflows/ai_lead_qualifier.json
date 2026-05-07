@@ -213,7 +213,7 @@
             },
             {
               "role": "user",
-              "content": "=Write a personalized reply to this lead:\n\nName: {{ $json.name }}\nBusiness: {{ $json.business }}\nTitle: {{ $json.jobTitle }}\nIndustry: {{ $json.industry }}\nMessage they sent: {{ $json.message }}\nAI recommended action: {{ $json.recommendedAction }}\n\nInclude this Calendly link naturally: https://calendly.com/zeroorigins"
+              "content": "=Write a personalized reply to this lead:\n\nName: {{ $json.name }}\nBusiness: {{ $json.business }}\nTitle: {{ $json.jobTitle }}\nIndustry: {{ $json.industry }}\nMessage they sent: {{ $json.message }}\nAI recommended action: {{ $json.recommendedAction }}\n\nInclude this Calendly link naturally: https://calendly.com/zerooriginsai/30min"
             }
           ]
         },
@@ -274,7 +274,7 @@
       "parameters": {
         "sendTo": "={{ $json.email }}",
         "subject": "Quick question about your automation setup",
-        "message": "=<p>Hi {{ $json.name }},</p>\n\n<p>Thanks for reaching out.</p>\n\n<p>We build AI automation systems for {{ $json.industry || 'businesses' }} — the kind that run lead capture, qualification, and follow-up without anyone manually touching a thing.</p>\n\n<p>From your message it sounds like there might be a fit. The fastest way to find out is a 30-minute call — no prep needed from your side.</p>\n\n<p><a href=\"https://calendly.com/zeroorigins\" style=\"background:#111;color:#fff;padding:10px 24px;border-radius:6px;text-decoration:none;display:inline-block;font-family:sans-serif\">Book a 30-minute call</a></p>\n\n<p>Talk soon,<br>Naveen<br>ZeroOrigins AI<br>hello@zeroorigins.in</p>",
+        "message": "=<p>Hi {{ $json.name }},</p>\n\n<p>Thanks for reaching out.</p>\n\n<p>We build AI automation systems for {{ $json.industry || 'businesses' }} — the kind that run lead capture, qualification, and follow-up without anyone manually touching a thing.</p>\n\n<p>From your message it sounds like there might be a fit. The fastest way to find out is a 30-minute call — no prep needed from your side.</p>\n\n<p><a href=\"https://calendly.com/zerooriginsai/30min\" style=\"background:#111;color:#fff;padding:10px 24px;border-radius:6px;text-decoration:none;display:inline-block;font-family:sans-serif\">Book a 30-minute call</a></p>\n\n<p>Talk soon,<br>Naveen<br>ZeroOrigins AI<br>hello@zeroorigins.in</p>",
         "options": { "appendAttribution": false, "senderName": "Naveen at ZeroOrigins" }
       },
       "id": "alf-013",

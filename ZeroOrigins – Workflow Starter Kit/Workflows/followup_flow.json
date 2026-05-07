@@ -90,7 +90,7 @@
       "parameters": {
         "sendTo": "={{ $json.Email }}",
         "subject": "Still thinking it over? I can help.",
-        "message": "=<p>Hi {{ $json.Name }},</p>\n\n<p>I noticed you reached out recently and wanted to follow up.</p>\n\n<p>If you're still figuring out your next step, I'd be happy to jump on a quick 30-minute call. We can look at your current setup and map out the fastest path to getting your system working.</p>\n\n<p>No pressure — just a conversation.</p>\n\n<p><a href=\"https://calendly.com/zeroorigins\" style=\"background:#000;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block\">Book a free 30-minute call</a></p>\n\n<p>Or reply to this email and let me know where you're at — I read every reply.</p>\n\n<p>Talk soon,<br>Naveen<br>ZeroOrigins AI<br>hello@zeroorigins.in</p>",
+        "message": "=<p>Hi {{ $json.Name }},</p>\n\n<p>I noticed you reached out recently and wanted to follow up.</p>\n\n<p>If you're still figuring out your next step, I'd be happy to jump on a quick 30-minute call. We can look at your current setup and map out the fastest path to getting your system working.</p>\n\n<p>No pressure — just a conversation.</p>\n\n<p><a href=\"https://calendly.com/zerooriginsai/30min\" style=\"background:#000;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block\">Book a free 30-minute call</a></p>\n\n<p>Or reply to this email and let me know where you're at — I read every reply.</p>\n\n<p>Talk soon,<br>Naveen<br>ZeroOrigins AI<br>hello@zeroorigins.in</p>",
         "options": {
           "appendAttribution": false,
           "senderName": "Naveen at ZeroOrigins"

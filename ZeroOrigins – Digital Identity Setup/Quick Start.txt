@@ -1,0 +1,54 @@
+================================================================
+  QUICK START — LAUNCH YOUR DIGITAL IDENTITY IN 5 STEPS
+  ZeroOrigins – Digital Identity Setup
+================================================================
+
+For those who want to move fast. No fluff.
+
+----------------------------------------------------------------
+STEP 1 — Fill the form (20 min)
+----------------------------------------------------------------
+  File: Templates/content_collection_form.md
+
+  Answer every question. Your answers become your profile copy.
+  Skip nothing — gaps show up as vague, generic content.
+
+----------------------------------------------------------------
+STEP 2 — Build your profile card (15 min)
+----------------------------------------------------------------
+  File: Templates/profile_card_template.md
+
+  Transfer your form answers into the profile card.
+  This is your master identity block — reuse it everywhere.
+
+----------------------------------------------------------------
+STEP 3 — Draft your bio link page (15 min)
+----------------------------------------------------------------
+  File: Templates/bio_link_page_template.md
+
+  Structure your link page: headline, sub-headline, links.
+  Use Resources/copy_examples.md for tone reference.
+
+----------------------------------------------------------------
+STEP 4 — Run the brand asset checklist (10 min)
+----------------------------------------------------------------
+  File: Resources/brand_assets_checklist.md
+
+  Go through item by item. Mark what you have.
+  Identify what is missing — these are your action items.
+
+----------------------------------------------------------------
+STEP 5 — Send your content form for guided setup
+----------------------------------------------------------------
+  File: Consultation/next_steps.md
+
+  Share your completed content form with us.
+  We handle the setup, refinement, and final polish.
+
+----------------------------------------------------------------
+
+TOTAL TIME TO LAUNCH: Under 2 hours (your part)
+
+After you send us the form, we take it from there.
+
+================================================================

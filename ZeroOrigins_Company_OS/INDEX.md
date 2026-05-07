@@ -156,5 +156,14 @@ Use this index to find any SOP, template, tracker, or policy by ID or topic.
 
 ---
 
-*Total documents: 57 SOPs + 5 Templates + 5 Trackers + 5 Policies = 72 documents*  
-*Version: 1.0 | Created: May 2026 | Owner: Founder, ZeroOrigins*
+## Root-Level Documents
+
+| File | Location | Topic |
+|------|----------|-------|
+| `zeroorigins_unified_operating_system.md` | `/` | Master strategy, brand architecture, GTM |
+| `ZeroOrigins_Brand_Identity.docx` | `/` | Brand identity guidelines (colors, typography, tone) |
+
+---
+
+*Total documents: 57 SOPs + 5 Templates + 5 Trackers + 5 Policies = 72 documents + 2 root docs*  
+*Version: 1.1 | Updated: May 2026 | Owner: Founder, ZeroOrigins*

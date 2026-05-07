@@ -2,7 +2,7 @@
 
 **Time required:** 30–60 minutes  
 **Skill level:** Beginner-friendly — no coding required  
-**Support:** hello@zeroorigins.in | https://calendly.com/zeroorigins
+**Support:** hello@zeroorigins.in | https://calendly.com/zerooriginsai/30min
 
 ---
 
@@ -166,7 +166,7 @@ Once this is running, you can extend it:
 - Build a multi-step nurture sequence instead of one follow-up
 
 To build any of these, book a setup call:
-**https://calendly.com/zeroorigins**
+**https://calendly.com/zerooriginsai/30min**
 
 ---
 

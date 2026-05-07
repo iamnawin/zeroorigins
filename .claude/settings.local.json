@@ -13,7 +13,11 @@
       "Bash(New-Item -ItemType Directory -Path \"D:\\\\Downloads\\\\zeroOrigins\\\\ZeroOrigins_Company_OS\\\\10_Trackers\" -Force)",
       "Bash(New-Item -ItemType Directory -Path \"D:\\\\Downloads\\\\zeroOrigins\\\\ZeroOrigins_Company_OS\\\\11_Policies\" -Force)",
       "Bash(Write-Output \"All folders created\")",
-      "PowerShell(New-Item *)"
+      "PowerShell(New-Item *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(Select-String \"Digital\")"
     ]
   }
 }

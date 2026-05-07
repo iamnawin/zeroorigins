@@ -1,0 +1,498 @@
+<section class="zo-di-page" id="digital-identity">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap');
+
+    .zo-di-page,
+    .zo-di-page * {
+      box-sizing: border-box;
+    }
+
+    .zo-di-page {
+      --zero: #0B0D12;
+      --deep: #1C1F29;
+      --graphite: #2A2F3B;
+      --chrome: #A6ABB5;
+      --amber: #FDBA3D;
+      --gold: #E8A020;
+      --white: #FFFFFF;
+      --off: #F5F5F5;
+      --line: rgba(166, 171, 181, 0.18);
+      --line-strong: rgba(253, 186, 61, 0.36);
+      --panel: rgba(28, 31, 41, 0.72);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 8%, rgba(255, 255, 255, 0.06), transparent 9%),
+        radial-gradient(circle at 78% 18%, rgba(253, 186, 61, 0.08), transparent 20%),
+        linear-gradient(180deg, var(--zero) 0%, #08090d 48%, var(--zero) 100%);
+      color: var(--chrome);
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.55;
+    }
+
+    .zo-di-page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(166, 171, 181, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(166, 171, 181, 0.035) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.82), transparent 72%);
+    }
+
+    .zo-di-page a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .zo-di-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 clamp(18px, 5vw, 72px);
+    }
+
+    .zo-di-logo {
+      display: inline-flex;
+      margin-bottom: 42px;
+    }
+
+    .zo-di-logo img {
+      display: block;
+      height: 42px;
+      width: auto;
+    }
+
+    .zo-di-hero {
+      min-height: 720px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.75fr);
+      gap: clamp(34px, 6vw, 82px);
+      align-items: center;
+      padding: clamp(64px, 9vw, 116px) 0;
+    }
+
+    .zo-di-brand {
+      display: block;
+      margin-bottom: 18px;
+      color: var(--white);
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(30px, 4vw, 52px);
+      font-weight: 700;
+      letter-spacing: -0.12em;
+    }
+
+    .zo-di-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      color: var(--amber);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .zo-di-eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: var(--amber);
+    }
+
+    .zo-di-page h1,
+    .zo-di-page h2,
+    .zo-di-page h3 {
+      margin: 0;
+      color: var(--off);
+      font-family: "Space Grotesk", "Inter", sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 0.98;
+    }
+
+    .zo-di-page h1 {
+      max-width: 880px;
+      font-size: clamp(54px, 9vw, 108px);
+    }
+
+    .zo-di-page h2 {
+      max-width: 760px;
+      font-size: clamp(38px, 5vw, 64px);
+    }
+
+    .zo-di-page h3 {
+      font-size: clamp(26px, 3vw, 38px);
+    }
+
+    .zo-di-page p {
+      margin: 0;
+      color: rgba(166, 171, 181, 0.86);
+    }
+
+    .zo-di-lead {
+      max-width: 680px;
+      margin-top: 26px !important;
+      color: rgba(245, 245, 245, 0.76) !important;
+      font-size: clamp(17px, 2vw, 21px);
+    }
+
+    .zo-di-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 36px;
+    }
+
+    .zo-di-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 22px;
+      border: 1px solid var(--line-strong);
+      background: rgba(253, 186, 61, 0.08);
+      color: var(--off) !important;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .zo-di-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--amber);
+      background: rgba(253, 186, 61, 0.14);
+    }
+
+    .zo-di-btn.secondary {
+      border-color: var(--line);
+      background: rgba(166, 171, 181, 0.04);
+      color: var(--chrome) !important;
+    }
+
+    .zo-di-frame {
+      position: relative;
+      min-height: 520px;
+      border: 1px solid rgba(166, 171, 181, 0.2);
+      background: linear-gradient(180deg, rgba(42, 47, 59, 0.35), rgba(11, 13, 18, 0.92)), var(--zero);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .zo-di-frame::before {
+      content: "";
+      position: absolute;
+      inset: 22px;
+      border: 1px solid rgba(166, 171, 181, 0.14);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .zo-di-frame::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 120px;
+      height: 120px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.62), rgba(253, 186, 61, 0.16) 28%, transparent 66%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .zo-di-frame video {
+      width: 100%;
+      height: 100%;
+      min-height: 520px;
+      object-fit: cover;
+      opacity: 0.62;
+      filter: grayscale(1) contrast(1.1) brightness(0.72);
+    }
+
+    .zo-di-meta {
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      bottom: 28px;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      z-index: 3;
+      color: rgba(245, 245, 245, 0.78);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .zo-di-meta span:last-child {
+      color: var(--amber);
+    }
+
+    .zo-di-section {
+      padding: clamp(76px, 10vw, 128px) 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .zo-di-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 42px;
+      margin-bottom: 48px;
+    }
+
+    .zo-di-head p {
+      max-width: 420px;
+      font-size: 16px;
+    }
+
+    .zo-di-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .zo-di-card {
+      position: relative;
+      min-height: 420px;
+      padding: clamp(28px, 4vw, 44px);
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(28, 31, 41, 0.78), rgba(11, 13, 18, 0.92)), var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .zo-di-kicker {
+      color: var(--amber);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .zo-di-card h3 {
+      margin-top: 68px;
+    }
+
+    .zo-di-card p {
+      margin-top: 22px;
+      font-size: 16px;
+    }
+
+    .zo-di-list {
+      display: grid;
+      gap: 10px;
+      margin: 30px 0 34px;
+      padding: 0;
+      list-style: none;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .zo-di-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(245, 245, 245, 0.76);
+    }
+
+    .zo-di-list li::before {
+      content: "";
+      width: 18px;
+      height: 1px;
+      background: var(--amber);
+      flex: 0 0 auto;
+    }
+
+    .zo-di-closing {
+      padding: clamp(76px, 10vw, 128px) 0;
+    }
+
+    .zo-di-panel {
+      border: 1px solid var(--line-strong);
+      background: radial-gradient(circle at 74% 22%, rgba(253, 186, 61, 0.12), transparent 30%), rgba(11, 13, 18, 0.92);
+      padding: clamp(34px, 6vw, 70px);
+      box-shadow: var(--shadow);
+    }
+
+    .zo-di-panel p {
+      max-width: 620px;
+      margin-top: 24px;
+      font-size: 18px;
+    }
+
+    @media (max-width: 980px) {
+      .zo-di-hero,
+      .zo-di-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .zo-di-head {
+        display: block;
+      }
+
+      .zo-di-head p {
+        margin-top: 20px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .zo-di-wrap {
+        padding-inline: 16px;
+      }
+
+      .zo-di-actions {
+        display: grid;
+      }
+
+      .zo-di-frame,
+      .zo-di-frame video {
+        min-height: 360px;
+      }
+
+      .zo-di-meta {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .zo-di-card {
+        min-height: auto;
+      }
+
+      .zo-di-card h3 {
+        margin-top: 52px;
+      }
+    }
+  </style>
+
+  <div class="zo-di-wrap">
+    <div class="zo-di-hero">
+      <div>
+        <a class="zo-di-logo" href="https://zeroorigins.in/" aria-label="ZeroOrigins">
+          <img src="https://zeroorigins.in/wp-content/uploads/2026/05/ZerorOrigins-loho-1.png" alt="ZeroOrigins">
+        </a>
+        <span class="zo-di-brand">ZeroOrigins</span>
+        <div class="zo-di-eyebrow">Automate. Systemize. Scale.</div>
+        <h1>Digital presence, built like infrastructure.</h1>
+        <p class="zo-di-lead">Identity pages. Template systems. Operating documents. Compact digital layers that make trust easier to verify and action easier to take.</p>
+        <div class="zo-di-actions">
+          <a class="zo-di-btn" href="https://calendly.com/zerooriginsai/30min" target="_blank" rel="noopener noreferrer">Build My Digital Identity</a>
+          <a class="zo-di-btn secondary gumroad-template-link" href="https://zeroorigins.gumroad.com/l/WorkflowKit?want=true" target="_blank" rel="noopener noreferrer" data-product="workflow-starter-kit">View Template Pack</a>
+        </div>
+      </div>
+
+      <div class="zo-di-frame" aria-label="ZeroOrigins infinity system visual">
+        <video autoplay muted loop playsinline preload="metadata" poster="https://zeroorigins.in/wp-content/uploads/2026/05/ZerorOrigins-loho-1.png">
+          <source src="https://zeroorigins.in/wp-content/uploads/2026/05/Infinity-loop.mp4" type="video/mp4">
+        </video>
+        <div class="zo-di-meta">
+          <span>Zero Black / Chrome / Origin Amber</span>
+          <span>Identity Layer Active</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="zo-di-section">
+      <div class="zo-di-head">
+        <div>
+          <div class="zo-di-eyebrow">Digital Identity Systems</div>
+          <h2>Your online identity should not look like a forgotten PDF.</h2>
+        </div>
+        <p>A packaged digital presence system for professionals, founders, creators, consultants, and students.</p>
+      </div>
+
+      <div class="zo-di-grid">
+        <article class="zo-di-card">
+          <div class="zo-di-kicker">Trust System</div>
+          <h3>Skills, proof, story, links, and contact path in one controlled surface.</h3>
+          <p>We design compact digital identity systems that turn your skills, story, proof, links, and contact path into a clean, credible online presence.</p>
+          <ul class="zo-di-list">
+            <li>Conversion-ready profile</li>
+            <li>Professional signal engine</li>
+            <li>Link and contact architecture</li>
+            <li>Proof and credibility layer</li>
+          </ul>
+          <a class="zo-di-btn" href="https://calendly.com/zerooriginsai/30min" target="_blank" rel="noopener noreferrer">Build My Digital Identity</a>
+        </article>
+
+        <article class="zo-di-card">
+          <div class="zo-di-kicker">Built For</div>
+          <h3>Professionals who need signal without noise.</h3>
+          <p>Not a resume. Not a course page. Not another generic portfolio. A tighter operating layer for how people understand who you are, what you can do, and how to reach you.</p>
+          <ul class="zo-di-list">
+            <li>Founders</li>
+            <li>Creators</li>
+            <li>Consultants</li>
+            <li>Students entering the market</li>
+          </ul>
+          <a class="zo-di-btn secondary" href="mailto:hello@zeroorigins.in?subject=Digital%20Identity%20System">Request the scope</a>
+        </article>
+      </div>
+    </div>
+
+    <div class="zo-di-section" id="templates">
+      <div class="zo-di-head">
+        <div>
+          <div class="zo-di-eyebrow">Template Packages</div>
+          <h2>Start with systems, not blank pages.</h2>
+        </div>
+        <p>Download practical workflow kits, SOP systems, automation templates, and AI-ready business assets built from the ZeroOrigins lab.</p>
+      </div>
+
+      <div class="zo-di-grid">
+        <article class="zo-di-card">
+          <div class="zo-di-kicker">Workflow Starter Kit</div>
+          <h3>Practical operating assets from the ZeroOrigins lab.</h3>
+          <p>Ready-to-use ZeroOrigins systems, templates, workflow kits, and operating documents.</p>
+          <ul class="zo-di-list">
+            <li>SOP systems</li>
+            <li>Automation templates</li>
+            <li>Workflow starter assets</li>
+            <li>AI-ready business documents</li>
+          </ul>
+          <a class="zo-di-btn gumroad-template-link" href="https://zeroorigins.gumroad.com/l/WorkflowKit?want=true" target="_blank" rel="noopener noreferrer" data-product="workflow-starter-kit">View Template Pack</a>
+        </article>
+
+        <article class="zo-di-card">
+          <div class="zo-di-kicker">Deployment Logic</div>
+          <h3>Documents that already know the next step.</h3>
+          <p>Each package is built to reduce setup drag. The goal is not more material. The goal is a cleaner path from intent to execution.</p>
+          <ul class="zo-di-list">
+            <li>Lead capture flow</li>
+            <li>Client onboarding logic</li>
+            <li>Follow-up systems</li>
+            <li>Reusable operating documents</li>
+          </ul>
+          <a class="zo-di-btn secondary" href="mailto:hello@zeroorigins.in?subject=Template%20Package%20Question">Ask before buying</a>
+        </article>
+      </div>
+    </div>
+
+    <div class="zo-di-closing" id="zo-di-contact">
+      <div class="zo-di-panel">
+        <div class="zo-di-eyebrow">ZeroOrigins</div>
+        <h2>Build the layer people see before they trust you.</h2>
+        <p>Start with identity. Add systems. Replace scattered links and blank pages with a controlled digital surface.</p>
+        <div class="zo-di-actions">
+          <a class="zo-di-btn" href="https://calendly.com/zerooriginsai/30min" target="_blank" rel="noopener noreferrer">Book a Call</a>
+          <a class="zo-di-btn secondary" href="mailto:hello@zeroorigins.in">hello@zeroorigins.in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
